@@ -1,0 +1,12 @@
+{
+  "name": "@peekaboo-ssr/protobufjs",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./protoMessages": "./index.js"
+  },
+  "dependencies": {}
+}

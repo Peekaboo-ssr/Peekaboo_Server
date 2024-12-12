@@ -1,0 +1,19 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "게이트웨이 서버",
+  "main": "gateway.server.js",
+  "type": "module",
+  "scripts": {
+    "gateway:start": "node dist/gateway.server.js",
+    "dev": "node src/gateway.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli dist"
+  },
+  "dependencies": {
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*"
+  }
+}

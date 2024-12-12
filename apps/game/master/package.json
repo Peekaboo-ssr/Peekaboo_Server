@@ -1,0 +1,20 @@
+{
+  "name": "game",
+  "version": "1.0.0",
+  "description": "데디 서버 만들어주는 게임 마스터 서버",
+  "main": "game.server.js",
+  "type": "module",
+  "scripts": {
+    "game:start": "node dist/game.server.js",
+    "dev": "node src/game.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli dist"
+  },
+  "dependencies": {
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*",
+    "@peekaboo-ssr/error": "*"
+  }
+}

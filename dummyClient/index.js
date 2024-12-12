@@ -1,0 +1,120 @@
+// src/index.js
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { ProtoLoader } from './proto/loader.proto.js';
+import { PacketHelper } from './managers/packet.manager.js';
+import { DummyClient } from './clients/dummy.client.js';
+import { ScenarioManager } from './managers/scenario.manager.js';
+import { delay } from './utils/delay.js';
+import {
+  CLIENT_PACKET,
+  CLIENT_PACKET_MAPS,
+  headerConfig,
+  packetNames,
+} from './config/config.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const protoDir = path.join(__dirname, '../packages/common/protobufs');
+
+(async () => {
+  const protoLoader = new ProtoLoader(protoDir, packetNames);
+  await protoLoader.load();
+
+  const packetHelper = new PacketHelper(
+    protoLoader,
+    headerConfig,
+    CLIENT_PACKET_MAPS,
+  );
+
+  // 여러 클라이언트에 대한 설정들
+  const clientsData = [
+    {
+      userData: {
+        id: 'test2',
+        password: '1234',
+        token: 'tokenTest2',
+        userId: 'b25ba876-3939-48cd-a1dd-ce16eacf935c',
+        position: { x: 21.24, y: 15.2, z: 8.66 },
+        rotation: { x: 1.2, y: 11.5, z: 6.9 },
+      },
+      host: '0.0.0.0',
+      port: 6000,
+    },
+    {
+      userData: {
+        id: 'test3',
+        password: '1234',
+        token: 'tokenTest3',
+        userId: 'bd05fc53-9f85-43fe-8c23-3e4fdc6b239a',
+        position: { x: 10.0, y: 10.0, z: 10.0 },
+        rotation: { x: 0.0, y: 0.0, z: 0.0 },
+      },
+      host: '0.0.0.0',
+      port: 6000,
+    },
+    // 필요하다면 더 추가 가능
+  ];
+
+  // clients와 scenarioManagers를 담을 배열
+  const clients = [];
+  const scenarioManagers = [];
+
+  for (const cData of clientsData) {
+    const client = new DummyClient({
+      host: cData.host,
+      port: cData.port,
+      packetHelper,
+      CLIENT_PACKET,
+    });
+
+    await client.connect(); // 각 클라이언트 접속
+
+    const scenario = new ScenarioManager(client, CLIENT_PACKET);
+    clients.push({ client, userData: cData.userData });
+    scenarioManagers.push(scenario);
+  }
+
+  // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
+  // 모든 클라이언트 로그인
+  for (let i = 0; i < clients.length; i++) {
+    const { userData } = clients[i];
+    await scenarioManagers[i].loginScenario(userData);
+  }
+
+  await delay(5000);
+
+  // 모든 클라이언트 로비 진입
+  for (let i = 0; i < clients.length; i++) {
+    const { userData } = clients[i];
+    await scenarioManagers[i].enterLobbyScenario(userData);
+  }
+
+  await delay(5000);
+
+  // 첫 번째 클라이언트만 방 생성 및 생성될 때까지 대기
+  const firstClientUserData = clients[0].userData;
+  const secondClientUserData = clients[1].userData;
+  const inviteCode = await scenarioManagers[0].createRoomScenario(
+    firstClientUserData,
+  );
+
+  await delay(7000);
+
+  // 두 번째 클라이언트가 방 참가
+  scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
+
+  // 첫 번째 클라이언트만 이동 시나리오 시작
+  scenarioManagers[0].moveScenario(firstClientUserData, 200);
+
+  // 다른 클라이언트들 또한 필요하다면 시나리오 실행
+  // 예: 두 번째 클라이언트도 움직임 시작
+  // scenarioManagers[1].moveScenario(clients[1].userData, 300);
+
+  await delay(60000);
+
+  // 모든 클라이언트 종료
+  for (const { client } of clients) {
+    client.close();
+  }
+})();

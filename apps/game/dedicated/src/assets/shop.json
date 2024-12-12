@@ -1,0 +1,21 @@
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 2001,
+      "Name": "Lantern",
+      "Price": 50
+    },
+    {
+      "Id": 2002,
+      "Name": "Heart1",
+      "Price": 300
+    },
+    {
+      "Id": 2003,
+      "Name": "Heart2",
+      "Price": 600
+    }
+  ]
+}

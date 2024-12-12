@@ -1,0 +1,23 @@
+{
+  "name": "account",
+  "version": "1.0.0",
+  "description": "회원서비스 담당 서버",
+  "main": "account.server.js",
+  "type": "module",
+  "scripts": {
+    "account:start": "node dist/account.server.js",
+    "dev": "node src/account.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli dist"
+  },
+  "dependencies": {
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*",
+    "@peekaboo-ssr/commands": "*",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^11.0.3"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "@peekaboo-ssr/modules-constants",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    ".": "./*",
+    "./clientHeader": "./header/client.header.js",
+    "./serviceHeader": "./header/service.header.js",
+    "./routeHeader": "./header/route.header.js",
+    "./clientPacket": "./packet/client.packet.js",
+    "./servicePacket": "./packet/service.packet.js",
+    "./clientProtoNames": "./protoNames/client.proto.js",
+    "./serviceProtoNames": "./protoNames/service.proto.js",
+    "./pubAction": "./pubsub/action.pubsub.js",
+    "./subChannel": "./pubsub/channel.pubsub.js",
+    "./clientState": "./state/client.state.js",
+    "./redisKey": "./redis/key.redis.js"
+  },
+  "dependencies": {}
+}

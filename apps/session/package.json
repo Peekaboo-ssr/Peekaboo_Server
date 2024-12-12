@@ -1,0 +1,19 @@
+{
+  "name": "session",
+  "version": "1.0.0",
+  "description": "세션 담당 서버",
+  "main": "session.server.js",
+  "type": "module",
+  "scripts": {
+    "session:start": "node dist/session.server.js",
+    "dev": "node src/session.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli dist"
+  },
+  "dependencies": {
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*"
+  }
+}

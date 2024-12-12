@@ -1,0 +1,131 @@
+{
+  "name": "submission",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 5001,
+      "Day": "A",
+      "SubmissionValue": 150
+    },
+    {
+      "Id": 5002,
+      "Day": "B",
+      "SubmissionValue": 160
+    },
+    {
+      "Id": 5003,
+      "Day": "C",
+      "SubmissionValue": 170
+    },
+    {
+      "Id": 5004,
+      "Day": "D",
+      "SubmissionValue": 180
+    },
+    {
+      "Id": 5005,
+      "Day": "E",
+      "SubmissionValue": 190
+    },
+    {
+      "Id": 5006,
+      "Day": "F",
+      "SubmissionValue": 210
+    },
+    {
+      "Id": 5007,
+      "Day": "G",
+      "SubmissionValue": 230
+    },
+    {
+      "Id": 5008,
+      "Day": "H",
+      "SubmissionValue": 250
+    },
+    {
+      "Id": 5009,
+      "Day": "I",
+      "SubmissionValue": 270
+    },
+    {
+      "Id": 5010,
+      "Day": "J",
+      "SubmissionValue": 290
+    },
+    {
+      "Id": 5011,
+      "Day": "K",
+      "SubmissionValue": 320
+    },
+    {
+      "Id": 5012,
+      "Day": "L",
+      "SubmissionValue": 350
+    },
+    {
+      "Id": 5013,
+      "Day": "M",
+      "SubmissionValue": 380
+    },
+    {
+      "Id": 5014,
+      "Day": "N",
+      "SubmissionValue": 410
+    },
+    {
+      "Id": 5015,
+      "Day": "O",
+      "SubmissionValue": 440
+    },
+    {
+      "Id": 5016,
+      "Day": "P",
+      "SubmissionValue": 480
+    },
+    {
+      "Id": 5017,
+      "Day": "Q",
+      "SubmissionValue": 520
+    },
+    {
+      "Id": 5018,
+      "Day": "R",
+      "SubmissionValue": 560
+    },
+    {
+      "Id": 5019,
+      "Day": "S",
+      "SubmissionValue": 600
+    },
+    {
+      "Id": 5020,
+      "Day": "T",
+      "SubmissionValue": 640
+    },
+    {
+      "Id": 5021,
+      "Day": "U",
+      "SubmissionValue": 690
+    },
+    {
+      "Id": 5022,
+      "Day": "V",
+      "SubmissionValue": 740
+    },
+    {
+      "Id": 5023,
+      "Day": "W",
+      "SubmissionValue": 790
+    },
+    {
+      "Id": 5024,
+      "Day": "X",
+      "SubmissionValue": 840
+    },
+    {
+      "Id": 5025,
+      "Day": "Y",
+      "SubmissionValue": 890
+    }
+  ]
+}

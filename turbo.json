@@ -1,0 +1,36 @@
+{
+  "tasks": {
+    "distributor:start": {},
+    "lobby:start": {
+      "dependsOn": ["distributor:start"],
+      "outputs": ["dist/**"]
+    },
+    "account:start": {
+      "dependsOn": ["lobby:start"],
+      "outputs": ["dist/**"]
+    },
+    "session:start": {
+      "dependsOn": ["account:start"],
+      "outputs": ["dist/**"]
+    },
+    "game:start": {
+      "dependsOn": ["session:start"],
+      "outputs": ["dist/**"]
+    },
+    "gateway:start": {
+      "dependsOn": ["game:start"],
+      "outputs": ["dist/**"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "dev": {
+      "cache": false
+    },
+    "clean": {
+      "cache": false
+    }
+  },
+  "globalDependencies": ["package.json"]
+}

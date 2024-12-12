@@ -1,0 +1,19 @@
+{
+  "name": "@peekaboo-ssr/classes",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./TcpClient": "./models/tcpClient.class.js",
+    "./TcpServer": "./models/tcpServer.class.js",
+    "./DatabaseManager": "./managers/database.manager.js",
+    "./RedisManager": "./managers/redis.manager.js",
+    "./PubSubManager": "./managers/pubsub.manager.js"
+  },
+  "dependencies": {
+    "ioredis": "^5.4.1",
+    "mysql2": "^3.11.4"
+  }
+}

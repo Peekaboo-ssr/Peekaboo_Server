@@ -1,0 +1,10 @@
+{
+  "name": "map",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 401,
+      "MapName": "Hospital"
+    }
+  ]
+}

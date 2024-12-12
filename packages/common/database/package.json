@@ -1,0 +1,12 @@
+{
+  "name": "@peekaboo-ssr/commands",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./userCommands": "./commands/user.command.js",
+    "./testCommands": "./commands/test.command.js"
+  }
+}

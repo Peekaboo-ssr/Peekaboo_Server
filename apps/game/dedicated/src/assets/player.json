@@ -1,0 +1,18 @@
+{
+  "name": "player",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 501,
+      "WalkSpeed": 1.5,
+      "RunSpeed": 3,
+      "MaxHeart": 3,
+      "JumpCoolTime": 2,
+      "JumpForce": 4,
+      "Stamina": 10,
+      "StaminaRecovery": 0.5,
+      "Sight": 50,
+      "Hearing": 80
+    }
+  ]
+}

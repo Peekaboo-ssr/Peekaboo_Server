@@ -1,0 +1,19 @@
+{
+  "name": "distributor",
+  "version": "1.0.0",
+  "description": "각 서버의 위치 정보를 저장하고 알려주는 서버",
+  "main": "distributor.server.js",
+  "type": "module",
+  "scripts": {
+    "distributor:start": "node dist/distributor.server.js",
+    "dev": "node src/distributor.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli dist"
+  },
+  "dependencies": {
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@peekaboo-ssr/modules-handlers",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./index": "./index.js",
+    "./connection": "./connection/connectService.handler.js"
+  },
+  "dependencies": {}
+}

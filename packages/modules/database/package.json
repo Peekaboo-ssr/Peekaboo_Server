@@ -1,0 +1,12 @@
+{
+  "name": "@peekaboo-ssr/modules-database",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./USER_QUERIES": "./queries/user.queries.js"
+  },
+  "dependencies": {}
+}

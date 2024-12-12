@@ -1,0 +1,84 @@
+{
+  "name": "item",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 2101,
+      "Name": "SoulItem1",
+      "Value": 15,
+      "SpaceValue": 1,
+      "EasyMultiple": 1,
+      "NormalMultiple": 1.5,
+      "HardMultiple": 2,
+      "MaxItemSpawnNumber": 99,
+      "ExpValue": 5,
+      "Usable": "FALSE",
+      "Duration": 0
+    },
+    {
+      "Id": 2102,
+      "Name": "SoulItem2",
+      "Value": 40,
+      "SpaceValue": 1,
+      "EasyMultiple": 1,
+      "NormalMultiple": 1.5,
+      "HardMultiple": 2,
+      "MaxItemSpawnNumber": 2,
+      "ExpValue": 15,
+      "Usable": "FALSE",
+      "Duration": 0
+    },
+    {
+      "Id": 2103,
+      "Name": "SoulItem3",
+      "Value": 30,
+      "SpaceValue": 1,
+      "EasyMultiple": 1,
+      "NormalMultiple": 1.5,
+      "HardMultiple": 2,
+      "MaxItemSpawnNumber": 4,
+      "ExpValue": 10,
+      "Usable": "FALSE",
+      "Duration": 0
+    },
+    {
+      "Id": 2104,
+      "Name": "Lantern",
+      "Value": 50,
+      "SpaceValue": 1,
+      "EasyMultiple": 0,
+      "NormalMultiple": 0,
+      "HardMultiple": 0,
+      "MaxItemSpawnNumber": 0,
+      "ExpValue": 0,
+      "Usable": "TRUE",
+      "Duration": 480
+    },
+    {
+      "Id": 2105,
+      "Name": "Heart1",
+      "Value": 300,
+      "SpaceValue": 0,
+      "EasyMultiple": 0,
+      "NormalMultiple": 0,
+      "HardMultiple": 0,
+      "MaxItemSpawnNumber": 0,
+      "ExpValue": 0,
+      "Usable": "FALSE",
+      "Duration": 0
+    },
+    {
+      "Id": 2106,
+      "Name": "Heart2",
+      "Value": 600,
+      "SpaceValue": 0,
+      "EasyMultiple": 0,
+      "NormalMultiple": 0,
+      "HardMultiple": 0,
+      "MaxItemSpawnNumber": 0,
+      "ExpValue": 0,
+      "Usable": "FALSE",
+      "Duration": 0
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@peekaboo-ssr/utils",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./createPacket": "./packet/create.packet.js",
+    "./parsePacket": "./packet/parse.packet.js",
+    "./getRandomInt": "./math/random.math.js",
+    "./formatDate": "./format/date.format.js"
+  }
+}

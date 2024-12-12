@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package serviceData;
+
+message Microservices {
+    string host = 1;
+    uint32 port = 2;
+    string name = 3;
+}
+
+message Dedicates {
+    string host = 1;
+    uint32 port = 2;
+    string name = 3;
+}

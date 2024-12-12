@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS game_histories
+(
+    id          INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    players     VARCHAR(100) NOT NULL,
+    souls       INT DEFAULT 0,
+    start_time  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    end_time    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

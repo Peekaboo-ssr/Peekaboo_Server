@@ -1,0 +1,256 @@
+{
+  "name": "exitPos",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 11101,
+      "ExitPos": "0.9,1,-6.85",
+      "RotationY": 0
+    },
+    {
+      "Id": 11102,
+      "ExitPos": "-0.7,1,-5",
+      "RotationY": 90
+    },
+    {
+      "Id": 11103,
+      "ExitPos": "-3,1,-6.85",
+      "RotationY": 0
+    },
+    {
+      "Id": 11104,
+      "ExitPos": "-10.3,1,-6.85",
+      "RotationY": 0
+    },
+    {
+      "Id": 11105,
+      "ExitPos": "-6.9,1,-1.06",
+      "RotationY": 0
+    },
+    {
+      "Id": 11106,
+      "ExitPos": "-11.22,1,-6.2",
+      "RotationY": 90
+    },
+    {
+      "Id": 11107,
+      "ExitPos": "-14.52,1,-1.06",
+      "RotationY": 0
+    },
+    {
+      "Id": 11108,
+      "ExitPos": "-16.5,1,-6.84",
+      "RotationY": 0
+    },
+    {
+      "Id": 11109,
+      "ExitPos": "-13.5,1,1.44",
+      "RotationY": 0
+    },
+    {
+      "Id": 11110,
+      "ExitPos": "-17.59,1,2.24",
+      "RotationY": 90
+    },
+    {
+      "Id": 11111,
+      "ExitPos": "-14,1,5.46",
+      "RotationY": 0
+    },
+    {
+      "Id": 11112,
+      "ExitPos": "-17.58,1,8.36",
+      "RotationY": 90
+    },
+    {
+      "Id": 11113,
+      "ExitPos": "-14.38,1,10.24",
+      "RotationY": 0
+    },
+    {
+      "Id": 11114,
+      "ExitPos": "-17.59,1,11.34",
+      "RotationY": 90
+    },
+    {
+      "Id": 11115,
+      "ExitPos": "-13.99,1,10.44",
+      "RotationY": 0
+    },
+    {
+      "Id": 11116,
+      "ExitPos": "-14.99,1,14.34",
+      "RotationY": 0
+    },
+    {
+      "Id": 11117,
+      "ExitPos": "-17.6,1,17.55",
+      "RotationY": 90
+    },
+    {
+      "Id": 11118,
+      "ExitPos": "-12.73,1,17.55",
+      "RotationY": 90
+    },
+    {
+      "Id": 11119,
+      "ExitPos": "-9.49,1,21.65",
+      "RotationY": 90
+    },
+    {
+      "Id": 11120,
+      "ExitPos": "-5.32,1,23.65",
+      "RotationY": 90
+    },
+    {
+      "Id": 11121,
+      "ExitPos": "-5.09,1,22.15",
+      "RotationY": 90
+    },
+    {
+      "Id": 11122,
+      "ExitPos": "-2.52,1,24.74",
+      "RotationY": 0
+    },
+    {
+      "Id": 11123,
+      "ExitPos": "1.68,1,21.14",
+      "RotationY": 90
+    },
+    {
+      "Id": 11124,
+      "ExitPos": "0.78,1,24.75",
+      "RotationY": 0
+    },
+    {
+      "Id": 11125,
+      "ExitPos": "4.04,1,24.75",
+      "RotationY": 0
+    },
+    {
+      "Id": 11126,
+      "ExitPos": "4.61,1,18.95",
+      "RotationY": 0
+    },
+    {
+      "Id": 11127,
+      "ExitPos": "5.41,1,19.85",
+      "RotationY": 90
+    },
+    {
+      "Id": 11128,
+      "ExitPos": "7.41,1,24.74",
+      "RotationY": 0
+    },
+    {
+      "Id": 11129,
+      "ExitPos": "8.91,1,20.34",
+      "RotationY": 90
+    },
+    {
+      "Id": 11130,
+      "ExitPos": "13.08,1,21.07",
+      "RotationY": 90
+    },
+    {
+      "Id": 11131,
+      "ExitPos": "13.78,1,15.72",
+      "RotationY": 0
+    },
+    {
+      "Id": 11132,
+      "ExitPos": "14.58,1,12.13",
+      "RotationY": 90
+    },
+    {
+      "Id": 11133,
+      "ExitPos": "8.89,1,14.12",
+      "RotationY": 90
+    },
+    {
+      "Id": 11134,
+      "ExitPos": "8.89,1,8.54",
+      "RotationY": 90
+    },
+    {
+      "Id": 11135,
+      "ExitPos": "14.58,1,10.25",
+      "RotationY": 90
+    },
+    {
+      "Id": 11136,
+      "ExitPos": "12.48,1,7.53",
+      "RotationY": 0
+    },
+    {
+      "Id": 11137,
+      "ExitPos": "14.58,1,3.23",
+      "RotationY": 90
+    },
+    {
+      "Id": 11138,
+      "ExitPos": "8.88,1,-2.07",
+      "RotationY": 90
+    },
+    {
+      "Id": 11139,
+      "ExitPos": "11.28,1,-6.84",
+      "RotationY": 0
+    },
+    {
+      "Id": 11140,
+      "ExitPos": "5.22,1,-6.84",
+      "RotationY": 0
+    },
+    {
+      "Id": 11141,
+      "ExitPos": "4.21,1,-2.34",
+      "RotationY": 90
+    },
+    {
+      "Id": 11142,
+      "ExitPos": "4.66,1,6.85",
+      "RotationY": 90
+    },
+    {
+      "Id": 11143,
+      "ExitPos": "3.66,1,2",
+      "RotationY": 0
+    },
+    {
+      "Id": 11144,
+      "ExitPos": "-2.16,1,3",
+      "RotationY": 90
+    },
+    {
+      "Id": 11145,
+      "ExitPos": "-2.25,1,7.1",
+      "RotationY": 90
+    },
+    {
+      "Id": 11146,
+      "ExitPos": "-7.5,1,2",
+      "RotationY": 0
+    },
+    {
+      "Id": 11147,
+      "ExitPos": "-9.63,1,5.4",
+      "RotationY": 90
+    },
+    {
+      "Id": 11148,
+      "ExitPos": "0.97,1,13",
+      "RotationY": 90
+    },
+    {
+      "Id": 11149,
+      "ExitPos": "5.1,1,13.9",
+      "RotationY": 0
+    },
+    {
+      "Id": 11150,
+      "ExitPos": "6.23,1,9.7",
+      "RotationY": 90
+    }
+  ]
+}

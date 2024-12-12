@@ -1,0 +1,27 @@
+{
+  "name": "dedicated",
+  "version": "1.0.0",
+  "description": "데디케이티드 서버",
+  "main": "dedicated.server.js",
+  "type": "module",
+  "scripts": {
+    "dedicated:start": "node dist/dedicated.server.js",
+    "dev": "node src/dedicated.server.js",
+    "build": "node esbuild.config.js",
+    "clean": "del-cli master/dist"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bull": "^4.16.4",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "long": "^5.2.3",
+    "mysql2": "^3.11.4",
+    "protobufjs": "^7.4.0",
+    "uuid": "^11.0.3",
+    "yarn": "^1.22.22"
+  }
+}

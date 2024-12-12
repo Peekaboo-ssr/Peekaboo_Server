@@ -1,0 +1,13 @@
+{
+  "name": "@peekaboo-ssr/events",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js"
+  },
+  "exports": {
+    "./BaseEvent": "./base.events.js",
+    "./D2SEvent": "./onD2S.event.js",
+    "./G2SEvent": "./onG2S.event.js"
+  }
+}

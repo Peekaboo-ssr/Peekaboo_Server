@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import './service.data.proto';
+
+package service;
+
+message ConnectServiceRequest {
+  string host = 1;
+  uint32 port = 2;
+  string name = 3;
+}
+
+message ConnectedServiceNotification {
+  repeated Microservices microservices = 1;
+  repeated Dedicates dedicates = 2;
+  string message = 3;
+}
+
+message DisconnectServiceRequest {
+  string host = 1;
+  uint32 port = 2;
+  string name = 3;
+}
+
+message DisconnectedServiceNotification {
+  string host = 1;
+  uint32 port = 2;
+  string message =3;
+}
+
+message CreateDedicatedRequest {
+  string hostKey = 1;
+  string dedicateKey = 2;
+  string distributorKey = 3;
+  string gameSessionId = 4;
+  string inviteCode = 5;
+}
+
+message ConnectDedicatedRequest {
+  string dedicateKey = 1;
+  string clientKey = 2;
+}
+
+message JoinDedicatedRequest {
+  string clientKey = 1;
+  string userId = 2;
+}
+
+message ExitDedicatedRequest {
+  string clientKey = 1;
+}

@@ -1,0 +1,162 @@
+{
+  "name": "string",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 90001,
+      "Key": 1001,
+      "KOR": "웃는 신사",
+      "ENG": "SMILING_GENTLE_MAN"
+    },
+    {
+      "Id": 90002,
+      "Key": 1002,
+      "KOR": "안마사",
+      "ENG": "Massager"
+    },
+    {
+      "Id": 90003,
+      "Key": 1003,
+      "KOR": "장난꾸러기",
+      "ENG": "NAUGHTY_BOY"
+    },
+    {
+      "Id": 90004,
+      "Key": 1004,
+      "KOR": "어둠 손",
+      "ENG": "DARK_HAND"
+    },
+    {
+      "Id": 90005,
+      "Key": 1005,
+      "KOR": "사신",
+      "ENG": "GRIM_REAPER"
+    },
+    {
+      "Id": 90006,
+      "Key": 2104,
+      "KOR": "랜턴",
+      "ENG": "Lantern"
+    },
+    {
+      "Id": 90007,
+      "Key": "2104_Desc",
+      "KOR": "배터리가 5분 정도 사용 가능하다.",
+      "ENG": "The battery lasts about five minutes."
+    },
+    {
+      "Id": 90008,
+      "Key": 2105,
+      "KOR": "하트1",
+      "ENG": "Heart1"
+    },
+    {
+      "Id": 90009,
+      "Key": "2105_Desc",
+      "KOR": "귀신에게 한대 맞아도 살 수 있다",
+      "ENG": "You can live even if you get hit by a ghost"
+    },
+    {
+      "Id": 90010,
+      "Key": 2106,
+      "KOR": "하트2",
+      "ENG": "Heart2"
+    },
+    {
+      "Id": 90011,
+      "Key": "2106_Desc",
+      "KOR": "귀신에게 한대 더 맞을 수 있다",
+      "ENG": "You can get one more blow from a ghost"
+    },
+    {
+      "Id": 90012,
+      "Key": 301,
+      "KOR": "인턴",
+      "ENG": "Intern"
+    },
+    {
+      "Id": 90013,
+      "Key": 302,
+      "KOR": "사원",
+      "ENG": "Staff"
+    },
+    {
+      "Id": 90014,
+      "Key": 303,
+      "KOR": "주임",
+      "ENG": "AssistantManager"
+    },
+    {
+      "Id": 90015,
+      "Key": 304,
+      "KOR": "대리",
+      "ENG": "DeputyManager"
+    },
+    {
+      "Id": 90016,
+      "Key": 305,
+      "KOR": "과장",
+      "ENG": "Manager"
+    },
+    {
+      "Id": 90017,
+      "Key": 306,
+      "KOR": "차장",
+      "ENG": "SeniorManager"
+    },
+    {
+      "Id": 90018,
+      "Key": 307,
+      "KOR": "부장",
+      "ENG": "DepartmentHead"
+    },
+    {
+      "Id": 90019,
+      "Key": 308,
+      "KOR": "이사",
+      "ENG": "Director"
+    },
+    {
+      "Id": 90020,
+      "Key": 309,
+      "KOR": "상무",
+      "ENG": "ExecutiveDirector"
+    },
+    {
+      "Id": 90021,
+      "Key": 310,
+      "KOR": "전무",
+      "ENG": "SeniorExecutiveDirector"
+    },
+    {
+      "Id": 90022,
+      "Key": 311,
+      "KOR": "부사장",
+      "ENG": "VicePresident"
+    },
+    {
+      "Id": 90023,
+      "Key": 312,
+      "KOR": "사장",
+      "ENG": "President"
+    },
+    {
+      "Id": 90024,
+      "Key": 313,
+      "KOR": "부회장",
+      "ENG": "ViceChairman"
+    },
+    {
+      "Id": 90025,
+      "Key": 314,
+      "KOR": "회장",
+      "ENG": "Chairman"
+    },
+    {
+      "Id": 90026,
+      "Key": 315,
+      "KOR": "고인물",
+      "ENG": "Master"
+    }
+  ]
+}

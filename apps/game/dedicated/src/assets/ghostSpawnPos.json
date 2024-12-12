@@ -1,0 +1,114 @@
+{
+  "name": "ghost",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 11201,
+      "GhostSpawnPos": "3.1,0,-4.1"
+    },
+    {
+      "Id": 11202,
+      "GhostSpawnPos": "-5.3,0,-5.6"
+    },
+    {
+      "Id": 11203,
+      "GhostSpawnPos": "-9.8,0,-2"
+    },
+    {
+      "Id": 11204,
+      "GhostSpawnPos": "-13.9,0,-6"
+    },
+    {
+      "Id": 11205,
+      "GhostSpawnPos": "-14.5,0,0.7"
+    },
+    {
+      "Id": 11206,
+      "GhostSpawnPos": "-16,0,3.5"
+    },
+    {
+      "Id": 11207,
+      "GhostSpawnPos": "-14.5,0,9.2"
+    },
+    {
+      "Id": 11208,
+      "GhostSpawnPos": "-14.8,0,12.5"
+    },
+    {
+      "Id": 11209,
+      "GhostSpawnPos": "-13.8,0.17.8"
+    },
+    {
+      "Id": 11210,
+      "GhostSpawnPos": "-6.8,0,22.5"
+    },
+    {
+      "Id": 11211,
+      "GhostSpawnPos": "-3.5,0,23.9"
+    },
+    {
+      "Id": 11212,
+      "GhostSpawnPos": "-0.7,0,20.6"
+    },
+    {
+      "Id": 11213,
+      "GhostSpawnPos": "3.7,0,20.6"
+    },
+    {
+      "Id": 11214,
+      "GhostSpawnPos": "6.1,0,23.1"
+    },
+    {
+      "Id": 11215,
+      "GhostSpawnPos": "11,0,21.9"
+    },
+    {
+      "Id": 11216,
+      "GhostSpawnPos": "11.2,0,13.1"
+    },
+    {
+      "Id": 11217,
+      "GhostSpawnPos": "12.9,0,10.4"
+    },
+    {
+      "Id": 11218,
+      "GhostSpawnPos": "10.5,0,4.6"
+    },
+    {
+      "Id": 11219,
+      "GhostSpawnPos": "11.9,0,-0.2"
+    },
+    {
+      "Id": 11220,
+      "GhostSpawnPos": "9.5,0,-4.5"
+    },
+    {
+      "Id": 11221,
+      "GhostSpawnPos": "5,0,-2.4"
+    },
+    {
+      "Id": 11222,
+      "GhostSpawnPos": "7.1,0,4.4"
+    },
+    {
+      "Id": 11223,
+      "GhostSpawnPos": "3.3,0,5.5"
+    },
+    {
+      "Id": 11224,
+      "GhostSpawnPos": "0.5,0,3.4"
+    },
+    {
+      "Id": 11225,
+      "GhostSpawnPos": "-5.4,0,6.2"
+    },
+    {
+      "Id": 11226,
+      "GhostSpawnPos": "3.5,0,9"
+    },
+    {
+      "Id": 11227,
+      "GhostSpawnPos": "-1.9,0,10.9"
+    }
+  ]
+}

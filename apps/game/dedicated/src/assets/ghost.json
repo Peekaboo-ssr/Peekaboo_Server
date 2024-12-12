@@ -1,0 +1,61 @@
+{
+  "name": "ghost",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 1001,
+      "Name": "SMILING_GENTLE_MAN",
+      "Speed": 1.8,
+      "AttackRange": 5,
+      "AttackCool": 10,
+      "Sight": 80,
+      "Hearing": 110,
+      "SpawnTime": 30,
+      "AttackSuccessWaitingTime": 40
+    },
+    {
+      "Id": 1002,
+      "Name": "Massager",
+      "Speed": 1.8,
+      "AttackRange": 10,
+      "AttackCool": 0,
+      "Sight": 50,
+      "Hearing": 90,
+      "SpawnTime": 60,
+      "AttackSuccessWaitingTime": 20
+    },
+    {
+      "Id": 1003,
+      "Name": "NAUGHTY_BOY",
+      "Speed": 2.1,
+      "AttackRange": 10,
+      "AttackCool": 0,
+      "Sight": 50,
+      "Hearing": 90,
+      "SpawnTime": 0,
+      "AttackSuccessWaitingTime": 30
+    },
+    {
+      "Id": 1004,
+      "Name": "DARK_HAND",
+      "Speed": 1.8,
+      "AttackRange": 10,
+      "AttackCool": 0,
+      "Sight": 50,
+      "Hearing": 120,
+      "SpawnTime": 90,
+      "AttackSuccessWaitingTime": 180
+    },
+    {
+      "Id": 1005,
+      "Name": "GRIM_REAPER",
+      "Speed": 2.4,
+      "AttackRange": 5,
+      "AttackCool": 10,
+      "Sight": 100,
+      "Hearing": 110,
+      "SpawnTime": 180,
+      "AttackSuccessWaitingTime": 120
+    }
+  ]
+}

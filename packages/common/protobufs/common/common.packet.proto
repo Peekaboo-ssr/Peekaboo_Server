@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+import '../game/game.packet.proto';
+
+package common;
+
+message GamePacket {
+  oneof payload {
+    C2S_PlayerMoveRequest playerMoveRequest = 1;
+    S2C_PlayerMoveNotification playerMoveNotification = 2;
+    C2S_GhostMoveRequest ghostMoveRequest = 3;
+    S2C_GhostMoveNotification ghostMoveNotification = 4;
+    S2C_PingRequest pingRequest = 5;
+    C2S_PingResponse pingResponse = 6;
+    C2S_PlayerStateChangeRequest playerStateChangeRequest = 7;
+    S2C_PlayerStateChangeNotification playerStateChangeNotification = 8;
+    C2S_GhostStateChangeRequest ghostStateChangeRequest = 9;
+    S2C_GhostStateChangeNotification ghostStateChangeNotification = 10;
+    C2S_ItemChangeRequest itemChangeRequest = 11;
+    S2C_ItemChangeNotification itemChangeNotification = 12;
+    C2S_StartStageRequest startStageRequest = 23;
+    S2C_SpawnInitialDataRequest spawnInitialDataRequest = 24;
+    C2S_SpawnInitialDataResponse spawnInitialDataResponse = 25;
+    S2C_StartStageNotification startStageNotification = 26;
+    C2S_PlayerAttackedRequest playerAttackedRequest = 27;
+    S2C_PlayerLifeResponse playerLifeResponse = 28;
+    C2S_GhostAttackedRequest ghostAttackedRequest = 29;
+    C2S_ItemGetRequest itemGetRequest = 30;
+    S2C_ItemGetResponse itemGetResponse = 31;
+    C2S_ItemUseRequest itemUseRequest = 32;
+    S2C_ItemUseResponse itemUseResponse = 33;
+    S2C_ItemUseNotification itemUseNotification = 34;
+    C2S_ItemDiscardRequest itemDiscardRequest = 35;
+    S2C_ItemDiscardResponse itemDiscardResponse = 36;
+    S2C_ItemDiscardNotification itemDiscardNotification = 37;
+    C2S_DoorToggleRequest doorToggleRequest = 38;
+    S2C_DoorToggleNotification doorToggleNotification = 39;
+    S2C_StageEndNotification stageEndNotification = 40;
+    C2S_ExtractSoulRequest extractSoulRequest = 41;
+    S2C_ExtractSoulNotification extractSoulNotification = 42;
+    S2C_DisconnectPlayerNotification disconnectPlayerNotification = 43;
+    C2S_GhostSpecialStateRequest ghostSpecialStateRequest = 44;
+    S2C_GhostSpecialStateNotification ghostSpecialStateNotification = 45;
+    S2C_ItemDeleteNotification itemDeleteNotification = 46;
+    C2S_ItemDisuseRequest itemDisuseRequest = 47;
+    S2C_ItemDisuseNotification itemDisuseNotification = 48;
+    C2S_ItemCreateRequest itemCreateRequest = 49;
+    S2C_ItemCreateNotification itemCreateNotification = 50;
+    S2C_BlockInteractionNotification blockInteractionNotification = 51;
+    C2S_GhostSpawnRequest ghostSpawnRequest = 52;
+    S2C_GhostSpawnNotification ghostSpawnNotification = 53;
+    S2C_ItemGetNotification itemGetNotification = 54;
+    S2C_RemainingTimeNotification remainingTimeNotification = 55;
+    C2S_ItemPurchaseRequest itemPurchaseRequest = 56;
+    S2C_ItemPurchaseNotification itemPurchaseNotification = 57;
+    S2C_ItemPurchaseResponse itemPurchaseResponse = 58;
+    C2S_RegistAccountRequest registAccountRequest = 500;
+    S2C_RegistAccountResponse registAccountResponse = 501;
+    C2S_LoginRequest loginRequest = 502;
+    S2C_LoginResponse loginResponse = 503;
+    C2S_ChangeNicknameRequest changeNicknameRequest = 504;
+    S2C_ChangeNicknameResponse changeNicknameResponse = 505;
+    C2S_EnterLobbyRequest enterLobbyRequest = 506;
+    S2C_EnterLobbyResponse enterLobbyResponse = 507;
+    C2S_RefreshLobbyRequest refreshLobbyRequest = 508;
+    S2C_RefreshLobbyResponse refreshLobbyResponse = 509;
+    C2S_SearchRoomRequest searchRoomRequest = 510;
+    S2C_SearchRoomResponse searchRoomResponse = 511;
+    C2S_CreateRoomRequest createRoomRequest = 512;
+    S2C_CreateRoomResponse createRoomResponse = 513;
+    C2S_JoinRoomRequest joinRoomRequest = 514;
+    S2C_JoinRoomResponse joinRoomResponse = 515;
+    S2C_JoinRoomNotification joinRoomNotification = 516;
+  }
+}
+
+
+message ServicePacket {
+  oneof payload {
+    ConnectServiceRequest connectServiceRequest = 1;
+    ConnectedServiceNotification connectedServiceNotification = 2;
+    DisconnectServiceRequest disconnectServiceRequest = 3;
+    DisconnectedServiceNotification disconnectedServiceNotification = 4;
+    CreateDedicatedRequest createDedicatedRequest = 5;
+    ExitDedicatedRequest exitDedicatedRequest = 6;
+    ConnectDedicatedRequest connectDedicateRequest = 7;
+    JoinDedicatedRequest joinDedicatedRequest = 8;
+  }
+}
