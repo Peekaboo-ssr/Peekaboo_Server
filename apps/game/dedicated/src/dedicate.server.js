@@ -16,7 +16,7 @@ class DedicateServer {
     // 마이크로서비스 정보
     this.context = {
       host: config.server.game.host,
-      port: 0,
+      port: port,
       name: 'dedicated',
     };
     this.event = new G2SEventHandler();
@@ -27,11 +27,11 @@ class DedicateServer {
     this.redisClient = RedisManager.getClient(); // Redis 클라이언트 생성
     this.initServer(id, inviteCode);
     this.connectToDistributor(
-      config.server.distributor.host,
+      'host.docker.internal', //ec2에 사용 시 172.17.0.1로로
       config.server.distributor.port,
       () => {
         // S2S로 호스트 유저를 맵에 등록하도록 요청
-        const dedicateKey = `${this.context.host}:${this.context.port}`;
+        const dedicateKey = `${this.context.host}:${this.context.port}`; // 이거 안됨. 127.0.0.1:3600  172.0.0.2:3500    3600:3500
         const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
         const packet = createPacketS2S(
           PACKET_TYPE.service.CreateDedicatedRequest,
@@ -65,7 +65,6 @@ class DedicateServer {
         `${this.context.name} 서버가 대기 중: `,
         this.server.address(),
       );
-      this.context.port = this.server.address().port;
     });
 
     await loadProtos();
@@ -154,7 +153,12 @@ class TcpClient {
   }
 }
 
-const [clientKey, gameId, inviteCode, userId] = process.argv.slice(2);
+const gameId = process.env.GAME_ID;
+const clientKey = process.env.CLIENT_KEY;
+const inviteCode = process.env.INVITE_CODE;
+const userId = process.env.USER_ID;
+const port = process.env.PORT;
+
 new DedicateServer(clientKey, gameId, inviteCode, userId);
 
 // new DedicateServer('clientKey', 'gameId', 'userId');
