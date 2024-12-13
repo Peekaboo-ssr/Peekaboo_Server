@@ -28,7 +28,7 @@ export const joinRoomHandler = async (socket, clientKey, payload, server) => {
       const packetForDedicate = createPacketS2S(
         config.servicePacket.JoinDedicatedRequest,
         'game',
-        response.distributorKey,
+        response.dedicateKey,
         { clientKey, userId },
       );
 

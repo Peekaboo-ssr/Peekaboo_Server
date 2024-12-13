@@ -1,10 +1,9 @@
 import { config } from '../config/config.js';
 import { PACKET_MAPS } from '../constants/packet.js';
-import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import { parsePacketG2S } from '../utils/packet/parse.packet.js';
 import { PACKET_TYPE } from '../constants/packet.js';
 
-class G2SEventHandler extends BaseEvent {
+class G2SEventHandler {
   onConnection(socket, server) {
     console.log(
       `Gate connected from: ${socket.remoteAddress}:${socket.remotePort}`,

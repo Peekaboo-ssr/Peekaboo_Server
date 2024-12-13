@@ -30,7 +30,7 @@ export class DummyClient {
   onData(data) {
     const { packetType, version, sequence, payload } =
       this.packetHelper.parsePacket(data);
-    console.log('Received Packet:', { packetType, version, sequence, payload });
+    console.log('Received Packet:', { packetType, payload, port: this.port });
 
     // 만약 해당 packetType을 기다리는 Promise가 있다면 resolve
     const waiter = this.responseWaiters.get(packetType);
