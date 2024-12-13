@@ -2,6 +2,7 @@ import User from '../../classes/models/user.class.js';
 import { createPacketS2S } from '../../utils/packet/create.packet.js';
 import { config } from '../../config/config.js';
 import { sendJoinRoomResponse } from '../../response/room/room.response.js';
+import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 
 export const joinDedicatedHandler = (server, payload) => {
   const { clientKey, userId } = payload;
@@ -26,6 +27,7 @@ export const joinDedicatedHandler = (server, payload) => {
 
     // 유저 등록완료를 클라이언트에 알리기
     sendJoinRoomResponse(server.game, clientKey, true);
+    joinRoomNotification(server.game, user.id);
   } catch (e) {
     sendJoinRoomResponse(server.game, clientKey, false);
   }

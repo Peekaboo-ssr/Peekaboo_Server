@@ -23,6 +23,4 @@ class RedisManager {
   getClient = () => this.client;
 }
 
-const redisManager = new RedisManager();
-
-export default redisManager;
+export default new RedisManager();

@@ -1,6 +1,7 @@
 import { PACKET_TYPE } from '../../constants/packet.js';
 import { GLOBAL_FAIL_CODE } from '../../constants/state.js';
 import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 
 export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
   const players = isSuccess

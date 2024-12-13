@@ -1,8 +1,8 @@
 import net from 'net';
 import { config } from './config/config.js';
 import { PACKET_TYPE } from './constants/packet.js';
-import RedisManager from './classes/managers/redisManager.js';
 import { createPacketS2S } from './utils/packet/create.packet.js';
+import { setGameRedis } from './redis/game.redis.js';
 import G2SEventHandler from './events/onG2S.event.js';
 import D2SEventHandler from './events/onD2S.event.js';
 import { handlers } from './handlers/index.js';
@@ -24,7 +24,6 @@ class DedicateServer {
     this.isConnectedDistributor = false;
     this.clientToDistributor = null;
     this.handlers = handlers;
-    this.redisClient = RedisManager.getClient(); // Redis 클라이언트 생성
     this.initServer(id, inviteCode);
     this.connectToDistributor(
       config.server.distributor.host,
@@ -71,7 +70,7 @@ class DedicateServer {
     await loadProtos();
     await loadGameAssets();
     this.game = new Game(id, inviteCode); // 현재 서버의 게임 클래스
-    // setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
+    await setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
   }
 
   connectToDistributor(host, port, notification) {
@@ -156,26 +155,3 @@ class TcpClient {
 
 const [clientKey, gameId, inviteCode, userId] = process.argv.slice(2);
 new DedicateServer(clientKey, gameId, inviteCode, userId);
-
-// new DedicateServer('clientKey', 'gameId', 'userId');
-
-/**
- * CreateReq
- * 1. 마스터서버에서 dedicate 생성
- * 2. 호스트유저 addUser
- * 3. gameSessionKey, dedicateKey, inviteCode => 세션 서비스에 pub/sub
- * 4. 세션 서비스에 위 정보가 담긴 게임 세션들을 저장.
- *
- * 만약 데디/마스터 모두 joinReq를 받는다고 가정했을 때,
- * 1. 클라에서 보낸 joinRoomReq를 마스터서버에서 세션 서비스에 요청하여 dedicateKey를 찾음.
- * 2. S2S 게이트웨이에 해당 dedicateKey 데디에 joinRoomReq를 보냄 servicePacket
- * 3. 데디는 joinRoomReq를 받으면 addUser 하도록 함.
- *
- *
- * 대기실 리스트에서 게임을 참가한다고 했을 때,
- * 1. joinRoomRequest 를 2개로 나누는 형태로 가져감
- * 2. joinRoomByInviteReq , joinRoomByIdReq 형태
- * 3. joinRoomByInviteReq 는 페이로드로 inviteCode를 받아서 세션 서비스에 찾도록 요청
- * 4. joinRoomByIdReq 는 페이로드로 gameSessionId를 받아서 세션 서비스에 찾도록 요청
- * 5. 두 요청 모두 마스터 서버에서 다루어지면 됨.
- */

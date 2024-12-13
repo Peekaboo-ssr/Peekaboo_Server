@@ -1,5 +1,20 @@
 import redisManager from '../classes/managers/redisManager.js';
 import { config } from '../config/config.js';
+
+/**
+ * 방 생성시 redis에 게임 세션의 정보를 저장하는 함수입니다.
+ * @param {*} gameId
+ * @param {*} inviteCode
+ * @param {*} state
+ */
+export const setGameRedis = async (gameId, inviteCode, state) => {
+  const key = `${config.redis.game_set}:${gameId}`;
+
+  const data = { inviteCode, state };
+
+  await redisManager.getClient().hset(key, data);
+};
+
 /**
  * redis에 저장된 게임의 상태를 변경하기 위한 함수입니다.
  * @param {*} gameId
