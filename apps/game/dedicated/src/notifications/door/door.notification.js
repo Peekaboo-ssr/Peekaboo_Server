@@ -1,13 +1,13 @@
 import { createPacketS2G } from '../../utils/packet/create.packet.js';
 import { PACKET_TYPE } from '../../constants/packet.js';
 
-export const doorToggleNotification = (gameSession, payload) => {
-  gameSession.users.forEach((user) => {
+export const doorToggleNotification = (game, payload) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
       PACKET_TYPE.game.DoorToggleNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };

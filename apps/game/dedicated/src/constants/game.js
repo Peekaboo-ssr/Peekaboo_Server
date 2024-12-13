@@ -7,3 +7,5 @@ export const MAX_GHOST_NUM = 5;
 export const INVITE_CODE_LENGTH = 10;
 
 export const MAX_DOOR_NUM = 30;
+
+export const SUBMISSION_DURATION = 2;

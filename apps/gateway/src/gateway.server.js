@@ -32,7 +32,7 @@ class GatewayServer extends TcpServer {
         // client, info
       },
       dedicates: {
-        // client, info, users
+        // client, info, users, distributorKey
       },
     }; // 마이크로서비스들을 담기 위한 공간
 

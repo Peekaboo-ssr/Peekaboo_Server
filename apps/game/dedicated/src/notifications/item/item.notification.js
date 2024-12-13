@@ -1,135 +1,129 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
 import { PACKET_TYPE } from '../../constants/packet.js';
-import { ErrorCodesMaps } from '../../Error/error.codes.js';
+import { createPacketS2G } from '../../utils/packet/create.packet.js';
 
-export const itemChangeNotification = (gameSession, userId, itemId) => {
+export const itemChangeNotification = (game, userId, itemId) => {
   const payload = {
     userId,
     itemId,
   };
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemChangeNotification,
+      PACKET_TYPE.ItemChangeNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
 
-export const itemUseNotification = (gameSession, userId, itemId) => {
-  const payload = {
-    userId,
-    itemId,
-  };
-
-  gameSession.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemUseNotification,
-      payload,
-      user.socket.sequence++,
-    );
-    user.socket.write(packet);
-  });
-};
-
-export const itemDiscardNotification = (gameSession, userId, itemId) => {
+export const itemUseNotification = (game, userId, itemId) => {
   const payload = {
     userId,
     itemId,
   };
 
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemDiscardNotification,
+      PACKET_TYPE.ItemUseNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
 
-export const itemDeleteNotification = (gameSession, itemId) => {
-  const delItem = gameSession.removeItem(itemId);
-  if (delItem === -1) {
-    throw new CustomError(ErrorCodesMaps.ITEM_DETERIORATION);
-  }
-
-  //아이템 위변조가 일어나도 일단은 보내는걸로
-  const payload = {
-    itemId,
-  };
-
-  gameSession.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemDeleteNotification,
-      payload,
-      user.socket.sequence++,
-    );
-    user.socket.write(packet);
-  });
-};
-
-export const itemDisuseNotification = (gameSession, userId, itemId) => {
+export const itemDiscardNotification = (game, userId, itemId) => {
   const payload = {
     userId,
     itemId,
   };
 
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemDisuseNotification,
+      PACKET_TYPE.ItemDiscardNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
-export const itemCreateNotification = (gameSession, itemInfo) => {
+
+export const itemDeleteNotification = (game, itemIds) => {
+  const payload = {
+    itemIds,
+  };
+
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      PACKET_TYPE.ItemDeleteNotification,
+      user.clientKey,
+      payload,
+    );
+    game.socket.write(packet);
+  });
+};
+
+export const itemDisuseNotification = (game, userId, itemId) => {
+  const payload = {
+    userId,
+    itemId,
+  };
+
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      PACKET_TYPE.ItemDisuseNotification,
+      user.clientKey,
+      payload,
+    );
+    game.socket.write(packet);
+  });
+};
+export const itemCreateNotification = (game, itemInfo) => {
   const payload = {
     itemInfo,
   };
 
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemCreateNotification,
+      PACKET_TYPE.ItemCreateNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
 
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
 
-export const itemGetNotification = (gameSession, itemId, userId) => {
-  gameSession.users.forEach((user) => {
+export const itemGetNotification = (game, itemId, userId) => {
+  const payload = {
+    itemId,
+    userId,
+  };
+
+  game.users.forEach((user) => {
     if (user.id !== userId) {
       const packet = createPacketS2G(
-        PACKET_TYPE.game.ItemGetNotification,
-        {
-          itemId,
-          userId,
-        },
-        user.socket.sequence++,
+        PACKET_TYPE.ItemGetNotification,
+        user.clientKey,
+        payload,
       );
-
-      user.socket.write(packet);
+      game.socket.write(packet);
     }
   });
 };
 
-export const itemPurchaseNotification = (gameSession, itemInfo) => {
+export const itemPurchaseNotification = (game, itemInfo) => {
   const payload = {
     itemInfo,
   };
 
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.ItemPurchaseNotification,
+      PACKET_TYPE.ItemPurchaseNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
 
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };

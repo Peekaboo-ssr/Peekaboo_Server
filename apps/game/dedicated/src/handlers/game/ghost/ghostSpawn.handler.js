@@ -1,33 +1,27 @@
 import CustomError from '../../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { getGameSessionById } from '../../../sessions/game.session.js';
-import { getUserById } from '../../../sessions/user.sessions.js';
+import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import Ghost from '../../../classes/models/ghost.class.js';
 import { ghostSpawnNotification } from '../../../notifications/ghost/ghost.notification.js';
 import { getRandomInt } from '../../../utils/math/getRandomInt.js';
 
 /**
- * 귀신의 특수 상태 요청에 대한 핸들러 함수입니다. (호스트만 요청)
+ * 귀신 생성 요청에 따른 핸들러 함수입니다.
  */
-export const ghostSpawnHandler = ({ socket, payload }) => {
+export const ghostSpawnHandler = ({ socket, clientKey, payload, server }) => {
   try {
     const { ghostTypeId } = payload;
 
-    const user = getUserById(socket.userId);
+    const user = getUserByClientKey(clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
 
-    const gameSession = getGameSessionById(user.gameId);
-    if (!gameSession) {
-      throw new CustomError(ErrorCodesMaps.GAME_NOT_FOUND);
-    }
-
     const positionIndex = getRandomInt(
       0,
-      gameSession.ghostSpawnPositions.length,
+      server.game.ghostSpawnPositions.length,
     );
-    const ghostPosition = gameSession.ghostSpawnPositions.splice(
+    const ghostPosition = server.game.ghostSpawnPositions.splice(
       positionIndex,
       1,
     );
@@ -44,12 +38,12 @@ export const ghostSpawnHandler = ({ socket, payload }) => {
     };
 
     const ghost = new Ghost(
-      gameSession.ghostIdCount++,
+      server.game.ghostIdCount++,
       ghostTypeId,
       position,
       //rotation
     );
-    gameSession.addGhost(ghost);
+    server.game.addGhost(ghost);
 
     const moveInfo = {
       position,
@@ -62,7 +56,7 @@ export const ghostSpawnHandler = ({ socket, payload }) => {
       moveInfo,
     };
 
-    ghostSpawnNotification(gameSession, ghostInfo);
+    ghostSpawnNotification(server.game, ghostInfo);
   } catch (e) {
     handleError(e);
   }

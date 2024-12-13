@@ -30,3 +30,9 @@ export const CHARACTER_STATE = {
   SHOUT: 9,
   EXIT: 10,
 };
+
+export const DOOR_STATE = {
+  DOOR_LEFT: 1,
+  DOOR_MIDDLE: 2,
+  DOOR_RIGHT: 3,
+};

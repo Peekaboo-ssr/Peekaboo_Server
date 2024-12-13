@@ -22,13 +22,6 @@ class IntervalManager extends BaseManager {
     this.intervals.get(playerId).set(type, setInterval(callback, interval));
   }
 
-  // 게임 플레이어들 전용 Interval
-  addPlayersInterval(gameId, callback, interval, type = 'users') {
-    if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());
-
-    this.intervals.get(gameId).set(type, setInterval(callback, interval));
-  }
-
   // 게임 귀신들 전용 Interval
   addGhostsInterval(gameId, callback, interval, type = 'ghosts') {
     if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());
@@ -43,13 +36,15 @@ class IntervalManager extends BaseManager {
     this.intervals.get(gameId).set(type, setInterval(callback, interval));
   }
 
+  // 게임 타이머 전용 Interval
   addGameTimerInterval(gameId, callback, interval, type = 'timer') {
     if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());
 
     this.intervals.get(gameId).set(type, setInterval(callback, interval));
   }
 
-  removeUserInterval(userId) {
+  // 유저 인터벌 삭제
+  removePingInterval(userId) {
     if (this.intervals.has(userId)) {
       const userIntervals = this.intervals.get(userId);
       userIntervals.forEach((intervalId) => {
@@ -59,6 +54,7 @@ class IntervalManager extends BaseManager {
     }
   }
 
+  // 게임 관련 인터벌(귀신, 모니터링, 타이머) 삭제
   removeGameInterval(gameId) {
     if (this.intervals.has(gameId)) {
       const gameIntervals = this.intervals.get(gameId);
@@ -69,27 +65,46 @@ class IntervalManager extends BaseManager {
     }
   }
 
-  removeMonsterTypeInterval(gameId) {
+  // 귀신 인터벌 삭제
+  removeGhostsInterval(gameId) {
     if (this.intervals.has(gameId)) {
-      const gameMonitorInterval = this.intervals.get(gameId);
-      clearInterval(gameMonitorInterval.get('monsterType'));
-      this.intervals.delete(gameId);
-    }
-  }
-
-  removeInterval(playerId, type) {
-    if (this.intervals.has(playerId)) {
-      const userIntervals = this.intervals.get(playerId);
-      if (userIntervals.has(type)) {
-        clearInterval(userIntervals.get(type));
-        userIntervals.delete(type);
+      const gameIntervals = this.intervals.get(gameId);
+      if (gameIntervals.has('ghosts')) {
+        const ghostsInterval = this.intervals.get(gameId).get('ghosts');
+        clearInterval(ghostsInterval);
+        gameIntervals.delete('ghosts');
       }
     }
   }
 
+  // 게임 모니터링 인터벌 삭제
+  removeGameMonitorInterval(gameId) {
+    if (this.intervals.has(gameId)) {
+      const gameIntervals = this.intervals.get(gameId);
+      if (gameIntervals.has('monitor')) {
+        const ghostsInterval = this.intervals.get(gameId).get('monitor');
+        clearInterval(ghostsInterval);
+        gameIntervals.delete('monitor');
+      }
+    }
+  }
+
+  // 게임 타이머 인터벌 삭제
+  removeGameTimerInterval(gameId) {
+    if (this.intervals.has(gameId)) {
+      const gameIntervals = this.intervals.get(gameId);
+      if (gameIntervals.has('timer')) {
+        const ghostsInterval = this.intervals.get(gameId).get('timer');
+        clearInterval(ghostsInterval);
+        gameIntervals.delete('timer');
+      }
+    }
+  }
+
+  // 모든 인터벌 삭제
   clearAll() {
-    this.intervals.forEach((userIntervals) => {
-      userIntervals.forEach((intervalId) => {
+    this.intervals.forEach((Intervals) => {
+      Intervals.forEach((intervalId) => {
         clearInterval(intervalId);
       });
     });
