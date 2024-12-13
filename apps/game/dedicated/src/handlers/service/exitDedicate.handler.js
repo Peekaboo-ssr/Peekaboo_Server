@@ -1,7 +1,7 @@
 import { getUserByClientKey } from '../../sessions/user.sessions.js';
-import IntervalManager from '../../classes/managers/interval.manager.js';
+import { setUserRedis } from '../../redis/user.redis.js';
 
-export const exitDedicatedHandler = (server, payload) => {
+export const exitDedicatedHandler = async (server, payload) => {
   const { clientKey } = payload;
 
   const user = getUserByClientKey(server.game.users, clientKey);
@@ -11,10 +11,7 @@ export const exitDedicatedHandler = (server, payload) => {
     return;
   }
 
-  // 유저의 모든 인터벌 제거
-  IntervalManager.getInstance().removeUserInterval(user.id);
-
-  server.game.users = server.game.users.filter(
-    (user) => user.clientKey !== clientKey,
-  );
+  server.game.removeUser(user.id);
+  // 레디스에 유저 정보 저장
+  await setUserRedis(user.id, user.gameId);
 };

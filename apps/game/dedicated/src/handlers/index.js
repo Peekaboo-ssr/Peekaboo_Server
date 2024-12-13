@@ -1,7 +1,7 @@
 import { PACKET_TYPE } from '../constants/packet.js';
 import { movePlayerRequestHandler } from './game/player/movePlayer.handler.js';
 import { moveGhostRequestHandler } from './game/ghost/moveGhost.handler.js';
-import { pingHandler } from './game/ping.handler.js';
+import { pingHandler } from './game/system/ping.handler.js';
 import { doorToggleRequestHandler } from './game/door/door.handler.js';
 import {
   playerAttackedRequestHandler,

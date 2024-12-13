@@ -6,6 +6,8 @@ import {
 import { createPacketS2G } from '../utils/packet/create.packet.js';
 import { PACKET_TYPE } from '../constants/packet.js';
 
+// 찾아 보니 이것들안쓰고 있네요
+
 /**
  * 토큰이 유효하지 않을때 실패 응답 보내주는 함수입니다.
  * @param {*} socket
@@ -32,10 +34,11 @@ export const invalidTokenResponse = (socket) => {
 /**
  * 호스트에게 게임 초기 정보를 응답으로 보내주는 함수입니다.
  * @param {*} socket
- * @param {*} gameSession
+ * @param {*} game
  */
-export const sendConnectGameResponse = (socket, gameSession, existUserIds) => {
-  const ghosts = gameSession.ghosts.map((ghost) => {
+export const sendConnectGameResponse = (game, existUserIds, clientKey) => {
+  // 이게 맞는거
+  const ghosts = game.ghosts.map((ghost) => {
     const moveData = {
       position: ghost.position.getPosition(),
       rotation: ghost.rotation.getRotation(),
@@ -49,20 +52,20 @@ export const sendConnectGameResponse = (socket, gameSession, existUserIds) => {
     return ghostData;
   });
   const data = {
-    gameId: gameSession.id,
-    hostId: gameSession.hostId,
+    gameId: game.id,
+    hostId: game.hostId,
     existUserIds: existUserIds,
     ghostInfos: ghosts,
     ghostTypeIds: [1, 1], // 임시 고스트 타입 5마리 소환하라고 보냅니다.
     globalFailCode: GLOBAL_FAIL_CODE.NONE,
     userState: USER_STATE.INGAME,
-    gameSessionState: gameSession.state,
+    gameSessionState: game.state,
     message: '게임 세션 입장에 성공하였습니다.',
   };
   const responseData = createPacketS2G(
     PACKET_TYPE.ConnectGameResponse,
+    clientKey,
     data,
-    socket.sequence++,
   ); // sequence도 임시로
-  socket.write(responseData);
+  game.socket.write(responseData);
 };

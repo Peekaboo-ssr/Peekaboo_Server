@@ -64,11 +64,15 @@ export const usersLocationNotification = (game) => {
     return locationData;
   });
 
+  const payload = {
+    playerMoveInfos: userLocations,
+  };
+
   game.users.forEach((user) => {
     const userLocationPayload = createPacketS2G(
       PACKET_TYPE.game.PlayerMoveNotification,
       user.clientKey,
-      { playerMoveInfos: userLocations },
+      payload,
     );
     game.socket.write(userLocationPayload);
   });
@@ -78,9 +82,9 @@ export const playerStateChangeNotification = (game, payload) => {
   game.users.forEach((user) => {
     const packet = createPacketS2G(
       PACKET_TYPE.game.PlayerStateChangeNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };

@@ -9,6 +9,7 @@ import { handlers } from './handlers/index.js';
 import Game from './classes/models/game.class.js';
 import User from './classes/models/user.class.js';
 import { loadProtos } from './init/load.protos.js';
+import { loadGameAssets } from './init/load.assets.js';
 
 class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
@@ -24,8 +25,7 @@ class DedicateServer {
     this.clientToDistributor = null;
     this.handlers = handlers;
     this.redisClient = RedisManager.getClient(); // Redis 클라이언트 생성
-    this.initServer();
-    this.initializeRoom(clientKey, id, inviteCode);
+    this.initServer(id, inviteCode);
     this.connectToDistributor(
       'host.docker.internal', //ec2에 사용 시 172.17.0.1로로
       config.server.distributor.port,
@@ -38,7 +38,7 @@ class DedicateServer {
           'dedicated',
           'gateway',
           {
-            hostKey: this.hostKey,
+            hostKey: clientKey,
             dedicateKey,
             distributorKey,
             gameSessionId: this.game.id,
@@ -52,7 +52,7 @@ class DedicateServer {
     );
   }
 
-  async initServer() {
+  async initServer(id, inviteCode) {
     this.server = net.createServer((socket) => {
       this.event.onConnection(socket, this);
       socket.on('data', (data) => this.event.onData(socket, data, this));
@@ -68,6 +68,9 @@ class DedicateServer {
     });
 
     await loadProtos();
+    await loadGameAssets();
+    this.game = new Game(id, inviteCode); // 현재 서버의 게임 클래스
+    // setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
   }
 
   connectToDistributor(host, port, notification) {
@@ -111,13 +114,6 @@ class DedicateServer {
     }
     return this.handlers.service[packetType].handler;
   };
-
-  // 게임 방을 초기화 하는 함수
-  initializeRoom(clientKey, id, inviteCode) {
-    this.hostKey = clientKey; // 호스트의 키
-    this.game = new Game(id, inviteCode); // 현재 서버의 게임 클래스
-    // setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
-  }
 }
 
 class TcpClient {

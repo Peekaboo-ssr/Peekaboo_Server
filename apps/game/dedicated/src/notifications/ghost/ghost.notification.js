@@ -1,20 +1,19 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
 import { PACKET_TYPE } from '../../constants/packet.js';
-import { CHARACTER_STATE } from '../../constants/state.js';
 import CustomError from '../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../Error/error.codes.js';
+import { createPacketS2G } from '../../utils/packet/create.packet.js';
 
 /**
  * 귀신의 움직임값을 보내주는 함수입니다.
  */
-export const ghostsLocationNotification = (gameSession) => {
+export const ghostsLocationNotification = (game) => {
   // ghosts에 ghost가 없다면 ghostsLocationNotification을 보내지 않는다.
-  if (gameSession.ghosts.length === 0) {
+  if (game.ghosts.length === 0) {
     return;
   }
 
   // 보내줄 데이터 추출하여 정리
-  const ghostMoveInfos = gameSession.ghosts.map((ghost) => {
+  const ghostMoveInfos = game.ghosts.map((ghost) => {
     const ghostMoveInfo = {
       ghostId: ghost.id,
       position: ghost.position.getPosition(),
@@ -24,38 +23,38 @@ export const ghostsLocationNotification = (gameSession) => {
     return ghostMoveInfo;
   });
 
+  const payload = {
+    ghostMoveInfos,
+  };
+
   // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
-  gameSession.users.forEach((user) => {
+  game.users.forEach((user) => {
     // 호스트 빼고 보내주기
-    if (user.id === gameSession.hostId) {
+    if (user.id === game.hostId) {
       return;
     }
-    const responseData = createPacketS2G(
-      PACKET_TYPE.game.GhostMoveNotification,
-      { ghostMoveInfos },
-      user.socket.sequence++,
+    const packet = createPacketS2G(
+      PACKET_TYPE.GhostMoveNotification,
+      user.clientKey,
+      payload,
     );
-    user.socket.write(responseData);
+    game.socket.write(packet);
   });
 };
 
 /**
  * 고스트의 상태변화 통지를 알리는 함수입니다. (호스트 제외)
- * @param {*} gameSession
+ * @param {*} server
  * @param {*} ghostId
- * @param {*} ghostState
+ * @param {*} characterState
  */
-export const ghostStateChangeNotification = (
-  gameSession,
-  ghostId,
-  characterState,
-) => {
+export const ghostStateChangeNotification = (game, ghostId, characterState) => {
   // 고스트 검증
-  const ghost = gameSession.getGhost(ghostId);
+  const ghost = game.getGhost(ghostId);
   if (!ghost) {
     throw new CustomError(ErrorCodesMaps.GHOST_NOT_FOUND);
   }
-  ghost.setState(ghostState);
+  ghost.setState(characterState);
 
   const ghostStateInfo = {
     ghostId,
@@ -67,29 +66,29 @@ export const ghostStateChangeNotification = (
   };
 
   // 호스트 제외 packet 전송
-  gameSession.users.forEach((user) => {
-    if (gameSession.hostId === user.id) {
+  game.users.forEach((user) => {
+    if (game.hostId === user.id) {
       return;
     }
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostStateChangeNotification,
+      PACKET_TYPE.GhostStateChangeNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
 
 /**
  * 귀신의 특수상태 통지를 알리는 함수입니다. (호스트 제외)
- * @param {*} gameSession
+ * @param {*} game
  * @param {*} payload
  */
-export const ghostSpecialStateNotification = (gameSession, payload) => {
+export const ghostSpecialStateNotification = (game, payload) => {
   const { ghostId, specialState, isOn } = payload;
 
   // 고스트 검증
-  const ghost = gameSession.getGhost(ghostId);
+  const ghost = game.getGhost(ghostId);
   if (!ghost) {
     throw new CustomError(ErrorCodesMaps.GHOST_NOT_FOUND);
   }
@@ -101,31 +100,47 @@ export const ghostSpecialStateNotification = (gameSession, payload) => {
   };
 
   // 호스트 제외 packet 전송
-  gameSession.users.forEach((user) => {
-    if (gameSession.hostId === user.id) {
+  game.users.forEach((user) => {
+    if (game.hostId === user.id) {
       return;
     }
-
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostSpecialStateNotification,
+      PACKET_TYPE.GhostSpecialStateNotification,
+      user.clientKey,
       data,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };
 
 // 귀신 생성 알림
-export const ghostSpawnNotification = (gameSession, ghostInfo) => {
+export const ghostSpawnNotification = (game, ghostInfo) => {
   const payload = {
     ghostInfo,
   };
-  gameSession.users.forEach((user) => {
+
+  game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostSpawnNotification,
+      PACKET_TYPE.GhostSpawnNotification,
+      user.clientKey,
       payload,
-      user.socket.sequence++,
     );
-    user.socket.write(packet);
+    game.socket.write(packet);
+  });
+};
+
+// 귀신 삭제 알림
+export const ghostDeleteNotification = (game, ghostIds) => {
+  const payload = {
+    ghostIds,
+  };
+
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      PACKET_TYPE.GhostDeleteNotification,
+      user.clientKey,
+      payload,
+    );
+    game.socket.write(packet);
   });
 };

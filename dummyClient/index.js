@@ -74,8 +74,11 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     clients.push({ client, userData: cData.userData });
     scenarioManagers.push(scenario);
   }
-
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
+  await runScenario(clients, scenarioManagers);
+})();
+
+const runScenario = async (clients, scenarioManagers) => {
   // 모든 클라이언트 로그인
   for (let i = 0; i < clients.length; i++) {
     const { userData } = clients[i];
@@ -107,14 +110,23 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   // 첫 번째 클라이언트만 이동 시나리오 시작
   scenarioManagers[0].moveScenario(firstClientUserData, 200);
 
-  // 다른 클라이언트들 또한 필요하다면 시나리오 실행
-  // 예: 두 번째 클라이언트도 움직임 시작
-  // scenarioManagers[1].moveScenario(clients[1].userData, 300);
+  await delay(6000);
 
-  await delay(60000);
+  scenarioManagers[1].moveScenario(secondClientUserData, 200);
+
+  await delay(10000);
+
+  // 두 번째 클라이언트 종료
+  clients[1].client.close();
+
+  await delay(10000);
+
+  // 첫 번째 클라이언트 종료
+  clients[0].client.close();
 
   // 모든 클라이언트 종료
-  for (const { client } of clients) {
-    client.close();
-  }
-})();
+  // for (const { client } of clients) {
+  //   client.close();
+  // }
+  await scManager1.loginScenario();
+};

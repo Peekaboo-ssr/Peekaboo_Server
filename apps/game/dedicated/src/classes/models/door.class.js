@@ -1,8 +1,4 @@
-export const DOOR_STATE = {
-  DOOR_LEFT: 1,
-  DOOR_MIDDLE: 2,
-  DOOR_RIGHT: 3,
-};
+import { DOOR_STATE } from '../../constants/state.js';
 
 export class Door {
   constructor(doorId) {

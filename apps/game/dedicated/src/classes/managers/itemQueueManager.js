@@ -1,19 +1,15 @@
 import Queue from 'bull';
 import { config } from '../../config/config.js';
-import { getGameSessionById } from '../../sessions/game.session.js';
 import CustomError from '../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../Error/error.codes.js';
-import { getUserById } from '../../sessions/user.sessions.js';
+import { getUserByClientKey } from '../../sessions/user.sessions.js';
 import { itemGetResponse } from '../../response/item/item.response.js';
-import {
-  itemChangeNotification,
-  itemGetNotification,
-} from '../../notifications/item/item.notification.js';
+import { itemGetNotification } from '../../notifications/item/item.notification.js';
 import redisManager from './redisManager.js';
 
 class ItemQueueManager {
-  constructor(gameId) {
-    this.queue = new Queue(`${gameId}:itemQueue`, {
+  constructor(game) {
+    this.queue = new Queue(`${game.id}:itemQueue`, {
       redis: {
         host: config.redis.host,
         port: config.redis.port,
@@ -25,17 +21,12 @@ class ItemQueueManager {
       const startTime = Date.now();
       const { userId, itemId, inventorySlot } = job.data;
 
-      const user = getUserById(userId);
+      const user = getUserByClientKey(userId);
       if (!user) {
         throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
       }
 
-      const gameSession = getGameSessionById(user.gameId);
-      if (!gameSession) {
-        throw new CustomError(ErrorCodesMaps.GAME_NOT_FOUND);
-      }
-
-      const item = gameSession.getItem(itemId);
+      const item = game.getItem(itemId);
 
       // 혹시 모를 동시성 제어 2
       if (!item.mapOn) {
@@ -64,12 +55,12 @@ class ItemQueueManager {
 
         // 응답 보내주기
         // itemGetResponse(user.socket, itemId, newInventorySlot);
-        itemGetResponse(user.socket, itemId, inventorySlot);
-        itemGetNotification(gameSession, itemId, userId);
+        itemGetResponse(user.clientKey, game.socket, itemId, inventorySlot);
+        itemGetNotification(game, itemId, userId);
 
-        if (!gameSession.ghostCSpawn) {
+        if (!game.ghostCSpawn) {
           if (user.character.inventory.itemCount === 4) {
-            gameSession.ghostCSpawn === true;
+            game.ghostCSpawn === true;
             //ghostC 소환 요청 로직 추가
           }
         }
