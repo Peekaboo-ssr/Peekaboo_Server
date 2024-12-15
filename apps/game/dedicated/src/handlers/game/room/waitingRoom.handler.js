@@ -58,7 +58,7 @@ export const startStageRequestHandler = ({
     };
 
     const packet = createPacketS2G(
-      PACKET_TYPE.SpawnInitialDataRequest,
+      PACKET_TYPE.game.SpawnInitialDataRequest,
       hostUser.clientKey,
       s2cRequestPayload,
     );

@@ -8,7 +8,7 @@ export const itemChangeNotification = (game, userId, itemId) => {
   };
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemChangeNotification,
+      PACKET_TYPE.game.ItemChangeNotification,
       user.clientKey,
       payload,
     );
@@ -24,7 +24,7 @@ export const itemUseNotification = (game, userId, itemId) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemUseNotification,
+      PACKET_TYPE.game.ItemUseNotification,
       user.clientKey,
       payload,
     );
@@ -41,7 +41,7 @@ export const itemDiscardNotification = (game, userId, itemId) => {
   game.users.forEach((user) => {
     if (userId !== user.id) {
       const packet = createPacketS2G(
-        PACKET_TYPE.ItemDiscardNotification,
+        PACKET_TYPE.game.ItemDiscardNotification,
         user.clientKey,
         payload,
       );
@@ -57,7 +57,7 @@ export const itemDeleteNotification = (game, itemIds) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemDeleteNotification,
+      PACKET_TYPE.game.ItemDeleteNotification,
       user.clientKey,
       payload,
     );
@@ -73,7 +73,7 @@ export const itemDisuseNotification = (game, userId, itemId) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemDisuseNotification,
+      PACKET_TYPE.game.ItemDisuseNotification,
       user.clientKey,
       payload,
     );
@@ -87,7 +87,7 @@ export const itemCreateNotification = (game, itemInfo) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemCreateNotification,
+      PACKET_TYPE.game.ItemCreateNotification,
       user.clientKey,
       payload,
     );
@@ -105,7 +105,7 @@ export const itemGetNotification = (game, itemId, userId) => {
   game.users.forEach((user) => {
     if (user.id !== userId) {
       const packet = createPacketS2G(
-        PACKET_TYPE.ItemGetNotification,
+        PACKET_TYPE.game.ItemGetNotification,
         user.clientKey,
         payload,
       );
@@ -122,7 +122,7 @@ export const itemPurchaseNotification = (game, itemInfo) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemPurchaseNotification,
+      PACKET_TYPE.game.ItemPurchaseNotification,
       user.clientKey,
       payload,
     );
