@@ -12,7 +12,7 @@ import { PACKET_TYPE } from '../constants/packet.js';
  * 토큰이 유효하지 않을때 실패 응답 보내주는 함수입니다. 이거 나중에 바꿔줘야 할듯
  * @param {*} socket
  */
-export const invalidTokenResponse = (clientKey) => {
+export const invalidTokenResponse = (game, clientKey) => {
   const data = {
     gameId: null,
     hostId: null,
@@ -28,7 +28,7 @@ export const invalidTokenResponse = (clientKey) => {
     clientKey,
     data,
   ); // sequence도 임시로
-  socket.write(responseData);
+  game.socket.write(responseData);
 };
 
 /**

@@ -85,6 +85,6 @@ export const submissionEndNotification = (game, result) => {
       payload,
     );
 
-    user.socket.write(packet);
+    game.socket.write(packet);
   });
 };

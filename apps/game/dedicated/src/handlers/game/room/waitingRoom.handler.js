@@ -59,11 +59,11 @@ export const startStageRequestHandler = ({
 
     const packet = createPacketS2G(
       PACKET_TYPE.SpawnInitialDataRequest,
-      clientKey,
+      hostUser.clientKey,
       s2cRequestPayload,
     );
 
-    hostUser.socket.write(packet);
+    socket.write(packet);
   } catch (e) {
     handleError(e);
   }
