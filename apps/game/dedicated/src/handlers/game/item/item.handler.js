@@ -22,19 +22,18 @@ export const itemGetRequestHandler = async ({
 }) => {
   try {
     const { itemId, inventorySlot } = payload;
-    console.log(user.id, '슬롯확인----------', inventorySlot);
     const user = getUserByClientKey(server.game.users, clientKey);
+    console.log(user.id, '슬롯확인----------', inventorySlot);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
 
     // 동시성 제어 1(불큐)
     // 실질적인 아이템 저장
-    await server.game.itemQueue.queue.add(
+    await server.game.gameQueue.queue.add(
       {
-        clientKey,
-        itemId,
-        inventorySlot,
+        type: 'item',
+        data: { clientKey, itemId, inventorySlot },
       },
       { jobId: `getItem:${itemId}`, removeOnComplete: true },
     );
