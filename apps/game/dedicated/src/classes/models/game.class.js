@@ -170,7 +170,7 @@ class Game {
     // 연결을 종료한 사실을 다른 유저들에게 disconnectPlayerNotification로 알려준다.
     await disconnectPlayerNotification(this, userId);
 
-    // IntervalManager.getInstance().removeUserInterval(userId);
+    IntervalManager.getInstance().removeUserInterval(userId);
   }
 
   getUser(userId) {

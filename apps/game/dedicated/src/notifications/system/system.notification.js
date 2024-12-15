@@ -79,7 +79,7 @@ export const submissionEndNotification = (game, result) => {
     submissionId: result ? game.submissionId : 0,
   };
   game.users.forEach((user) => {
-    const packet = serializer(
+    const packet = createPacketS2G(
       PACKET_TYPE.SubmissionEndNotification,
       user.clientKey,
       payload,

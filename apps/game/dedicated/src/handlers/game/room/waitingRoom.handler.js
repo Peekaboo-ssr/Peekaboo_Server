@@ -57,10 +57,10 @@ export const startStageRequestHandler = ({
       message: '게임 시작을 요청합니다.',
     };
 
-    const packet = serializer(
+    const packet = createPacketS2G(
       PACKET_TYPE.SpawnInitialDataRequest,
+      clientKey,
       s2cRequestPayload,
-      socket.sequence++,
     );
 
     hostUser.socket.write(packet);

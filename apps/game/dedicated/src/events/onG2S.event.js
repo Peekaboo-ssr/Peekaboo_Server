@@ -69,7 +69,7 @@ class G2SEventHandler {
         )
           console.log(
             `#@!RECV!@# PacketType : ${
-              PACKET_MAPS[packetType]
+              PACKET_MAPS.client[packetType]
             } => Payload ${JSON.stringify(payload)}`,
           );
 

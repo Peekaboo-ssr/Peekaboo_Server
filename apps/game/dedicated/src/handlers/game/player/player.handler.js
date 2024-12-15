@@ -77,8 +77,8 @@ export const playerAttackedRequestHandler = async ({
 
     const packet = createPacketS2G(
       PACKET_TYPE.PlayerLifeResponse,
+      clientKey,
       lifePayload,
-      socket.sequence++,
     );
 
     socket.write(packet);
