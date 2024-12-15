@@ -32,7 +32,7 @@ class DedicateServer {
   async initialize(id, inviteCode, userId, clientKey) {
     await this.initServer();
     await this.connectToDistributor(
-      'host.docker.internal',
+      '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
       config.server.distributor.port,
       () => {
         // 게임 인스턴스 생성
