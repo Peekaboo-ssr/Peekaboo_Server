@@ -9,7 +9,7 @@ class DoorQueueManager {
     this.game = game;
   }
 
-  initializeQueue() {
+  initializeDoorQueue() {
     this.queue = new Queue(`${this.game.id}:doorQueue`, {
       redis: {
         host: config.redis.host,

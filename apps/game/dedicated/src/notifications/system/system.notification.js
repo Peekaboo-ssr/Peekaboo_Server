@@ -52,8 +52,15 @@ export const remainingTimeNotification = (game) => {
 };
 
 export const stageEndNotification = (game) => {
+  const startPosition = {
+    x: -13.17,
+    y: 1,
+    z: 22.5,
+  };
+
   const payload = {
-    difficultyId: game.difficultyId,
+    remainingDay: game.day,
+    startPosition,
   };
 
   game.users.forEach((user) => {
@@ -62,7 +69,22 @@ export const stageEndNotification = (game) => {
       user.clientKey,
       payload,
     );
-
     game.socket.write(packet);
+  });
+};
+
+export const submissionEndNotification = (game, result) => {
+  const payload = {
+    result,
+    submissionId: result ? game.submissionId : 0,
+  };
+  game.users.forEach((user) => {
+    const packet = serializer(
+      PACKET_TYPE.SubmissionEndNotification,
+      user.clientKey,
+      payload,
+    );
+
+    user.socket.write(packet);
   });
 };

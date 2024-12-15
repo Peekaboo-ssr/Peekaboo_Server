@@ -60,13 +60,14 @@ export const PACKET_TYPE = {
     ExtractSoulRequest: 401,
     ExtractSoulNotification: 402,
     DisconnectPlayerNotification: 403,
-    BlockInteractionNotification: 404,
-    RemainingTimeNotification: 405,
+    RemainingTimeNotification: 404,
+    BlockInteractionNotification: 405,
     StartStageRequest: 406,
     SpawnInitialDataRequest: 407,
     SpawnInitialDataResponse: 408,
     StartStageNotification: 409,
     StageEndNotification: 410,
+    SubmissionEndNotification: 411,
 
     // 로그인, 로비 : 500번대
     RegistAccountRequest: 500,
@@ -164,6 +165,8 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.SpawnInitialDataRequest]: 'spawnInitialDataRequest',
     [PACKET_TYPE.game.SpawnInitialDataResponse]: 'spawnInitialDataResponse',
     [PACKET_TYPE.game.StartStageNotification]: 'startStageNotification',
+    [PACKET_TYPE.StageEndNotification]: 'stageEndNotification',
+    [PACKET_TYPE.SubmissionEndNotification]: 'submissionEndNotification',
 
     // 로그인, 로비 : 500번대
     [PACKET_TYPE.game.RegistAccountRequest]: 'registAccountRequest',
@@ -192,8 +195,7 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.service.ConnectServiceRequest]: 'connectServiceRequest',
     [PACKET_TYPE.service.ConnectedServiceNotification]:
       'connectedServiceNotification',
-    [PACKET_TYPE.service.DisconnectServiceRequest]:
-      'disconnectServiceRequest',
+    [PACKET_TYPE.service.DisconnectServiceRequest]: 'disconnectServiceRequest',
     [PACKET_TYPE.service.DisconnectedServiceNotification]:
       'disconnectedServiceNotification',
     [PACKET_TYPE.service.CreateDedicatedRequest]: 'createDedicatedRequest',

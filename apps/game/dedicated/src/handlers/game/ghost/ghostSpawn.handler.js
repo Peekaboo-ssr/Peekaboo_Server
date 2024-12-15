@@ -4,6 +4,7 @@ import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import Ghost from '../../../classes/models/ghost.class.js';
 import { ghostSpawnNotification } from '../../../notifications/ghost/ghost.notification.js';
 import { getRandomInt } from '../../../utils/math/getRandomInt.js';
+import { handleError } from '../../../Error/error.handler.js';
 
 /**
  * 귀신 생성 요청에 따른 핸들러 함수입니다.
@@ -25,18 +26,8 @@ export const ghostSpawnHandler = ({ socket, clientKey, payload, server }) => {
       positionIndex,
       1,
     );
-    const positions = ghostPosition[0].GhostSpawnPos.split(',').map(
-      (position) => {
-        return Number(position);
-      },
-    );
     const rotation = { x: 0, y: 0, z: 0 };
-    const position = {
-      x: positions[0],
-      y: positions[1],
-      z: positions[2],
-    };
-
+    const position = ghostPosition[0].getPosition();
     const ghost = new Ghost(
       server.game.ghostIdCount++,
       ghostTypeId,

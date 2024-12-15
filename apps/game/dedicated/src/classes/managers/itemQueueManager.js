@@ -10,8 +10,10 @@ import redisManager from './redisManager.js';
 class ItemQueueManager {
   constructor(game) {
     this.game = game;
+  }
 
-    this.queue = new Queue(`${game.id}:itemQueue`, {
+  initializeItemQueue() {
+    this.queue = new Queue(`${this.game.id}:itemQueue`, {
       redis: {
         host: config.redis.host,
         port: config.redis.port,
@@ -23,12 +25,12 @@ class ItemQueueManager {
       const startTime = Date.now();
       const { clientKey, itemId, inventorySlot } = job.data;
 
-      const user = getUserByClientKey(game.users, clientKey);
+      const user = getUserByClientKey(this.game.users, clientKey);
       if (!user) {
         throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
       }
 
-      const item = game.getItem(itemId);
+      const item = this.game.getItem(itemId);
 
       // 혹시 모를 동시성 제어 2
       if (!item.mapOn) {
@@ -57,12 +59,17 @@ class ItemQueueManager {
 
         // 응답 보내주기
         // itemGetResponse(user.socket, itemId, newInventorySlot);
-        itemGetResponse(user.clientKey, game.socket, itemId, inventorySlot);
-        itemGetNotification(game, itemId, user.id);
+        itemGetResponse(
+          user.clientKey,
+          this.game.socket,
+          itemId,
+          inventorySlot,
+        );
+        itemGetNotification(this.game, itemId, user.id);
 
-        if (!game.ghostCSpawn) {
+        if (!this.game.ghostCSpawn) {
           if (user.character.inventory.itemCount === 4) {
-            game.ghostCSpawn === true;
+            this.game.ghostCSpawn === true;
             //ghostC 소환 요청 로직 추가
           }
         }

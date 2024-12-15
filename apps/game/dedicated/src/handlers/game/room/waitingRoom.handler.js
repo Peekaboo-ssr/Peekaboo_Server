@@ -7,7 +7,10 @@ import CustomError from '../../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
 import { handleError } from '../../../Error/error.handler.js';
 import { startStageNotification } from '../../../notifications/room/room.notification.js';
-import { blockInteractionNotification } from '../../../notifications/system/system.notification.js';
+import {
+  blockInteractionNotification,
+  submissionEndNotification,
+} from '../../../notifications/system/system.notification.js';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import { createPacketS2G } from '../../../utils/packet/create.packet.js';
 
@@ -20,14 +23,24 @@ export const startStageRequestHandler = ({
   try {
     const { gameSessionId, difficultyId } = payload;
 
+    if (server.game.day === 0) {
+      const submissionResult = server.game.endSubmission();
+      submissionEndNotification(server.game, submissionResult);
+      if (!submissionResult) {
+        // submission에 실패했다면 다른 처리를 해야될 거 같다...
+        // 귀신 매우매우 많이 스폰???
+        // 플레이어가 자연스럽게 죽고 첫날로 돌아갈 수 있게 할 수 위한 로직이 있어야 함.
+        return;
+      }
+    }
     // 게임이 이미 플레이 중이라면
     if (server.game.state === GAME_SESSION_STATE.INPROGRESS) {
-      console.log(`이미 게임 플레이중입니다.`);
+      console.log(`이미 게임 플레이 중입니다.`);
       throw new CustomError(ErrorCodesMaps.INVALID_PACKET);
     }
 
     // TODO : 임의로 전달받은 difficultyId에 100을 더해서 사용한다.
-    server.game.difficultyId = difficultyId + 100;
+    server.game.setDifficulty(difficultyId);
 
     // 게임이 시작되기 전까지 모든 플레이어게게 Block하도록 알려주는 blockInteractionNotification을 보낸다.
     blockInteractionNotification(server.game);
@@ -44,7 +57,7 @@ export const startStageRequestHandler = ({
       message: '게임 시작을 요청합니다.',
     };
 
-    const packet = createPacketS2G(
+    const packet = serializer(
       PACKET_TYPE.SpawnInitialDataRequest,
       s2cRequestPayload,
       socket.sequence++,

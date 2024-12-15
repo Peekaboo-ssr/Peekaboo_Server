@@ -154,6 +154,7 @@ message C2S_ItemPurchaseRequest {
 
 message S2C_ItemPurchaseNotification {
   ItemInfo itemInfo = 1;
+  uint32 soulCredit = 2;
 }
 
 message S2C_ItemPurchaseResponse {
@@ -183,7 +184,7 @@ message C2S_ExtractSoulRequest {
 }
 
 message S2C_ExtractSoulNotification {
-  uint32 soulAccumulatedAmount = 1; 
+  uint32 soulCredit = 1; 
 }
 
 message S2C_DisconnectPlayerNotification {
@@ -220,6 +221,11 @@ message S2C_StartStageNotification {
 
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
+  Position startPosition = 2;
+}
+message S2C_SubmissionEndNotification {
+  bool result = 1;
+  uint32 submissionId = 2;
 }
 
 message C2S_RegistAccountRequest {

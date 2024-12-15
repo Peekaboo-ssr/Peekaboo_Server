@@ -39,12 +39,14 @@ export const itemDiscardNotification = (game, userId, itemId) => {
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.ItemDiscardNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (userId !== user.id) {
+      const packet = createPacketS2G(
+        PACKET_TYPE.ItemDiscardNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 
@@ -115,6 +117,7 @@ export const itemGetNotification = (game, itemId, userId) => {
 export const itemPurchaseNotification = (game, itemInfo) => {
   const payload = {
     itemInfo,
+    soulCredit: game.soulCredit,
   };
 
   game.users.forEach((user) => {

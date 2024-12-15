@@ -5,30 +5,30 @@
     {
       "Id": 101,
       "DifName": "EASY",
-      "SpawnGhost": "GST0001,GST0002",
+      "SpawnGhost": [1001],
       "MinGhostNumber": 1,
       "MaxGhostNumber": 2,
-      "TimeLimit(sec)": 620,
+      "TimeLimit": 620,
       "MinSoulItemNumber": 10,
       "MaxSoulItemNumber ": 16
     },
     {
       "Id": 102,
       "DifName": "NORMAL",
-      "SpawnGhost": "GST0001,GST0002,GST0003,GST0004",
+      "SpawnGhost": [1001, 1002, 1003, 1004],
       "MinGhostNumber": 2,
       "MaxGhostNumber": 3,
-      "TimeLimit(sec)": 620,
+      "TimeLimit": 620,
       "MinSoulItemNumber": 8,
       "MaxSoulItemNumber ": 13
     },
     {
       "Id": 103,
       "DifName": "HARD",
-      "SpawnGhost": "GST0001,GST0002,GST0003,GST0004,GST0005",
+      "SpawnGhost": [1001, 1002, 1003, 1004, 1005],
       "MinGhostNumber": 2,
       "MaxGhostNumber": 4,
-      "TimeLimit(sec)": 620,
+      "TimeLimit": 620,
       "MinSoulItemNumber": 7,
       "MaxSoulItemNumber ": 10
     }

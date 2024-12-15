@@ -3,6 +3,7 @@ import { PACKET_TYPE } from '../../../constants/packet.js';
 import { CHARACTER_STATE } from '../../../constants/state.js';
 import CustomError from '../../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import { handleError } from '../../../Error/error.handler.js';
 import { itemDiscardNotification } from '../../../notifications/item/item.notification.js';
 import { playerStateChangeNotification } from '../../../notifications/player/player.notification.js';
 import { itemDiscardResponse } from '../../../response/item/item.response.js';
@@ -31,7 +32,7 @@ export const playerStateChangeRequestHandler = async ({
 
     // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
     if (user.character.state === CHARACTER_STATE.EXIT) {
-      await server.game.stageEnd();
+      await server.game.endStage();
       // if (.checkStageEnd()) {
       //   // 스테이지 종료 조건이 만족했다면,
 
@@ -103,7 +104,7 @@ export const playerAttackedRequestHandler = async ({
         }
       }
 
-      await server.game.stageEnd();
+      await server.game.endStage();
       // if (.checkStageEnd()) {
       //   // 스테이지 종료 조건이 만족했다면, 스테이지를 종료시킨다.
 

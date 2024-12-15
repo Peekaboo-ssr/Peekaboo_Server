@@ -23,16 +23,15 @@ export const itemPurchaseHandler = ({ socket, clientKey, payload, server }) => {
       throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
     }
 
-    if (server.game.soulAccumulatedAmount < itemInfo.Value) {
-      itemPurchaseResponse(user.clientKey, server.game.socket, false);
+    if (server.game.soulCredit < itemInfo.Value) {
+      itemPurchaseResponse(user.socket, false);
       return;
     }
 
     // 아이템 가격만큼 골드 차감
-    server.game.soulAccumulatedAmount -= itemInfo.Value;
-    console.log(`남은 게임 머니 : ${server.game.soulAccumulatedAmount}`);
+    server.game.soulCredit -= itemInfo.Value;
 
-    extractSoulNotification(server.game.soulAccumulatedAmount);
+    console.log(`남은 게임 머니 : ${server.game.soulCredit}`);
 
     if (itemInfo.SpaceValue === 0) {
       // 아이템의 SpaceValue가 0이면 Heart 아이템으로 응답만
@@ -62,8 +61,6 @@ export const itemPurchaseHandler = ({ socket, clientKey, payload, server }) => {
       };
       itemPurchaseNotification(server.game, itemInfo);
     }
-
-    server.game.soulAccumulatedAmount;
   } catch (e) {
     handleError(e);
   }

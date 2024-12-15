@@ -2,6 +2,7 @@ import CustomError from '../../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
 import { ghostSpecialStateNotification } from '../../../notifications/ghost/ghost.notification.js';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
+import { handleError } from '../../../Error/error.handler.js';
 
 /**
  * 귀신의 특수 상태 요청에 대한 핸들러 함수입니다. (호스트만 요청)

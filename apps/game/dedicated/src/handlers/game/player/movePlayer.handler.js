@@ -2,6 +2,7 @@ import CustomError from '../../../Error/custom.error.js';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import { usersLocationNotification } from '../../../notifications/player/player.notification.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import { handleError } from '../../../Error/error.handler.js';
 
 // 플레이어 이동 요청에 따른 핸들러 함수
 export const movePlayerRequestHandler = ({
