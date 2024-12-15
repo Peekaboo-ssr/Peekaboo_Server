@@ -3,7 +3,7 @@ import TcpServer from '@peekaboo-ssr/classes/TcpServer';
 import config from '@peekaboo-ssr/config/session';
 import RedisManager from '@peekaboo-ssr/classes/RedisManager';
 import PubSubManager from '@peekaboo-ssr/classes/PubSubManager';
-import G2SEventHandler from './events/onG2S.event.js';
+import G2SEventHandler from '@peekaboo-ssr/events/G2SEvent';
 import { handlers } from './handlers/index.js';
 import cluster from 'cluster';
 
