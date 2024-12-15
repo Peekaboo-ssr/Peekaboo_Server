@@ -5,7 +5,7 @@ const PUB_ACTION = {
   ExitSessionResponse: 4,
   FindUserRequest: 5,
   FindUserResponse: 6,
-  CreateDedicateRequest: 7,
+  CreateDedicatedRequest: 7,
   FindDedicateByInviteCodeRequest: 8,
   FindDedicateByIdRequest: 9,
 };

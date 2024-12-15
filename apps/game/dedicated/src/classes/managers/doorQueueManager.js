@@ -6,7 +6,11 @@ import { ErrorCodesMaps } from '../../Error/error.codes.js';
 
 class DoorQueueManager {
   constructor(game) {
-    this.queue = new Queue(`${game.id}:doorQueue`, {
+    this.game = game;
+  }
+
+  initializeQueue() {
+    this.queue = new Queue(`${this.game.id}:doorQueue`, {
       redis: {
         host: config.redis.host,
         port: config.redis.port,
@@ -17,10 +21,10 @@ class DoorQueueManager {
     this.queue.process(4, async (job) => {
       // const startTime = Date.now();
 
-      const { gameSessionId, userId, doorId, doorState } = job.data;
+      const { doorId, doorState } = job.data;
 
       // 문 검증
-      const door = game.getDoor(doorId);
+      const door = this.game.getDoor(doorId);
       if (!door) {
         throw new CustomError(ErrorCodesMaps.DOOR_NOT_FOUND);
       }
@@ -32,7 +36,7 @@ class DoorQueueManager {
         // console.log(
         //   `"Fail ${
         //     doorState
-        //   }" [${doorId}] Door (${curDoorState} => ${doorState}) by User ${userId}`,
+        //   }" [${doorId}] Door (${curDoorState} => ${doorState}) by User ${clientKey}`,
         // );
         return;
       }
@@ -46,12 +50,12 @@ class DoorQueueManager {
         doorState,
       };
 
-      doorToggleNotification(game, payload);
+      doorToggleNotification(this.game, payload);
 
       // doorQueue Log
       // const endTime = Date.now();
       // console.log(
-      //   `"Success [${doorId}] Door (${curDoorState} => ${doorState}) by User ${userId}`,
+      //   `"Success [${doorId}] Door (${curDoorState} => ${doorState}) by User ${clientKey}`,
       // );
       //console.log(`Elapsed Time : ${endTime - startTime}`);
     });

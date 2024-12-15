@@ -65,7 +65,7 @@ export const spawnInitialDataResponseHandler = async ({
   try {
     const { itemInfos } = payload;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
 
     itemInfos.forEach((itemInfo) => {
       const item = new Item(

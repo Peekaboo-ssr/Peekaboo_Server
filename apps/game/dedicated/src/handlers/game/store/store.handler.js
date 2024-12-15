@@ -11,7 +11,7 @@ export const itemPurchaseHandler = ({ socket, clientKey, payload, server }) => {
   try {
     const { itemTypeId } = payload;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }

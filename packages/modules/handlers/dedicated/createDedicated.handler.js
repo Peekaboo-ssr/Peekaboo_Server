@@ -16,7 +16,7 @@ export const createDedicatedHandler = (server, payload) => {
 
   // 세션 서비스에 등록 요청
   const pubMessage = {
-    action: config.pubAction.CreateDedicateRequest,
+    action: config.pubAction.CreateDedicatedRequest,
     dedicateKey,
     distributorKey,
     gameSessionId,

@@ -15,7 +15,7 @@ export const extractorSoulHandler = async ({
 
     // ------------------------- 검증 -------------------------------
     // 유저 검증
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }

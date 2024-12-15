@@ -29,9 +29,7 @@ export const deleteUserToConnectClients = (server, clientKey) => {
     // 게임에 참가한 유저였는지 확인
     if (gameSessionKey !== null) {
       // 참가한 유저의 데디에 해당 유저 삭제 요청
-      const distributorKey =
-        server.mapClients.dedicates[gameSessionKey].distributorKey;
-      exitUserNotificationToDedicated(server, clientKey, distributorKey);
+      exitUserNotificationToDedicated(server, clientKey, gameSessionKey);
 
       // 데디케이티드 맵에서 해당 유저가 참여한 데디에서 유저 삭제
       deleteUserToDedicates(server, gameSessionKey, clientKey);
@@ -76,12 +74,12 @@ export const deleteUserToDedicates = (server, gameSessionKey, clientKey) => {
 export const exitUserNotificationToDedicated = (
   server,
   clientKey,
-  distributorKey,
+  gameSessionKey,
 ) => {
   const packet = createPacketS2S(
     config.servicePacket.ExitDedicatedRequest,
     'gateway',
-    distributorKey,
+    gameSessionKey,
     { clientKey },
   );
   server.clientToDistributor.write(packet);

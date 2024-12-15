@@ -22,7 +22,7 @@ export const itemGetRequestHandler = async ({
   try {
     const { itemId, inventorySlot } = payload;
     console.log(user.id, '슬롯확인----------', inventorySlot);
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
@@ -31,7 +31,7 @@ export const itemGetRequestHandler = async ({
     // 실질적인 아이템 저장
     await server.game.itemQueue.queue.add(
       {
-        userId: user.id,
+        clientKey,
         itemId,
         inventorySlot,
       },
@@ -53,7 +53,7 @@ export const itemChangeRequestHandler = async ({
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
@@ -78,7 +78,7 @@ export const itemUseRequestHandler = async ({
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
@@ -126,7 +126,7 @@ export const itemDiscardRequestHandler = async ({
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
@@ -164,7 +164,7 @@ export const itemDisuseRequestHandler = async ({
   try {
     const { itemId } = payload;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }

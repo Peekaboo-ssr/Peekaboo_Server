@@ -3,6 +3,35 @@ import { GLOBAL_FAIL_CODE } from '../../constants/state.js';
 import { createPacketS2G } from '../../utils/packet/create.packet.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 
+/**
+ * 토큰이 유효하지 않을때 실패 응답 보내주는 함수입니다.
+ * @param {*} socket
+ */
+export const sendCreateRoomResponse = async (
+  socket,
+  clientKey,
+  gameId,
+  inviteCode,
+) => {
+  try {
+    const payloadData = {
+      globalFailCode: GLOBAL_FAIL_CODE.NONE,
+      message: '방이 성공적으로 생성되었습니다.',
+      gameSessionId: gameId,
+      inviteCode, // 임시 고스트 타입
+    };
+    const packet = createPacketS2G(
+      PACKET_TYPE.game.CreateRoomResponse,
+      clientKey,
+      payloadData,
+    );
+
+    socket.write(packet);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
   const players = isSuccess
     ? game.users.map((user) => {

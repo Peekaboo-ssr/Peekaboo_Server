@@ -9,6 +9,8 @@ export const joinRoomHandler = async (socket, clientKey, payload, server) => {
   try {
     const { userId, inviteCode } = payload;
 
+    // TODO : 토큰 검증
+
     // 일단 inviteCode로 게임을 찾음
     const responseChannel = `find_game_${clientKey}_${Date.now()}`;
     const pubMessage = {
@@ -37,7 +39,9 @@ export const joinRoomHandler = async (socket, clientKey, payload, server) => {
       throw new CustomError(ErrorCodesMaps.GAME_NOT_FOUND);
     }
 
-    console.log(`----------- joinRoom Complete : ${userId} -----------`);
+    console.log(
+      `----------- join Dedicate Request Complete : ${userId} -----------`,
+    );
   } catch (e) {
     handleError(e);
 

@@ -53,30 +53,6 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
       host: '0.0.0.0',
       port: 6000,
     },
-    {
-      userData: {
-        id: 'test1',
-        password: '1234',
-        token: 'tokenTest1',
-        userId: 'bd05fc53-9f85-43fe-8c23-3e4fdc6b239a',
-        position: { x: 10.0, y: 10.0, z: 10.0 },
-        rotation: { x: 10.0, y: 10.0, z: 10.0 },
-      },
-      host: '0.0.0.0',
-      port: 6000,
-    },
-    {
-      userData: {
-        id: 'test4',
-        password: '1234',
-        token: 'tokenTest4',
-        userId: 'bd05fc53-9f85-43fe-8c23-3e4fdc6b239a',
-        position: { x: 40.0, y: 40.0, z: 40.0 },
-        rotation: { x: 40.0, y: 40.0, z: 40.0 },
-      },
-      host: '0.0.0.0',
-      port: 6000,
-    },
     // 필요하다면 더 추가 가능
   ];
 
@@ -126,24 +102,20 @@ const runScenario = async (clients, scenarioManagers) => {
     firstClientUserData,
   );
 
-  await delay(7000);
-
   // 두 번째 클라이언트가 방 참가
-  scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
+  // scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
 
   // 첫 번째 클라이언트만 이동 시나리오 시작
-  scenarioManagers[0].moveScenario(firstClientUserData, 100);
+  // scenarioManagers[0].moveScenario(firstClientUserData, 100);
 
-  await delay(6000);
+  // await delay(6000);
 
-  scenarioManagers[1].moveScenario(secondClientUserData, 100);
+  // scenarioManagers[1].moveScenario(secondClientUserData, 100);
 
-  await delay(10000);
+  await delay(5000);
 
-  // 두 번째 클라이언트 종료
-  clients[1].client.close();
-
-  await delay(10000);
+  // // 두 번째 클라이언트 종료
+  // clients[1].client.close();
 
   // 첫 번째 클라이언트 종료
   clients[0].client.close();

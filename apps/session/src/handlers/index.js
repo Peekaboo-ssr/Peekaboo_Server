@@ -21,7 +21,7 @@ export const handlers = {
     [config.pubAction.ExitSessionRequest]: {
       handler: exitSessionHandler,
     },
-    [config.pubAction.CreateDedicateRequest]: {
+    [config.pubAction.CreateDedicatedRequest]: {
       handler: createDedicatedHandler,
     },
     [config.pubAction.FindDedicateByInviteCodeRequest]: {

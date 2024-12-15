@@ -87,6 +87,7 @@ class GatewayServer extends TcpServer {
       const node = dedicated;
       const key = node.host + ':' + node.port;
       if (!this.mapClients.dedicates[key]) {
+        console.log('새로운 데디케이티드와 연결: ', node);
         const client = new TcpClient(
           node.host,
           node.port,

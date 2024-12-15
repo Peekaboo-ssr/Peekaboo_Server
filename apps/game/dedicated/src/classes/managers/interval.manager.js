@@ -44,7 +44,7 @@ class IntervalManager extends BaseManager {
   }
 
   // 유저 인터벌 삭제
-  removePingInterval(userId) {
+  removeUserInterval(userId) {
     if (this.intervals.has(userId)) {
       const userIntervals = this.intervals.get(userId);
       userIntervals.forEach((intervalId) => {

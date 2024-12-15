@@ -17,4 +17,4 @@ COPY . .
 # EXPOSE 6666
 
 # 애플리케이션 실행 커맨드
-CMD ["yarn", "dev"]
+CMD ["yarn", "create:dedicate"]

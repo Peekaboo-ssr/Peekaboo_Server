@@ -55,17 +55,21 @@ class S2DEventHandler extends BaseEvent {
       socket.buffer = socket.buffer.subarray(totalPacketLength);
 
       try {
-        // 보내야 할 서비스 라우팅하기
-        console.log(packetType);
-        const receiverSocket = findServiceByReceiver(receiver);
-
-        // 만약 receiverSocket이 없다면 Distributor가 목적지이거나 찾지 못한 것이니 Distributor 핸들링을 하도록 함.
-        if (!receiverSocket) {
+        if (receiver === 'distributor') {
           const handler = server.getServiceHandlerByPacketType(packetType);
           const payload = parsePacketS2S(packetType, payloadBuffer);
           await handler(socket, payload);
         } else {
-          receiverSocket.write(buffer);
+          // 보내야 할 서비스 라우팅하기
+          console.log(packetType);
+          const receiverSocket = findServiceByReceiver(receiver);
+
+          if (receiverSocket === null) {
+            console.error('라우팅할 곳 찾지 못함!!');
+            return;
+          } else {
+            receiverSocket.write(buffer);
+          }
         }
       } catch (e) {
         console.error(e);

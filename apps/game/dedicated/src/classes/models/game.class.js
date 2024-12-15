@@ -48,9 +48,9 @@ class Game {
     // 아이템 관련 데이터
     this.itemIdCount = 1; // 아이템에 부여할 ID (스폰될때마다 증가)
     this.itemQueue = new ItemQueueManager(this);
-
     // 문관련 데이터
     this.doorQueue = new DoorQueueManager(this);
+    this.doorQueue.initializeQueue(); // Game이 완전히 초기화된 뒤에 큐 초기화
 
     // 스테이지 초기화
     this.initStage();
@@ -325,6 +325,10 @@ class Game {
     });
 
     return isEndStage;
+  }
+
+  static getGameInstance() {
+    return this;
   }
 }
 

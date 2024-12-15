@@ -10,6 +10,7 @@ import Game from './classes/models/game.class.js';
 import User from './classes/models/user.class.js';
 import { loadProtos } from './init/load.protos.js';
 import { loadGameAssets } from './init/load.assets.js';
+import { sendCreateRoomResponse } from './response/room/room.response.js';
 
 class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
@@ -24,13 +25,20 @@ class DedicateServer {
     this.isConnectedDistributor = false;
     this.clientToDistributor = null;
     this.handlers = handlers;
-    this.initServer(id, inviteCode);
-    this.connectToDistributor(
-      'host.docker.internal', //ec2에 사용 시 172.17.0.1로로
+
+    this.initialize(id, inviteCode, userId, clientKey);
+  }
+
+  async initialize(id, inviteCode, userId, clientKey) {
+    await this.initServer();
+    await this.connectToDistributor(
+      'host.docker.internal',
       config.server.distributor.port,
       () => {
+        // 게임 인스턴스 생성
+        this.game = new Game(id, inviteCode);
         // S2S로 호스트 유저를 맵에 등록하도록 요청
-        const dedicateKey = `${this.context.host}:${this.context.port}`; // 이거 안됨. 127.0.0.1:3600  172.0.0.2:3500    3600:3500
+        const dedicateKey = `${this.context.host}:${this.context.port}`;
         const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
         const packet = createPacketS2S(
           PACKET_TYPE.service.CreateDedicatedRequest,
@@ -40,18 +48,19 @@ class DedicateServer {
             hostKey: clientKey,
             dedicateKey,
             distributorKey,
-            gameSessionId: this.game.id,
-            inviteCode: this.game.inviteCode,
+            gameSessionId: id,
+            inviteCode: inviteCode,
           },
         );
         this.clientToDistributor.write(packet);
-        // 호스트 유저를 생성하여 저장
-        this.game.addUser(new User(userId, clientKey), true);
       },
     );
+    setTimeout(async () => {
+      await this.initializeGame(id, inviteCode, userId, clientKey);
+    }, 5000);
   }
 
-  async initServer(id, inviteCode) {
+  async initServer() {
     this.server = net.createServer((socket) => {
       this.event.onConnection(socket, this);
       socket.on('data', (data) => this.event.onData(socket, data, this));
@@ -68,11 +77,9 @@ class DedicateServer {
 
     await loadProtos();
     await loadGameAssets();
-    this.game = new Game(id, inviteCode); // 현재 서버의 게임 클래스
-    await setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
   }
 
-  connectToDistributor(host, port, notification) {
+  async connectToDistributor(host, port, notification) {
     this.clientToDistributor = new TcpClient(
       host,
       port,
@@ -96,6 +103,19 @@ class DedicateServer {
         this.clientToDistributor.connect();
       }
     }, 3000);
+  }
+
+  async initializeGame(id, inviteCode, userId, clientKey) {
+    // 레디스에 해당 게임 저장
+    await setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
+    // createRoomResponse를 보내준다.
+    console.log(
+      `----------- createRoom Complete : ${this.game.id} -----------`,
+    );
+    // TODO: 유저에게 방 생성 완료 응답
+    sendCreateRoomResponse(this.game.socket, clientKey, id, inviteCode);
+    // 호스트 유저를 생성하여 저장
+    this.game.addUser(new User(userId, clientKey), true);
   }
 
   getClientHandlerByPacketType = (packetType) => {

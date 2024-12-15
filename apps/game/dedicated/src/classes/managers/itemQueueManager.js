@@ -9,6 +9,8 @@ import redisManager from './redisManager.js';
 
 class ItemQueueManager {
   constructor(game) {
+    this.game = game;
+
     this.queue = new Queue(`${game.id}:itemQueue`, {
       redis: {
         host: config.redis.host,
@@ -19,9 +21,9 @@ class ItemQueueManager {
 
     this.queue.process(4, async (job) => {
       const startTime = Date.now();
-      const { userId, itemId, inventorySlot } = job.data;
+      const { clientKey, itemId, inventorySlot } = job.data;
 
-      const user = getUserByClientKey(userId);
+      const user = getUserByClientKey(game.users, clientKey);
       if (!user) {
         throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
       }
@@ -37,7 +39,7 @@ class ItemQueueManager {
         return;
       }
 
-      const lockKey = `lock:${userId}:${inventorySlot}`;
+      const lockKey = `lock:${clientKey}:${inventorySlot}`;
 
       //락을 걸엇으면 = ok 또는 락이 걸린상태 = null
       const lock = await redisManager
@@ -56,7 +58,7 @@ class ItemQueueManager {
         // 응답 보내주기
         // itemGetResponse(user.socket, itemId, newInventorySlot);
         itemGetResponse(user.clientKey, game.socket, itemId, inventorySlot);
-        itemGetNotification(game, itemId, userId);
+        itemGetNotification(game, itemId, user.id);
 
         if (!game.ghostCSpawn) {
           if (user.character.inventory.itemCount === 4) {

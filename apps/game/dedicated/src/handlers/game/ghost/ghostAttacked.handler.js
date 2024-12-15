@@ -14,7 +14,7 @@ export const ghostAttackedRequestHandler = ({
     const { userId, ghostId } = payload;
 
     // user 검증
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }

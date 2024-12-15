@@ -15,7 +15,7 @@ export const itemCreateHandler = ({ socket, clientKey, payload, server }) => {
       return;
     }
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }

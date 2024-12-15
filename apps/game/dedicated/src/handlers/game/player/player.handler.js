@@ -18,7 +18,7 @@ export const playerStateChangeRequestHandler = async ({
   try {
     const { playerStateInfo } = payload;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
@@ -51,7 +51,7 @@ export const playerAttackedRequestHandler = async ({
   try {
     const { userId, ghostId } = payload;
 
-    const user = getUserByClientKey(userId);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
