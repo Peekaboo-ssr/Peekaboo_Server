@@ -17,9 +17,9 @@ export const doorToggleRequestHandler = async ({
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
 
-    // 문 상호작용 요청을 DoorQueue에 추가
-    server.game.doorQueue.queue.add(
-      { doorId, doorState },
+    // 문 상호작용 요청을 단일 Queue에 추가
+    server.game.gameQueue.queue.add(
+      { type: 'door', data: { doorId, doorState } }, // 작업 유형(type)을 'door'로 지정
       { jobId: `door:${doorId}`, removeOnComplete: true },
     );
   } catch (e) {

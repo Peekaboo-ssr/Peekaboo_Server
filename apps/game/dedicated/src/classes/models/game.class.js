@@ -11,8 +11,9 @@ import {
   remainingTimeNotification,
   stageEndNotification,
 } from '../../notifications/system/system.notification.js';
-import ItemQueueManager from '../managers/itemQueueManager.js';
-import DoorQueueManager from '../managers/doorQueueManager.js';
+// import ItemQueueManager from '../managers/itemQueueManager.js';
+// import DoorQueueManager from '../managers/doorQueueManager.js';
+import GameQueueManager from '../managers/gameQueue.manager.js';
 import { Door } from './door.class.js';
 import { config } from '../../config/config.js';
 import { getGameAssets } from '../../init/load.assets.js';
@@ -62,12 +63,14 @@ class Game {
 
     // 아이템 관련 데이터
     this.itemIdCount = 1; // 아이템에 부여할 ID (스폰될때마다 증가)
-    this.itemQueue = new ItemQueueManager(this);
-    this.itemQueue.initializeItemQueue();
+    this.gameQueue = new GameQueueManager(this);
+    this.gameQueue.initializeQueue();
+    // this.itemQueue = new ItemQueueManager(this);
+    // this.itemQueue.initializeItemQueue();
 
-    // 문관련 데이터
-    this.doorQueue = new DoorQueueManager(this);
-    this.doorQueue.initializeDoorQueue(); // Game이 완전히 초기화된 뒤에 큐 초기화
+    // // 문관련 데이터
+    // this.doorQueue = new DoorQueueManager(this);
+    // this.doorQueue.initializeDoorQueue(); // Game이 완전히 초기화된 뒤에 큐 초기화
 
     // 스테이지 초기화
     this.initStage();
@@ -96,7 +99,7 @@ class Game {
     // 문, 아이템, 귀신 초기화
     this.initDoors();
     this.initItems();
-    // this.initGhosts();
+    this.initGhosts();
 
     // 게임 상태를 준비상태로 변경
     this.state = GAME_SESSION_STATE.PREPARE;
