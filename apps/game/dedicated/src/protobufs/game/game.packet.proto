@@ -203,26 +203,19 @@ message C2S_StartStageRequest	{
   uint32 difficultyId = 2;
 }
 
-message S2C_SpawnInitialDataRequest	{
-  GlobalFailCode globalFailCode  = 1;
-  uint32 difficultyId = 2;
-  string message = 3;
-}
-
-message C2S_SpawnInitialDataResponse {
-  repeated ItemInfo itemInfos = 1;
-}
-
 message S2C_StartStageNotification {
   GlobalFailCode globalFailCode  = 1;
   string message = 2;
   repeated ItemInfo itemInfos = 3;
+  repeated GhostInfo ghostInfos = 4;
 }
 
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
+  bool isRemainingTimeOver = 3;
 }
+
 message S2C_SubmissionEndNotification {
   bool result = 1;
   uint32 submissionId = 2;

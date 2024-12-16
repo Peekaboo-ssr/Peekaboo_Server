@@ -31,7 +31,7 @@ export const joinSessionByType = (type, userData) => {
 export const exitUserFromSession = (clientKey) => {
   // 만약 해당 유저의 세션이 없다면 return
   if (!userSessions[clientKey]) {
-    console.error('해당 유저는 세션에 참가한 기록이 없습니다.');
+    console.error(`${clientKey} 클라이언트의 세션 기록이 없습니다.`);
     return;
   }
   delete userSessions[clientKey];

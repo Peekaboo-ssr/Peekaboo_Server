@@ -20,11 +20,12 @@ export const joinRoomNotification = async (game, userId) => {
   });
 };
 
-export const startStageNotification = (game, itemInfos) => {
+export const startStageNotification = (game, itemInfos, ghostInfos) => {
   const payload = {
     globalFailCode: 0,
     message: '로딩이 완료되어 게임을 시작합니다.',
     itemInfos,
+    ghostInfos,
   };
 
   console.log(`StartStageNotification payload : ${JSON.stringify(payload)}`);

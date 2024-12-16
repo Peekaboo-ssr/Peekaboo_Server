@@ -63,11 +63,9 @@ export const PACKET_TYPE = {
     RemainingTimeNotification: 404,
     BlockInteractionNotification: 405,
     StartStageRequest: 406,
-    SpawnInitialDataRequest: 407,
-    SpawnInitialDataResponse: 408,
-    StartStageNotification: 409,
-    StageEndNotification: 410,
-    SubmissionEndNotification: 411,
+    StartStageNotification: 407,
+    StageEndNotification: 408,
+    SubmissionEndNotification: 409,
 
     // 로그인, 로비 : 500번대
     RegistAccountRequest: 500,
@@ -104,13 +102,12 @@ export const PACKET_TYPE = {
 
 export const PACKET_MAPS = {
   client: {
-    // 1 ~ 15
     [PACKET_TYPE.game.PlayerMoveRequest]: 'playerMoveRequest',
     [PACKET_TYPE.game.PlayerMoveNotification]: 'playerMoveNotification',
     [PACKET_TYPE.game.GhostMoveRequest]: 'ghostMoveRequest',
     [PACKET_TYPE.game.GhostMoveNotification]: 'ghostMoveNotification',
-    [PACKET_TYPE.game.PingRequest]: 'pingRequest', // S2C
-    [PACKET_TYPE.game.PingResponse]: 'pingResponse', // C2S
+    [PACKET_TYPE.game.PingRequest]: 'pingRequest',
+    [PACKET_TYPE.game.PingResponse]: 'pingResponse',
     [PACKET_TYPE.game.PlayerStateChangeRequest]: 'playerStateChangeRequest',
     [PACKET_TYPE.game.PlayerStateChangeNotification]:
       'playerStateChangeNotification',
@@ -120,17 +117,20 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.ItemChangeRequest]: 'itemChangeRequest',
     [PACKET_TYPE.game.ItemChangeNotification]: 'itemChangeNotification',
 
-    // 플레이어 : 100번대
+    // Player: 100s
     [PACKET_TYPE.game.PlayerAttackedRequest]: 'playerAttackedRequest',
     [PACKET_TYPE.game.PlayerLifeResponse]: 'playerLifeResponse',
 
-    // 귀신 : 200번대
+    // Ghost: 200s
+    [PACKET_TYPE.game.GhostSpecialStateRequest]: 'ghostSpecialStateRequest',
+    [PACKET_TYPE.game.GhostSpecialStateNotification]:
+      'ghostSpecialStateNotification',
     [PACKET_TYPE.game.GhostAttackedRequest]: 'ghostAttackedRequest',
     [PACKET_TYPE.game.GhostSpawnRequest]: 'ghostSpawnRequest',
     [PACKET_TYPE.game.GhostSpawnNotification]: 'ghostSpawnNotification',
     [PACKET_TYPE.game.GhostDeleteNotification]: 'ghostDeleteNotification',
 
-    // 아이템 : 300번대
+    // Item: 300s
     [PACKET_TYPE.game.ItemGetRequest]: 'itemGetRequest',
     [PACKET_TYPE.game.ItemGetResponse]: 'itemGetResponse',
     [PACKET_TYPE.game.ItemGetNotification]: 'itemGetNotification',
@@ -149,26 +149,24 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.ItemCreateRequest]: 'itemCreateRequest',
     [PACKET_TYPE.game.ItemCreateNotification]: 'itemCreateNotification',
 
-    // 문 : 350번대
+    // Door: 350s
     [PACKET_TYPE.game.DoorToggleRequest]: 'doorToggleRequest',
     [PACKET_TYPE.game.DoorToggleNotification]: 'doorToggleNotification',
 
-    // 게임 시스템 : 400번대
+    // Game System: 400s
     [PACKET_TYPE.game.ExtractSoulRequest]: 'extractSoulRequest',
     [PACKET_TYPE.game.ExtractSoulNotification]: 'extractSoulNotification',
     [PACKET_TYPE.game.DisconnectPlayerNotification]:
       'disconnectPlayerNotification',
+    [PACKET_TYPE.game.RemainingTimeNotification]: 'remainingTimeNotification',
     [PACKET_TYPE.game.BlockInteractionNotification]:
       'blockInteractionNotification',
-    [PACKET_TYPE.game.RemainingTimeNotification]: 'remainingTimeNotification',
     [PACKET_TYPE.game.StartStageRequest]: 'startStageRequest',
-    [PACKET_TYPE.game.SpawnInitialDataRequest]: 'spawnInitialDataRequest',
-    [PACKET_TYPE.game.SpawnInitialDataResponse]: 'spawnInitialDataResponse',
     [PACKET_TYPE.game.StartStageNotification]: 'startStageNotification',
-    [PACKET_TYPE.StageEndNotification]: 'stageEndNotification',
-    [PACKET_TYPE.SubmissionEndNotification]: 'submissionEndNotification',
+    [PACKET_TYPE.game.StageEndNotification]: 'stageEndNotification',
+    [PACKET_TYPE.game.SubmissionEndNotification]: 'submissionEndNotification',
 
-    // 로그인, 로비 : 500번대
+    // Login, Lobby: 500s
     [PACKET_TYPE.game.RegistAccountRequest]: 'registAccountRequest',
     [PACKET_TYPE.game.RegistAccountResponse]: 'registAccountResponse',
     [PACKET_TYPE.game.LoginRequest]: 'loginRequest',
@@ -182,14 +180,12 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.SearchRoomRequest]: 'searchRoomRequest',
     [PACKET_TYPE.game.SearchRoomResponse]: 'searchRoomResponse',
 
-    // 방 : 600번대
+    // Room: 600s
     [PACKET_TYPE.game.CreateRoomRequest]: 'createRoomRequest',
     [PACKET_TYPE.game.CreateRoomResponse]: 'createRoomResponse',
     [PACKET_TYPE.game.JoinRoomRequest]: 'joinRoomRequest',
     [PACKET_TYPE.game.JoinRoomResponse]: 'joinRoomResponse',
     [PACKET_TYPE.game.JoinRoomNotification]: 'joinRoomNotification',
-
-    [PACKET_TYPE.game.StageEndNotification]: 'stageEndNotification',
   },
   service: {
     [PACKET_TYPE.service.ConnectServiceRequest]: 'connectServiceRequest',

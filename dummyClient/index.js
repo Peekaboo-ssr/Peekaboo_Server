@@ -104,19 +104,19 @@ const runScenario = async (clients, scenarioManagers) => {
 
   // 두 번째 클라이언트가 방 참가
   await delay(5000);
-  scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
+  // scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
 
   // 첫 번째 클라이언트만 이동 시나리오 시작
   scenarioManagers[0].moveScenario(firstClientUserData, 100);
 
   await delay(6000);
 
-  scenarioManagers[1].moveScenario(secondClientUserData, 100);
+  // scenarioManagers[1].moveScenario(secondClientUserData, 100);
 
-  await delay(5000);
+  // await delay(5000);
 
   // // 두 번째 클라이언트 종료
-  clients[1].client.close();
+  // clients[1].client.close();
 
   // 첫 번째 클라이언트 종료
   clients[0].client.close();

@@ -17,10 +17,7 @@ import {
 import { ghostAttackedRequestHandler } from './game/ghost/ghostAttacked.handler.js';
 import { ghostStateChangeRequestHandler } from './game/ghost/ghostStateChange.handler.js';
 import { extractorSoulHandler } from './game/Extractor/extractor.handler.js';
-import {
-  spawnInitialDataResponseHandler,
-  startStageRequestHandler,
-} from './game/room/waitingRoom.handler.js';
+import { startStageRequestHandler } from './game/room/waitingRoom.handler.js';
 import { ghostSpecialStateRequestHandler } from './game/ghost/ghostSpecialState.handler.js';
 import { ghostSpawnHandler } from './game/ghost/ghostSpawn.handler.js';
 import { itemCreateHandler } from './game/item/itemCreate.handler.js';
@@ -46,10 +43,6 @@ export const handlers = {
     /*-------------------------장재영 작업--------------------------*/
     [PACKET_TYPE.game.StartStageRequest]: {
       handler: startStageRequestHandler,
-      protoType: 'common.GamePacket',
-    },
-    [PACKET_TYPE.game.SpawnInitialDataResponse]: {
-      handler: spawnInitialDataResponseHandler,
       protoType: 'common.GamePacket',
     },
     [PACKET_TYPE.game.DoorToggleRequest]: {

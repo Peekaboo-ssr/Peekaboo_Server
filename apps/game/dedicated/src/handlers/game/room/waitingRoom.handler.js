@@ -1,7 +1,3 @@
-import Ghost from '../../../classes/models/ghost.class.js';
-import Item from '../../../classes/models/item.class.js';
-import { Position } from '../../../classes/models/moveInfo.class.js';
-import { PACKET_TYPE } from '../../../constants/packet.js';
 import { GAME_SESSION_STATE } from '../../../constants/state.js';
 import CustomError from '../../../Error/custom.error.js';
 import { ErrorCodesMaps } from '../../../Error/error.codes.js';
@@ -11,10 +7,8 @@ import {
   blockInteractionNotification,
   submissionEndNotification,
 } from '../../../notifications/system/system.notification.js';
-import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { createPacketS2G } from '../../../utils/packet/create.packet.js';
 
-export const startStageRequestHandler = ({
+export const startStageRequestHandler = async ({
   socket,
   clientKey,
   payload,
@@ -39,7 +33,7 @@ export const startStageRequestHandler = ({
       throw new CustomError(ErrorCodesMaps.INVALID_PACKET);
     }
 
-    // TODO : 임의로 전달받은 difficultyId에 100을 더해서 사용한다.
+    // 클라에서 difficultyId를 인덱스로 전달해서 difficultyId에 100을 더해서 사용한다.
     server.game.setDifficulty(difficultyId);
 
     // 게임이 시작되기 전까지 모든 플레이어게게 Block하도록 알려주는 blockInteractionNotification을 보낸다.
@@ -51,47 +45,15 @@ export const startStageRequestHandler = ({
       console.error(`호스트 유저가 없습니다.`);
     }
 
-    const s2cRequestPayload = {
-      globalFailCode: 0,
-      difficultyId,
-      message: '게임 시작을 요청합니다.',
-    };
+    // TODO : 고스트와 아이템 difficultyId에 맞게 소환
+    const itemInfos = server.game.spawnItems();
+    const ghostInfos = server.game.spawnGhosts();
 
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.SpawnInitialDataRequest,
-      hostUser.clientKey,
-      s2cRequestPayload,
-    );
-
-    socket.write(packet);
-  } catch (e) {
-    handleError(e);
-  }
-};
-
-export const spawnInitialDataResponseHandler = async ({
-  socket,
-  clientKey,
-  payload,
-  server,
-}) => {
-  try {
-    const { itemInfos } = payload;
-
-    const user = getUserByClientKey(server.game.users, clientKey);
-
-    itemInfos.forEach((itemInfo) => {
-      const item = new Item(
-        itemInfo.itemId,
-        itemInfo.itemTypeId,
-        itemInfo.position ? itemInfo.position : new Position(),
-      );
-      server.game.addItem(item);
-    });
-
-    startStageNotification(server.game, itemInfos);
+    startStageNotification(server.game, itemInfos, ghostInfos);
 
     await server.game.startStage();
+
+    socket.write(packet);
   } catch (e) {
     handleError(e);
   }

@@ -13,7 +13,7 @@ export class Door {
   checkDoorInteraction(inputDoorState) {
     switch (inputDoorState) {
       case DOOR_STATE.DOOR_LEFT:
-        if (this.status !== DOOR_STATE.DOOR_MIDDLE) {
+        if (this.status === DOOR_STATE.DOOR_LEFT) {
           return false;
         }
         break;
@@ -23,12 +23,13 @@ export class Door {
         }
         break;
       case DOOR_STATE.DOOR_RIGHT:
-        if (this.status !== DOOR_STATE.DOOR_MIDDLE) {
+        if (this.status === DOOR_STATE.DOOR_RIGHT) {
           return false;
         }
         break;
     }
 
+    console.log('문 상호작용 정상');
     return true;
   }
 
