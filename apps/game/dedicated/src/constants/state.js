@@ -31,6 +31,12 @@ export const CHARACTER_STATE = {
   EXIT: 10,
 };
 
+export const GHOST_SPECIAL_STATE = {
+  GHOST_SPECIAL_STATE_NONE: 0,
+  SEE: 1,
+  EYE_LIGHT: 2,
+};
+
 export const DOOR_STATE = {
   DOOR_LEFT: 1,
   DOOR_MIDDLE: 2,

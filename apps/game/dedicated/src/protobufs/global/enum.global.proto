@@ -36,6 +36,12 @@ enum CharacterState {
   EXIT = 10;
 }
 
+enum GhostSpecialState {
+  GHOST_SPECIAL_STATE_NONE = 0;
+  SEE = 1;
+  EYE_LIGHT = 2;
+}
+
 enum DoorState {
   DOOR_STATE_NONE = 0;
   DOOR_LEFT = 1;
