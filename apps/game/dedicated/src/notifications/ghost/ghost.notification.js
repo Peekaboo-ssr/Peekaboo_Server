@@ -101,9 +101,6 @@ export const ghostSpecialStateNotification = (game, payload) => {
 
   // 호스트 제외 packet 전송
   game.users.forEach((user) => {
-    if (game.hostId === user.id) {
-      return;
-    }
     const packet = createPacketS2G(
       PACKET_TYPE.game.GhostSpecialStateNotification,
       user.clientKey,

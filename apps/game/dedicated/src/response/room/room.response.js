@@ -18,13 +18,14 @@ export const sendCreateRoomResponse = async (
       globalFailCode: GLOBAL_FAIL_CODE.NONE,
       message: '방이 성공적으로 생성되었습니다.',
       gameSessionId: gameId,
-      inviteCode, // 임시 고스트 타입
+      inviteCode,
     };
     const packet = createPacketS2G(
       PACKET_TYPE.game.CreateRoomResponse,
       clientKey,
       payloadData,
     );
+    console.log('packet: ', packet);
 
     socket.write(packet);
   } catch (e) {

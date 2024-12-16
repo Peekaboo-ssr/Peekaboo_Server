@@ -24,6 +24,7 @@ class DedicateServer {
     this.onD2SEvent = new D2SEventHandler();
     this.isConnectedDistributor = false;
     this.clientToDistributor = null;
+    this.game = null;
     this.handlers = handlers;
 
     this.initialize(id, inviteCode, userId, clientKey);
@@ -55,8 +56,13 @@ class DedicateServer {
         this.clientToDistributor.write(packet);
       },
     );
-    setTimeout(async () => {
-      await this.initializeGame(id, inviteCode, userId, clientKey);
+    setTimeout(() => {
+      setInterval(async () => {
+        // 게임이 초기화 되었고, 호스트아이디가 빈 값일 때, 호스트를 참가시키고 응답하도록 수행
+        if (this.game.isInit === true && this.game.hostId === null) {
+          await this.initializeGame(id, inviteCode, userId, clientKey);
+        }
+      }, 2000);
     }, 5000);
   }
 
