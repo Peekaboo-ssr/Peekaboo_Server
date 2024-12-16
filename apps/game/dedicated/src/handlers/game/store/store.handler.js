@@ -16,9 +16,9 @@ export const itemPurchaseHandler = ({ socket, clientKey, payload, server }) => {
       throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
     }
 
-    const itemDatas = server.game.gameAssets.item.data;
+    const itemData = server.game.gameAssets.item.data;
 
-    const itemInfo = itemDatas.find((item) => item.Id === itemTypeId);
+    const itemInfo = itemData.find((item) => item.Id === itemTypeId);
     if (!itemInfo) {
       throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
     }

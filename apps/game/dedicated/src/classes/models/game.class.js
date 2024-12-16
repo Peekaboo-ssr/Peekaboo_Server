@@ -89,7 +89,7 @@ class Game {
       const initSubMissionData = this.gameAssets.submission.data[0];
       this.submissionId = initSubMissionData.Id;
       this.goalSoulAmount = initSubMissionData.SubmissionValue;
-      this.soulAccumulatedAmount = 1000;
+      this.soulCredit = 1000;
     }
 
     // 귀신 스폰 가능 지점 초기화 => 원본 데이터 유지를 위한 복제
