@@ -2,7 +2,12 @@ import net from 'net';
 
 // src/client/dummyClient.js
 export class DummyClient {
-  constructor({ host = '0.0.0.0', port = 6000, packetHelper, CLIENT_PACKET }) {
+  constructor({
+    host = '127.0.0.1',
+    port = 6000,
+    packetHelper,
+    CLIENT_PACKET,
+  }) {
     this.host = host;
     this.port = port;
     this.packetHelper = packetHelper;
