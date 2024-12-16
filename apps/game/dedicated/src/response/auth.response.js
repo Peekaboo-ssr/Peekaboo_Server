@@ -63,7 +63,7 @@ export const sendConnectGameResponse = (game, existUserIds, clientKey) => {
     message: '게임 세션 입장에 성공하였습니다.',
   };
   const responseData = createPacketS2G(
-    PACKET_TYPE.ConnectGameResponse,
+    PACKET_TYPE.game.ConnectGameResponse,
     clientKey,
     data,
   ); // sequence도 임시로

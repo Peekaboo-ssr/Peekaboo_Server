@@ -65,13 +65,13 @@ message S2C_PlayerLifeResponse {
 
 message C2S_GhostSpecialStateRequest {
   uint32 ghostId = 1;
-  uint32 specialState = 2;
+  GhostSpecialState specialState = 2;
   bool isOn = 3;
 }
 
 message S2C_GhostSpecialStateNotification {
   uint32 ghostId = 1;
-  uint32 specialState = 2;
+  GhostSpecialState specialState = 2;
   bool isOn = 3;
 }
 

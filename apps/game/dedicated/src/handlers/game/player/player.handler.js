@@ -76,7 +76,7 @@ export const playerAttackedRequestHandler = async ({
     };
 
     const packet = createPacketS2G(
-      PACKET_TYPE.PlayerLifeResponse,
+      PACKET_TYPE.game.PlayerLifeResponse,
       clientKey,
       lifePayload,
     );

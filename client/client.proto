@@ -1,0 +1,505 @@
+syntax = "proto3";
+
+enum GlobalFailCode {
+  NONE = 0;
+  UNKNOWN = 1;
+  INVALID_REQUEST = 2;
+  AUTHENTICATION_FAILED = 3;
+}
+
+enum UserState {
+  USER_STATE_NONE = 0;
+  STAY = 1;
+  INGAME = 2;
+}
+
+enum GameSessionState {
+  GAME_STATE_NONE = 0;
+  PREPARE = 1;
+  INPROGRESS = 2;
+  END = 3;
+}
+
+enum CharacterState {
+  CHARACTER_STATE_NONE = 0;
+  IDLE = 1;
+  MOVE = 2;
+  RUN = 3;
+  JUMP = 4;
+  ATTACK = 5;
+  DIED = 6;
+  HIT = 7;
+  COOLDOWN = 8;
+  SHOUT = 9;
+  EXIT = 10;
+}
+
+enum GhostSpecialState {
+  GHOST_SPECIAL_STATE_NONE = 0;
+  SEE = 1;
+  EYE_LIGHT = 2;
+}
+
+enum DoorState {
+  DOOR_STATE_NONE = 0;
+  DOOR_LEFT = 1;
+  DOOR_MIDDLE = 2;
+  DOOR_RIGHT = 3;
+}
+
+message Position {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message Rotation {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message MoveInfo {
+  Position position = 1;
+  Rotation rotation = 2;
+}
+
+message PlayerInfo {
+  string userId = 1;
+  MoveInfo moveInfo = 2;
+  bool isHost = 3;
+}
+
+message PlayerMoveInfo {
+  string userId = 1;
+  Position position = 2;
+  Rotation rotation = 3;
+}
+
+message PlayerStateInfo {
+  string userId = 1;
+  CharacterState characterState = 2;
+}
+
+message GhostInfo {
+  uint32 ghostId = 1;
+  uint32 ghostTypeId = 2;
+  MoveInfo moveInfo = 3;
+}
+
+message GhostMoveInfo {
+  uint32 ghostId = 1;
+  Position position = 2;
+}
+
+message GhostStateInfo {
+  uint32 ghostId = 1;
+  CharacterState characterState = 2;
+}
+
+message ItemInfo {
+  uint32 itemId = 1;
+  uint32 itemTypeId = 2;
+  Position position = 3;
+}
+
+message ProfileInfo {
+  string userId =1;
+  string nickname = 2;
+  uint32 levelId = 3;
+}
+
+message RoomInfo {
+  string gameSessionId = 1;
+  string roomName = 2;
+  uint32 numberOfPlayer =3;
+}
+
+message C2S_PlayerMoveRequest {
+  PlayerMoveInfo playerMoveInfo = 1;
+}
+
+message S2C_PlayerMoveNotification {
+  repeated PlayerMoveInfo playerMoveInfos = 1;
+}
+
+message C2S_GhostMoveRequest {
+  repeated GhostMoveInfo ghostMoveInfos = 1;
+}
+
+message S2C_GhostMoveNotification {
+  repeated GhostMoveInfo ghostMoveInfos = 1;
+}
+
+message S2C_PingRequest {
+  uint64 timestamp = 1;
+}
+
+message C2S_PingResponse {
+  uint64 timestamp = 1;
+}
+
+message C2S_PlayerStateChangeRequest {
+  PlayerStateInfo playerStateInfo = 1;
+}
+
+message S2C_PlayerStateChangeNotification {
+  PlayerStateInfo playerStateInfo = 1;
+}
+
+message C2S_GhostStateChangeRequest {
+  GhostStateInfo ghostStateInfo = 1;
+} 
+
+message S2C_GhostStateChangeNotification {
+  GhostStateInfo ghostStateInfo = 1;
+} 
+
+message C2S_ItemChangeRequest {
+  uint32 inventorySlot = 1;
+}
+
+message S2C_ItemChangeNotification {
+  string userId = 1;
+  uint32 itemId = 2;
+}
+
+message C2S_PlayerAttackedRequest {
+  string userId = 1;
+  uint32 ghostId = 2;
+} 
+
+message S2C_PlayerLifeResponse {
+  uint32 life= 1;
+}
+
+message C2S_GhostSpecialStateRequest {
+  uint32 ghostId = 1;
+  GhostSpecialState specialState = 2;
+  bool isOn = 3;
+}
+
+message S2C_GhostSpecialStateNotification {
+  uint32 ghostId = 1;
+  GhostSpecialState specialState = 2;
+  bool isOn = 3;
+}
+
+message C2S_GhostAttackedRequest {
+  uint32 ghostId = 1;
+  string userId = 2;
+}
+
+message C2S_GhostSpawnRequest {
+  uint32 ghostTypeId = 1;
+}
+
+message S2C_GhostSpawnNotification {
+  GhostInfo ghostInfo = 1;
+}
+
+message S2C_GhostDeleteNotification {
+  repeated uint32 ghostIds = 1;
+}
+
+message C2S_ItemGetRequest {
+  uint32 itemId = 1;
+  uint32 inventorySlot = 2;
+}
+
+message S2C_ItemGetResponse {
+  uint32 itemId = 1;
+  uint32 inventorySlot = 2;
+}
+
+message S2C_ItemGetNotification {
+  uint32 itemId = 1;
+  string userId = 2;
+} 
+
+message C2S_ItemUseRequest {
+  uint32 inventorySlot = 1;
+}
+
+message S2C_ItemUseResponse {
+  uint32 itemId = 1;
+  uint32 inventorySlot = 2;
+}
+
+message S2C_ItemUseNotification {
+  string userId = 1;
+  uint32 itemId = 2;
+}
+
+message C2S_ItemDiscardRequest {
+  ItemInfo itemInfo = 1;
+  uint32 inventorySlot = 2;
+}
+
+message S2C_ItemDiscardResponse {
+  uint32 inventorySlot = 1;
+}
+
+message S2C_ItemDiscardNotification {
+  string userId = 1;
+  uint32 itemId = 2;
+}
+
+message C2S_ItemDisuseRequest {
+  uint32 itemId  = 1;
+}
+
+message S2C_ItemDisuseNotification {
+  uint32 userId = 1;
+  uint32 itemId  = 2;
+}
+
+message S2C_ItemDeleteNotification {
+  repeated uint32 itemIds  = 1;
+}
+
+message C2S_ItemPurchaseRequest {
+  uint32 itemTypeId = 1;
+} 
+
+message S2C_ItemPurchaseNotification {
+  ItemInfo itemInfo = 1;
+  uint32 soulCredit = 2;
+}
+
+message S2C_ItemPurchaseResponse {
+  GlobalFailCode globalFailCode = 1;
+}
+
+message C2S_ItemCreateRequest {
+  uint32 itemTypeId = 1;
+}
+
+message S2C_ItemCreateNotification {
+  ItemInfo itemInfo = 1;
+}
+
+message C2S_DoorToggleRequest{
+  uint32 doorId = 1;
+  DoorState doorState = 2;
+}
+
+message S2C_DoorToggleNotification {
+  uint32 doorId = 1;
+  DoorState doorState = 2;
+}
+
+message C2S_ExtractSoulRequest {
+  string userId = 1;
+}
+
+message S2C_ExtractSoulNotification {
+  uint32 soulCredit = 1; 
+}
+
+message S2C_DisconnectPlayerNotification {
+  string userId = 1;
+}
+
+message S2C_RemainingTimeNotification {
+  uint32 remainingTime = 1;
+}
+
+message S2C_BlockInteractionNotification {
+}
+
+message C2S_StartStageRequest	{
+  string gameSessionId = 1;
+  uint32 difficultyId = 2;
+}
+
+message S2C_SpawnInitialDataRequest	{
+  GlobalFailCode globalFailCode  = 1;
+  uint32 difficultyId = 2;
+  string message = 3;
+}
+
+message C2S_SpawnInitialDataResponse {
+  repeated ItemInfo itemInfos = 1;
+}
+
+message S2C_StartStageNotification {
+  GlobalFailCode globalFailCode  = 1;
+  string message = 2;
+  repeated ItemInfo itemInfos = 3;
+}
+
+message S2C_StageEndNotification {
+  uint32 remainingDay = 1;
+  Position startPosition = 2;
+}
+
+message S2C_SubmissionEndNotification {
+  bool result = 1;
+  uint32 submissionId = 2;
+}
+
+message C2S_RegistAccountRequest {
+  string id = 1;
+  string password = 2;
+}
+
+message S2C_RegistAccountResponse {
+  GlobalFailCode globalFailCode = 1;
+  string message = 2;
+}
+
+message C2S_LoginRequest {
+  string id = 1;
+  string password = 2;
+}
+
+message S2C_LoginResponse {
+  GlobalFailCode globalFailCode = 1;
+  string userId = 2;
+  string token = 3;
+}
+
+message C2S_ChangeNicknameRequest {
+  string userId = 1;
+  string nickname = 2; 
+  string token = 3;
+}
+
+message S2C_ChangeNicknameResponse {
+  GlobalFailCode globalFailCode = 1;
+  string message = 2;
+}
+
+message C2S_EnterLobbyRequest {
+  string userId = 1;
+}
+
+message S2C_EnterLobbyResponse {
+  repeated RoomInfo roomInfos = 1;
+}
+
+message C2S_RefreshLobbyRequest {
+  string userId = 1;
+}
+
+message S2C_RefreshLobbyResponse {
+  repeated RoomInfo roomInfos = 1;
+  GlobalFailCode globalFailCode = 2;
+}
+
+message C2S_SearchRoomRequest {
+ string searchText = 1;
+}
+
+message S2C_SearchRoomResponse {
+ repeated RoomInfo roomInfos = 1;
+}
+
+message C2S_CreateRoomRequest {
+  string userId = 1;
+  string token = 2;
+}
+
+message S2C_CreateRoomResponse {
+  GlobalFailCode globalFailCode  = 1;
+  string message = 2;
+  string gameSessionId = 3;
+  string inviteCode = 4;
+}
+
+message C2S_JoinRoomRequest {
+  string userId = 1;
+  string inviteCode = 2;
+  string token = 3;
+}
+
+message S2C_JoinRoomResponse {
+  GlobalFailCode globalFailCode  = 1;
+  string message = 2;
+  string gameSessionId = 3;
+  repeated PlayerInfo playerInfos = 4;
+}
+
+message S2C_JoinRoomNotification {
+  string userId = 1;
+}
+
+message GamePacket {
+  oneof payload {
+    C2S_PlayerMoveRequest playerMoveRequest = 1;
+    S2C_PlayerMoveNotification playerMoveNotification = 2;
+    C2S_GhostMoveRequest ghostMoveRequest = 3;
+    S2C_GhostMoveNotification ghostMoveNotification = 4;
+    S2C_PingRequest pingRequest = 5;
+    C2S_PingResponse pingResponse = 6;
+    C2S_PlayerStateChangeRequest playerStateChangeRequest = 7;
+    S2C_PlayerStateChangeNotification playerStateChangeNotification = 8;
+    C2S_GhostStateChangeRequest ghostStateChangeRequest = 9;
+    S2C_GhostStateChangeNotification ghostStateChangeNotification = 10;
+    C2S_ItemChangeRequest itemChangeRequest = 11;
+    S2C_ItemChangeNotification itemChangeNotification = 12;
+
+    C2S_PlayerAttackedRequest playerAttackedRequest = 101;
+    S2C_PlayerLifeResponse playerLifeResponse = 102;
+ 
+    C2S_GhostSpecialStateRequest ghostSpecialStateRequest = 201;
+    S2C_GhostSpecialStateNotification ghostSpecialStateNotification = 202;
+    C2S_GhostAttackedRequest ghostAttackedRequest = 203;
+    C2S_GhostSpawnRequest ghostSpawnRequest = 204;
+    S2C_GhostSpawnNotification ghostSpawnNotification = 205;
+    S2C_GhostDeleteNotification ghostDeleteNotification = 206;
+
+    C2S_ItemGetRequest itemGetRequest = 301;
+    S2C_ItemGetResponse itemGetResponse = 302;
+    S2C_ItemGetNotification itemGetNotification = 303;
+    C2S_ItemUseRequest itemUseRequest = 304;
+    S2C_ItemUseResponse itemUseResponse = 305;
+    S2C_ItemUseNotification itemUseNotification = 306;
+    C2S_ItemDiscardRequest itemDiscardRequest = 307;
+    S2C_ItemDiscardResponse itemDiscardResponse = 308;
+    S2C_ItemDiscardNotification itemDiscardNotification = 309;
+    C2S_ItemDisuseRequest itemDisuseRequest = 310;
+    S2C_ItemDisuseNotification itemDisuseNotification = 311;
+    S2C_ItemDeleteNotification itemDeleteNotification = 312;
+    C2S_ItemPurchaseRequest itemPurchaseRequest = 313;
+    S2C_ItemPurchaseNotification itemPurchaseNotification = 314;
+    S2C_ItemPurchaseResponse itemPurchaseResponse = 315;
+    C2S_ItemCreateRequest itemCreateRequest = 316;
+    S2C_ItemCreateNotification itemCreateNotification = 317;
+
+    C2S_DoorToggleRequest doorToggleRequest = 350;
+    S2C_DoorToggleNotification doorToggleNotification = 351;
+
+    C2S_ExtractSoulRequest extractSoulRequest = 401;
+    S2C_ExtractSoulNotification extractSoulNotification = 402;
+    S2C_DisconnectPlayerNotification disconnectPlayerNotification = 403;
+    S2C_RemainingTimeNotification remainingTimeNotification = 404;
+    S2C_BlockInteractionNotification blockInteractionNotification = 405;
+    C2S_StartStageRequest startStageRequest = 406;
+    S2C_SpawnInitialDataRequest spawnInitialDataRequest = 407;
+    C2S_SpawnInitialDataResponse spawnInitialDataResponse = 408;
+    S2C_StartStageNotification startStageNotification = 409;
+    S2C_StageEndNotification stageEndNotification = 410;
+    S2C_SubmissionEndNotification submissionEndNotification = 411;
+
+    C2S_RegistAccountRequest registAccountRequest = 500;
+    S2C_RegistAccountResponse registAccountResponse = 501;
+    C2S_LoginRequest loginRequest = 502;
+    S2C_LoginResponse loginResponse = 503;
+    C2S_ChangeNicknameRequest changeNicknameRequest = 504;
+    S2C_ChangeNicknameResponse changeNicknameResponse = 505;
+    C2S_EnterLobbyRequest enterLobbyRequest = 506;
+    S2C_EnterLobbyResponse enterLobbyResponse = 507;
+    C2S_RefreshLobbyRequest refreshLobbyRequest = 508;
+    S2C_RefreshLobbyResponse refreshLobbyResponse = 509;
+    C2S_SearchRoomRequest searchRoomRequest = 510;
+    S2C_SearchRoomResponse searchRoomResponse = 511;
+
+    C2S_CreateRoomRequest createRoomRequest = 601;
+    S2C_CreateRoomResponse createRoomResponse = 602;
+    C2S_JoinRoomRequest joinRoomRequest = 603;
+    S2C_JoinRoomResponse joinRoomResponse = 604;
+    S2C_JoinRoomNotification joinRoomNotification = 605;
+  }
+}

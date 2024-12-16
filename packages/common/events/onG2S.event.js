@@ -1,4 +1,4 @@
-import config from '@peekaboo-ssr/config/session';
+import config from '@peekaboo-ssr/config/shared';
 import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import { parsePacketG2S } from '@peekaboo-ssr/utils/parsePacket';
 
@@ -56,7 +56,7 @@ class G2SEventHandler extends BaseEvent {
 
         const handler = server.getClientHandlerByPacketType(packetType);
 
-        await handler(socket, clientKey, payload, server.clientToDistributor);
+        await handler(socket, clientKey, payload, server);
       } catch (e) {
         console.error(e);
       }

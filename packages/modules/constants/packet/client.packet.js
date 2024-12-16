@@ -2,9 +2,8 @@ const CLIENT_PACKET = {
   game: {
     // 방 : 600번대
     CreateRoomRequest: 601,
-    CreateRoomResponse: 602,
     JoinRoomRequest: 603,
-    JoinRoomResponse: 604,
+    JoinRoomResponse: 604, // 참가 실패 시 게임에서도 response 해줌.
   },
   account: {
     // 로그인, 로비 : 500번대
@@ -84,7 +83,9 @@ const CLIENT_PACKET = {
     SpawnInitialDataResponse: 408,
     StartStageNotification: 409,
     StageEndNotification: 410,
-
+    SubmissionEndNotification: 411,
+    CreateRoomResponse: 602,
+    JoinRoomResponse: 604,
     JoinRoomNotification: 605,
   },
 };

@@ -14,10 +14,7 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.lobby.SearchRoomRequest]: 'searchRoomRequest',
   [clientPacket.lobby.SearchRoomResponse]: 'searchRoomResponse',
   [clientPacket.game.CreateRoomRequest]: 'createRoomRequest',
-  [clientPacket.game.CreateRoomResponse]: 'createRoomResponse',
   [clientPacket.game.JoinRoomRequest]: 'joinRoomRequest',
-  [clientPacket.game.JoinRoomResponse]: 'joinRoomResponse',
-  [clientPacket.game.JoinRoomNotification]: 'joinRoomNotification',
   [clientPacket.dedicated.PlayerMoveRequest]: 'playerMoveRequest',
   [clientPacket.dedicated.PlayerMoveNotification]: 'playerMoveNotification',
   [clientPacket.dedicated.GhostMoveRequest]: 'ghostMoveRequest',
@@ -72,6 +69,9 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.ItemPurchaseRequest]: 'itemPurchaseRequest',
   [clientPacket.dedicated.ItemPurchaseNotification]: 'itemPurchaseNotification',
   [clientPacket.dedicated.ItemPurchaseResponse]: 'itemPurchaseResponse',
+  [clientPacket.dedicated.CreateRoomResponse]: 'createRoomResponse',
+  [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
+  [clientPacket.dedicated.JoinRoomNotification]: 'joinRoomNotification',
 };
 
 export default CLIENT_PACKET_MAPS;

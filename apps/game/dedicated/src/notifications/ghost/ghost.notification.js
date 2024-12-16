@@ -34,7 +34,7 @@ export const ghostsLocationNotification = (game) => {
       return;
     }
     const packet = createPacketS2G(
-      PACKET_TYPE.GhostMoveNotification,
+      PACKET_TYPE.game.GhostMoveNotification,
       user.clientKey,
       payload,
     );
@@ -71,7 +71,7 @@ export const ghostStateChangeNotification = (game, ghostId, characterState) => {
       return;
     }
     const packet = createPacketS2G(
-      PACKET_TYPE.GhostStateChangeNotification,
+      PACKET_TYPE.game.GhostStateChangeNotification,
       user.clientKey,
       payload,
     );
@@ -105,7 +105,7 @@ export const ghostSpecialStateNotification = (game, payload) => {
       return;
     }
     const packet = createPacketS2G(
-      PACKET_TYPE.GhostSpecialStateNotification,
+      PACKET_TYPE.game.GhostSpecialStateNotification,
       user.clientKey,
       data,
     );
@@ -121,7 +121,7 @@ export const ghostSpawnNotification = (game, ghostInfo) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.GhostSpawnNotification,
+      PACKET_TYPE.game.GhostSpawnNotification,
       user.clientKey,
       payload,
     );
@@ -137,7 +137,7 @@ export const ghostDeleteNotification = (game, ghostIds) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.GhostDeleteNotification,
+      PACKET_TYPE.game.GhostDeleteNotification,
       user.clientKey,
       payload,
     );

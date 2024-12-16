@@ -38,7 +38,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
         position: { x: 21.24, y: 15.2, z: 8.66 },
         rotation: { x: 1.2, y: 11.5, z: 6.9 },
       },
-      host: '43.201.83.243',
+      host: '0.0.0.0',
       port: 6000,
     },
     {
@@ -50,7 +50,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
         position: { x: 10.0, y: 10.0, z: 10.0 },
         rotation: { x: 0.0, y: 0.0, z: 0.0 },
       },
-      host: '43.201.83.243',
+      host: '0.0.0.0',
       port: 6000,
     },
     // 필요하다면 더 추가 가능
