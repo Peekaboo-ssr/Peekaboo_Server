@@ -103,6 +103,7 @@ class Game {
 
     // 게임 상태를 준비상태로 변경
     this.state = GAME_SESSION_STATE.PREPARE;
+    this.isInit = true;
   }
 
   // stage 시작
@@ -138,6 +139,9 @@ class Game {
     IntervalManager.getInstance().removeGhostsInterval(this.id);
     IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
+    if (this.isInit === true) {
+      this.isInit === false;
+    }
     this.initStage();
   }
 
@@ -175,6 +179,11 @@ class Game {
     await disconnectPlayerNotification(this, userId);
 
     IntervalManager.getInstance().removeUserInterval(userId);
+
+    // 인원이 없는 경우 모든 인터벌 삭제
+    if (this.users.length <= 0) {
+      IntervalManager.getInstance().clearAll();
+    }
   }
 
   getUser(userId) {
