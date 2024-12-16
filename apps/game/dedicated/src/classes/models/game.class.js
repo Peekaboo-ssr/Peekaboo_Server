@@ -4,6 +4,7 @@ import { Character } from './character.class.js';
 import {
   ghostDeleteNotification,
   ghostsLocationNotification,
+  ghostSpawnNotification,
 } from '../../notifications/ghost/ghost.notification.js';
 import {
   disconnectPlayerNotification,
@@ -299,6 +300,14 @@ class Game {
       const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
       copyGhostSpawnPositions.splice(randomPosIdx, 1);
       this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+
+      const ghostInfo = {
+        ghostId,
+        ghostTypeId,
+        moveInfo: ghostPosition.getPosition(),
+      };
+
+      //ghostSpawnNotification(this, ghostInfo);
     }
   }
 
