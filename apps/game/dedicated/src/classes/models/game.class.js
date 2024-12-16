@@ -45,6 +45,7 @@ class Game {
     this.difficultyId = null; // 난이도
     this.defaultRemainingTime = null; // 스테이지 제한 시간
     this.remainingTime = null; // 스테이지 남은 시간
+    this.isRemainingTimeOver = false;
     this.goalSoulCredit = null; // 소울 수집 목표량
     this.soulCredit = null; // 현재 소울량
     this.ghostSpawnPositions = null; // 귀신 스폰 지역
@@ -90,6 +91,7 @@ class Game {
       this.submissionId = initSubMissionData.Id;
       this.goalSoulAmount = initSubMissionData.SubmissionValue;
       this.soulCredit = 1000;
+      this.isRemainingTimeOver = false;
     }
 
     // 귀신 스폰 가능 지점 초기화 => 원본 데이터 유지를 위한 복제
@@ -129,20 +131,22 @@ class Game {
 
   // 스테이지 종료 로직
   async endStage() {
-    // 게임 상태를 END로 변경한다.
-    await this.setState(GAME_SESSION_STATE.END);
-    // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
-    this.day -= 1;
-    stageEndNotification(this);
+    if (this.state === GAME_SESSION_STATE.INPROGRESS) {
+      // 게임 상태를 END로 변경한다.
+      await this.setState(GAME_SESSION_STATE.END);
+      // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
+      this.day -= 1;
+      stageEndNotification(this);
 
-    // 귀신 및 게임 타이머 인터벌 삭제
-    IntervalManager.getInstance().removeGhostsInterval(this.id);
-    IntervalManager.getInstance().removeGameTimerInterval(this.id);
+      // 귀신 및 게임 타이머 인터벌 삭제
+      IntervalManager.getInstance().removeGhostsInterval(this.id);
+      IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
-    if (this.isInit === true) {
-      this.isInit === false;
+      if (this.isInit === true) {
+        this.isInit === false;
+      }
+      this.initStage();
     }
-    this.initStage();
   }
 
   async addUser(user, isHost = false) {
@@ -277,51 +281,79 @@ class Game {
     this.ghosts = [];
   }
 
-  // 안쓰는거
-  // spawnItems() {
-  //   const spawnSoulItemNumber = getRandomInt(
-  //     this.minSoulItemNumber,
-  //     this.maxSoulItemNumber + 1,
-  //   );
-  //   const copyItemSpawnPosition = [...this.itemSpawnPositions];
-  //   for (let i = 0; i < spawnSoulItemNumber; i++) {
-  //     const itemId = this.getUniqueItemId();
-  //     const itemTypeId =
-  //       this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
-  //     const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
-  //     const itemPosition = copyItemSpawnPosition[randomPosIdx];
-  //     copyItemSpawnPosition.splice(randomPosIdx, 1);
-  //     this.items.push(new Item(itemId, itemTypeId, itemPosition));
-  //   }
-  // }
-  // spawnGhosts() {
-  //   const spawnGhostNumber = getRandomInt(
-  //     this.minGhostNumber,
-  //     this.maxGhostNumber + 1,
-  //   );
-  //   const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
-  //   const copyGhostTypes = [...this.spawnGhost];
-  //   for (let i = 0; i < spawnGhostNumber; i++) {
-  //     const ghostId = this.getUniqueGhostId();
-  //     const randomTypeIdx = getRandomInt(0, this.copyGhostTypes.length);
-  //     const ghostTypeId = copyGhostTypes[randomTypeIdx];
-  //     if (copyGhostTypes.length !== 1) {
-  //       copyGhostTypes.splice(randomTypeIdx, 1);
-  //     }
-  //     const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
-  //     const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
-  //     copyGhostSpawnPositions.splice(randomPosIdx, 1);
-  //     this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+  spawnItems() {
+    const spawnSoulItemNumber = getRandomInt(
+      this.minSoulItemNumber,
+      this.maxSoulItemNumber + 1,
+    );
+    const copyItemSpawnPosition = [...this.itemSpawnPositions];
+    const itemInfos = [];
+    for (let i = 0; i < spawnSoulItemNumber; i++) {
+      const itemId = this.getUniqueItemId();
+      const itemTypeId =
+        this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
+      const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
+      const itemPosition = copyItemSpawnPosition[randomPosIdx];
+      copyItemSpawnPosition.splice(randomPosIdx, 1).split(',');
+      const position = {
+        x: copyItemSpawnPosition[0],
+        y: copyItemSpawnPosition[1],
+        z: copyItemSpawnPosition[2],
+      };
+      this.items.push(new Item(itemId, itemTypeId, itemPosition));
 
-  //     const ghostInfo = {
-  //       ghostId,
-  //       ghostTypeId,
-  //       moveInfo: ghostPosition.getPosition(),
-  //     };
+      const itemInfo = {
+        itemId,
+        itemTypeId,
+        position,
+      };
 
-  //     //ghostSpawnNotification(this, ghostInfo);
-  //   }
-  // }
+      itemInfos.push(itemInfo);
+    }
+
+    return itemInfos;
+  }
+
+  spawnGhosts() {
+    const spawnGhostNumber = getRandomInt(
+      this.minGhostNumber,
+      this.maxGhostNumber + 1,
+    );
+    const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
+    const copyGhostTypes = [...this.spawnGhost];
+    const ghostInfos = [];
+    for (let i = 0; i < spawnGhostNumber; i++) {
+      const ghostId = this.getUniqueGhostId();
+      const randomTypeIdx = getRandomInt(0, this.copyGhostTypes.length);
+      const ghostTypeId = copyGhostTypes[randomTypeIdx];
+      if (copyGhostTypes.length !== 1) {
+        copyGhostTypes.splice(randomTypeIdx, 1);
+      }
+      const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
+      const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
+      // 이거 문자열이라 객체형태로 바꿔야함.
+      copyGhostSpawnPositions.splice(randomPosIdx, 1).split(',');
+      const position = {
+        x: copyGhostSpawnPositions[0],
+        y: copyGhostSpawnPositions[1],
+        z: copyGhostSpawnPositions[2],
+      };
+      this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+      const rotation = { x: 0, y: 0, z: 0 };
+      const moveInfo = {
+        position,
+        rotation,
+      };
+      const ghostInfo = {
+        ghostId,
+        ghostTypeId,
+        moveInfo,
+      };
+      ghostInfos.push(ghostInfo);
+    }
+
+    return ghostInfos;
+  }
 
   getDoor(doorId) {
     return this.doors.find((door) => door.doorId === doorId);
@@ -377,6 +409,7 @@ class Game {
     this.remainingTime -= 1;
 
     if (this.remainingTime <= 0) {
+      this.isRemainingTimeOver = true;
       this.endStage();
     } else {
       // 게임 남은 시간 동기화를 위해 remainingTimeNotification 패킷을 보낸다.
@@ -385,16 +418,13 @@ class Game {
   }
 
   // 모든 플레이어가 죽었거나 탈출했는지 검사하는 함수
-  // checkStageEnd() {
-  //   const isEndStage = this.users.every((user) => {
-  //     return (
-  //       user.character.state === CHARACTER_STATE.DIED ||
-  //       user.character.state === CHARACTER_STATE.EXIT
-  //     );
-  //   });
+  checkStageEnd() {
+    const isEndStage = this.users.every((user) => {
+      return user.character.state === CHARACTER_STATE.DIED;
+    });
 
-  //   return isEndStage;
-  // }
+    return isEndStage;
+  }
 
   endSubmission() {
     // submission 목표치 검증
@@ -421,6 +451,14 @@ class Game {
       // 실패시, 특별히 처리할 로직이 없다...
       return false;
     }
+  }
+
+  getUniqueItemId() {
+    return this.itemIdCount++;
+  }
+
+  getUniqueGhostId() {
+    return this.ghostIdCount++;
   }
 }
 

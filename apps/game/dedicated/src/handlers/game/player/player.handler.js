@@ -80,7 +80,6 @@ export const playerAttackedRequestHandler = async ({
       clientKey,
       lifePayload,
     );
-
     socket.write(packet);
 
     const playerStateInfo = {
@@ -104,11 +103,10 @@ export const playerAttackedRequestHandler = async ({
         }
       }
 
-      await server.game.endStage();
-      // if (.checkStageEnd()) {
-      //   // 스테이지 종료 조건이 만족했다면, 스테이지를 종료시킨다.
-
-      // }
+      if (server.game.checkStageEnd()) {
+        // 스테이지 종료 조건이 만족했다면, 스테이지를 종료시킨다.
+        await server.game.endStage();
+      }
     }
   } catch (e) {
     handleError(e);

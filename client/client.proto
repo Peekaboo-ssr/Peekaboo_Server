@@ -301,11 +301,11 @@ message S2C_DisconnectPlayerNotification {
   string userId = 1;
 }
 
-message S2C_RemainingTimeNotification {
-  uint32 remainingTime = 1;
+message S2C_BlockInteractionNotification {
 }
 
-message S2C_BlockInteractionNotification {
+message S2C_RemainingTimeNotification {
+  uint32 remainingTime = 1;
 }
 
 message C2S_StartStageRequest	{
@@ -313,25 +313,17 @@ message C2S_StartStageRequest	{
   uint32 difficultyId = 2;
 }
 
-message S2C_SpawnInitialDataRequest	{
-  GlobalFailCode globalFailCode  = 1;
-  uint32 difficultyId = 2;
-  string message = 3;
-}
-
-message C2S_SpawnInitialDataResponse {
-  repeated ItemInfo itemInfos = 1;
-}
-
 message S2C_StartStageNotification {
   GlobalFailCode globalFailCode  = 1;
   string message = 2;
   repeated ItemInfo itemInfos = 3;
+  repeated GhostInfo ghostInfos = 4;
 }
 
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
+  bool isRemainingTimeOver = 3;
 }
 
 message S2C_SubmissionEndNotification {
@@ -425,6 +417,7 @@ message S2C_JoinRoomNotification {
   string userId = 1;
 }
 
+
 message GamePacket {
   oneof payload {
     C2S_PlayerMoveRequest playerMoveRequest = 1;
@@ -442,7 +435,7 @@ message GamePacket {
 
     C2S_PlayerAttackedRequest playerAttackedRequest = 101;
     S2C_PlayerLifeResponse playerLifeResponse = 102;
- 
+
     C2S_GhostSpecialStateRequest ghostSpecialStateRequest = 201;
     S2C_GhostSpecialStateNotification ghostSpecialStateNotification = 202;
     C2S_GhostAttackedRequest ghostAttackedRequest = 203;
@@ -477,11 +470,9 @@ message GamePacket {
     S2C_RemainingTimeNotification remainingTimeNotification = 404;
     S2C_BlockInteractionNotification blockInteractionNotification = 405;
     C2S_StartStageRequest startStageRequest = 406;
-    S2C_SpawnInitialDataRequest spawnInitialDataRequest = 407;
-    C2S_SpawnInitialDataResponse spawnInitialDataResponse = 408;
-    S2C_StartStageNotification startStageNotification = 409;
-    S2C_StageEndNotification stageEndNotification = 410;
-    S2C_SubmissionEndNotification submissionEndNotification = 411;
+    S2C_StartStageNotification startStageNotification = 407;
+    S2C_StageEndNotification stageEndNotification = 408;
+    S2C_SubmissionEndNotification submissionEndNotification = 409;
 
     C2S_RegistAccountRequest registAccountRequest = 500;
     S2C_RegistAccountResponse registAccountResponse = 501;

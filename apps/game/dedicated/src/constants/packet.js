@@ -63,11 +63,9 @@ export const PACKET_TYPE = {
     RemainingTimeNotification: 404,
     BlockInteractionNotification: 405,
     StartStageRequest: 406,
-    SpawnInitialDataRequest: 407,
-    SpawnInitialDataResponse: 408,
-    StartStageNotification: 409,
-    StageEndNotification: 410,
-    SubmissionEndNotification: 411,
+    StartStageNotification: 407,
+    StageEndNotification: 408,
+    SubmissionEndNotification: 409,
 
     // 로그인, 로비 : 500번대
     RegistAccountRequest: 500,
@@ -164,8 +162,6 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.BlockInteractionNotification]:
       'blockInteractionNotification',
     [PACKET_TYPE.game.StartStageRequest]: 'startStageRequest',
-    [PACKET_TYPE.game.SpawnInitialDataRequest]: 'spawnInitialDataRequest',
-    [PACKET_TYPE.game.SpawnInitialDataResponse]: 'spawnInitialDataResponse',
     [PACKET_TYPE.game.StartStageNotification]: 'startStageNotification',
     [PACKET_TYPE.game.StageEndNotification]: 'stageEndNotification',
     [PACKET_TYPE.game.SubmissionEndNotification]: 'submissionEndNotification',

@@ -61,6 +61,7 @@ export const stageEndNotification = (game) => {
   const payload = {
     remainingDay: game.day,
     startPosition,
+    isRemainingOver: game.isRemainingOver,
   };
 
   game.users.forEach((user) => {

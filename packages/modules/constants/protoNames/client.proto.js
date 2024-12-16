@@ -30,8 +30,6 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.ItemChangeRequest]: 'itemChangeRequest',
   [clientPacket.dedicated.ItemChangeNotification]: 'itemChangeNotification',
   [clientPacket.dedicated.StartStageRequest]: 'startStageRequest',
-  [clientPacket.dedicated.SpawnInitialDataRequest]: 'spawnInitialDataRequest',
-  [clientPacket.dedicated.SpawnInitialDataResponse]: 'spawnInitialDataResponse',
   [clientPacket.dedicated.StartStageNotification]: 'startStageNotification',
   [clientPacket.dedicated.PlayerAttackedRequest]: 'playerAttackedRequest',
   [clientPacket.dedicated.PlayerLifeResponse]: 'playerLifeResponse',
