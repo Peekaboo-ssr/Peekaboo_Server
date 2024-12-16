@@ -16,7 +16,7 @@ class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
     // 마이크로서비스 정보
     this.context = {
-      host: config.server.game.host,
+      host: 'host.docker.internal', // EC2: 172.17.0.1 or local: host.docker.internal
       port: port,
       name: 'dedicated',
     };

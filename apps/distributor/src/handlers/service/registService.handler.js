@@ -22,11 +22,9 @@ export const connectServiceHandler = async (socket, payload) => {
         info: payload,
       };
     }
-
-    console.log('Service registered successfully:', key);
-    sendInfo(socket);
   } catch (err) {
     console.error('Error registering service:', err);
     socket.end();
   }
+  sendInfo();
 };

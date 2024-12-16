@@ -15,6 +15,7 @@ export const findRoutingClients = (server, packetType, clientKey = null) => {
         server.mapClients.microservices,
       )) {
         if (value.info.name === routingServiceName) {
+          console.log('찾음!!!');
           return value.client;
         }
       }

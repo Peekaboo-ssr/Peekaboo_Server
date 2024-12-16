@@ -14,12 +14,12 @@ services:
     env_file:
       - ./packages/common/config/.env
 
-  master:
+  game:
     build:
       context: .
       dockerfile: apps/game/master/dockerfile
-    container_name: master
-    hostname: master
+    container_name: game
+    hostname: game
     networks:
       - peekaboo-network
     ports:
@@ -28,6 +28,8 @@ services:
       - ./packages/common/config/.env
     depends_on:
       - distributor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   lobby:
     build:
@@ -42,7 +44,7 @@ services:
     env_file:
       - ./packages/common/config/.env
     depends_on:
-      - master
+      - game
 
   account:
     build:

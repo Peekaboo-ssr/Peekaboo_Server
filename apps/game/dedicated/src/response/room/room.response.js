@@ -26,6 +26,8 @@ export const sendCreateRoomResponse = async (
       payloadData,
     );
 
+    console.log('----socket 찾고있음----', socket);
+
     socket.write(packet);
   } catch (e) {
     console.error(e);
