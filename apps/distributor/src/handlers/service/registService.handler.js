@@ -6,19 +6,8 @@ import { serviceMap } from '../../source/connection.source.js';
  */
 export const connectServiceHandler = async (socket, payload) => {
   const { host, port } = payload;
-  // let ip = socket.remoteAddress;
-  // if (ip.startsWith('::')) {
-  //   ip = ip.replace('::ffff:', '');
-  // }
-
-  // if (ip === '127.0.0.1') {
-  //   ip = ip.replace('127.0.0.1', '0.0.0.0');
-  // }
 
   const key = host + ':' + port;
-
-  // 아 맞네............................................. ㅆ,ㅡㅂㄹ distributor랑 연결된거였네 하
-  // console.log('connectService payload: ', payload);
 
   if (payload.name === 'dedicated') {
     serviceMap.dedicates[key] = {

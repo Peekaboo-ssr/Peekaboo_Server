@@ -277,51 +277,51 @@ class Game {
     this.ghosts = [];
   }
 
-  spawnItems() {
-    const spawnSoulItemNumber = getRandomInt(
-      this.minSoulItemNumber,
-      this.maxSoulItemNumber + 1,
-    );
-    const copyItemSpawnPosition = [...this.itemSpawnPositions];
-    for (let i = 0; i < spawnSoulItemNumber; i++) {
-      const itemId = this.getUniqueItemId();
-      const itemTypeId =
-        this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
-      const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
-      const itemPosition = copyItemSpawnPosition[randomPosIdx];
-      copyItemSpawnPosition.splice(randomPosIdx, 1);
-      this.items.push(new Item(itemId, itemTypeId, itemPosition));
-    }
-  }
+  // 안쓰는거
+  // spawnItems() {
+  //   const spawnSoulItemNumber = getRandomInt(
+  //     this.minSoulItemNumber,
+  //     this.maxSoulItemNumber + 1,
+  //   );
+  //   const copyItemSpawnPosition = [...this.itemSpawnPositions];
+  //   for (let i = 0; i < spawnSoulItemNumber; i++) {
+  //     const itemId = this.getUniqueItemId();
+  //     const itemTypeId =
+  //       this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
+  //     const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
+  //     const itemPosition = copyItemSpawnPosition[randomPosIdx];
+  //     copyItemSpawnPosition.splice(randomPosIdx, 1);
+  //     this.items.push(new Item(itemId, itemTypeId, itemPosition));
+  //   }
+  // }
+  // spawnGhosts() {
+  //   const spawnGhostNumber = getRandomInt(
+  //     this.minGhostNumber,
+  //     this.maxGhostNumber + 1,
+  //   );
+  //   const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
+  //   const copyGhostTypes = [...this.spawnGhost];
+  //   for (let i = 0; i < spawnGhostNumber; i++) {
+  //     const ghostId = this.getUniqueGhostId();
+  //     const randomTypeIdx = getRandomInt(0, this.copyGhostTypes.length);
+  //     const ghostTypeId = copyGhostTypes[randomTypeIdx];
+  //     if (copyGhostTypes.length !== 1) {
+  //       copyGhostTypes.splice(randomTypeIdx, 1);
+  //     }
+  //     const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
+  //     const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
+  //     copyGhostSpawnPositions.splice(randomPosIdx, 1);
+  //     this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
 
-  spawnGhosts() {
-    const spawnGhostNumber = getRandomInt(
-      this.minGhostNumber,
-      this.maxGhostNumber + 1,
-    );
-    const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
-    const copyGhostTypes = [...this.spawnGhost];
-    for (let i = 0; i < spawnGhostNumber; i++) {
-      const ghostId = this.getUniqueGhostId();
-      const randomTypeIdx = getRandomInt(0, this.copyGhostTypes.length);
-      const ghostTypeId = copyGhostTypes[randomTypeIdx];
-      if (copyGhostTypes.length !== 1) {
-        copyGhostTypes.splice(randomTypeIdx, 1);
-      }
-      const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
-      const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
-      copyGhostSpawnPositions.splice(randomPosIdx, 1);
-      this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+  //     const ghostInfo = {
+  //       ghostId,
+  //       ghostTypeId,
+  //       moveInfo: ghostPosition.getPosition(),
+  //     };
 
-      const ghostInfo = {
-        ghostId,
-        ghostTypeId,
-        moveInfo: ghostPosition.getPosition(),
-      };
-
-      //ghostSpawnNotification(this, ghostInfo);
-    }
-  }
+  //     //ghostSpawnNotification(this, ghostInfo);
+  //   }
+  // }
 
   getDoor(doorId) {
     return this.doors.find((door) => door.doorId === doorId);

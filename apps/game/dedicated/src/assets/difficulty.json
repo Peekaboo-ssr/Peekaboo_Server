@@ -5,8 +5,8 @@
     {
       "Id": 101,
       "DifName": "EASY",
-      "SpawnGhost": [1001],
-      "MinGhostNumber": 1,
+      "SpawnGhost": [1001, 1003],
+      "MinGhostNumber": 2,
       "MaxGhostNumber": 2,
       "TimeLimit": 620,
       "MinSoulItemNumber": 10,
