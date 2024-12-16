@@ -29,10 +29,6 @@ export const ghostsLocationNotification = (game) => {
 
   // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
   game.users.forEach((user) => {
-    // 호스트 빼고 보내주기
-    if (user.id === game.hostId) {
-      return;
-    }
     const packet = createPacketS2G(
       PACKET_TYPE.game.GhostMoveNotification,
       user.clientKey,
@@ -65,11 +61,7 @@ export const ghostStateChangeNotification = (game, ghostId, characterState) => {
     ghostStateInfo,
   };
 
-  // 호스트 제외 packet 전송
   game.users.forEach((user) => {
-    if (game.hostId === user.id) {
-      return;
-    }
     const packet = createPacketS2G(
       PACKET_TYPE.game.GhostStateChangeNotification,
       user.clientKey,
@@ -99,11 +91,7 @@ export const ghostSpecialStateNotification = (game, payload) => {
     isOn,
   };
 
-  // 호스트 제외 packet 전송
   game.users.forEach((user) => {
-    if (game.hostId === user.id) {
-      return;
-    }
     const packet = createPacketS2G(
       PACKET_TYPE.game.GhostSpecialStateNotification,
       user.clientKey,
