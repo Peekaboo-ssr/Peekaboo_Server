@@ -29,6 +29,9 @@ export const ghostsLocationNotification = (game) => {
 
   // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
   game.users.forEach((user) => {
+    if (user.id === game.hostId) {
+      return;
+    }
     const packet = createPacketS2G(
       PACKET_TYPE.game.GhostMoveNotification,
       user.clientKey,
