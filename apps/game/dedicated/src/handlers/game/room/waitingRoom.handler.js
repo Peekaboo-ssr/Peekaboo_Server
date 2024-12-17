@@ -52,8 +52,6 @@ export const startStageRequestHandler = async ({
     startStageNotification(server.game, itemInfos, ghostInfos);
 
     await server.game.startStage();
-
-    socket.write(packet);
   } catch (e) {
     handleError(e);
   }

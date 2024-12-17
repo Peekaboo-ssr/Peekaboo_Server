@@ -128,7 +128,7 @@ class GatewayServer extends TcpServer {
       const key = node.host + ':' + node.port;
       if (!this.mapClients.microservices[key] && node.name !== 'gateway') {
         const client = new TcpClient(
-          node.name,
+          node.host,
           node.port,
           (options) => {
             this.S2GEventHandler.onConnection(client);

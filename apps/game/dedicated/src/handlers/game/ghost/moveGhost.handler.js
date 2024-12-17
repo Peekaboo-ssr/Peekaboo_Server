@@ -26,8 +26,9 @@ export const moveGhostRequestHandler = ({
       const ghost = server.game.getGhost(ghostId);
       if (!ghost) {
         console.error('해당 귀신 정보가 존재하지 않습니다.');
+      } else {
+        ghost.position.updatePosition(position.x, position.y, position.z);
       }
-      ghost.position.updatePosition(position.x, position.y, position.z);
       // ghost.rotation.updateRotation(rotation.x, rotation.y, rotation.z);
     });
   } catch (e) {

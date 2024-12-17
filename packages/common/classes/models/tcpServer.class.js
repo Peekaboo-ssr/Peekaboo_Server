@@ -54,7 +54,7 @@ class TcpServer {
 
     // Docker 네트워크에서는 service name인 'distributor'를 사용
     this.clientToDistributor = new TcpClient(
-      'distributor', // docker-compose에서 정의한 서비스 이름
+      host, // docker-compose에서 정의한 서비스 이름
       port,
       (options) => {
         console.log('Connected to distributor, sending registration packet');

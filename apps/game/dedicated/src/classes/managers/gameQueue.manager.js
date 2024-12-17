@@ -32,7 +32,7 @@ class GameQueueManager {
   }
 
   initializeQueue() {
-    this.queue.process(4, async (job) => {
+    this.queue.process(8, async (job) => {
       const { type, data } = job.data;
 
       switch (type) {

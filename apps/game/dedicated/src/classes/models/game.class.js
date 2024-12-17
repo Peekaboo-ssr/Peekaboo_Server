@@ -251,6 +251,8 @@ class Game {
     );
     console.log(`itemSpawnPositions : ${this.itemSpawnPositions}`);
     console.log(`ghostSpawnPositions : ${this.ghostSpawnPositions}`);
+    console.log(`minSoulItemNumber : ${this.minSoulItemNumber}`);
+    console.log(`maxSoulItemNumber : ${this.maxSoulItemNumber}`);
   }
 
   initDoors() {
@@ -294,22 +296,18 @@ class Game {
         this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
       const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
       const itemPosition = copyItemSpawnPosition[randomPosIdx];
-      copyItemSpawnPosition.splice(randomPosIdx, 1).split(',');
-      const position = {
-        x: copyItemSpawnPosition[0],
-        y: copyItemSpawnPosition[1],
-        z: copyItemSpawnPosition[2],
-      };
+      copyItemSpawnPosition.splice(randomPosIdx, 1);
       this.items.push(new Item(itemId, itemTypeId, itemPosition));
 
       const itemInfo = {
         itemId,
         itemTypeId,
-        position,
+        position: itemPosition.getPosition(),
       };
 
       itemInfos.push(itemInfo);
     }
+    console.log('spawnedItems: ', this.items);
 
     return itemInfos;
   }
@@ -324,24 +322,17 @@ class Game {
     const ghostInfos = [];
     for (let i = 0; i < spawnGhostNumber; i++) {
       const ghostId = this.getUniqueGhostId();
-      const randomTypeIdx = getRandomInt(0, this.copyGhostTypes.length);
+      const randomTypeIdx = getRandomInt(0, copyGhostTypes.length);
       const ghostTypeId = copyGhostTypes[randomTypeIdx];
       if (copyGhostTypes.length !== 1) {
         copyGhostTypes.splice(randomTypeIdx, 1);
       }
       const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
       const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
-      // 이거 문자열이라 객체형태로 바꿔야함.
-      copyGhostSpawnPositions.splice(randomPosIdx, 1).split(',');
-      const position = {
-        x: copyGhostSpawnPositions[0],
-        y: copyGhostSpawnPositions[1],
-        z: copyGhostSpawnPositions[2],
-      };
-      this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+      copyGhostSpawnPositions.splice(randomPosIdx, 1);
       const rotation = { x: 0, y: 0, z: 0 };
       const moveInfo = {
-        position,
+        position: ghostPosition.getPosition(),
         rotation,
       };
       const ghostInfo = {
@@ -349,8 +340,11 @@ class Game {
         ghostTypeId,
         moveInfo,
       };
+      this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
       ghostInfos.push(ghostInfo);
     }
+
+    console.log('spawnedGhost: ', this.ghosts);
 
     return ghostInfos;
   }
