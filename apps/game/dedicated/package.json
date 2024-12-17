@@ -7,7 +7,8 @@
   "scripts": {
     "create:dedicate": "node src/dedicate.server.js",
     "build": "node esbuild.config.js",
-    "clean": "del-cli dist"
+    "clean": "del-cli dist",
+    "docker:build": "docker build -t dedicated_server ."
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

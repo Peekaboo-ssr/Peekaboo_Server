@@ -32,39 +32,67 @@ class TcpServer {
       socket.on('error', (err) => this.event.onError(socket, err, this));
     });
 
-    this.server.listen(this.context.port === 0 ? 0 : this.context.port, () => {
+    const serverOptions = {
+      host: this.context.host,
+      port: this.context.port === 0 ? 0 : this.context.port,
+    };
+    console.log('context', this.context);
+
+    this.server.listen(serverOptions, () => {
       console.log(
         `${this.context.name} 서버가 대기 중: `,
         this.server.address(),
       );
+      console.log('Trying to Server:', serverOptions);
       this.context.port = this.server.address().port;
     });
   }
 
   // ---------- Distributor에 연결된 클라이언트 혹은 서비스에 연결된 게이트웨이의 클라이언트 부분 ------------
   connectToDistributor(host, port, notification) {
+    console.log('Connecting to distributor with:', { host, port });
+
+    // Docker 네트워크에서는 service name인 'distributor'를 사용
     this.clientToDistributor = new TcpClient(
-      host,
+      'distributor', // docker-compose에서 정의한 서비스 이름
       port,
       (options) => {
+        console.log('Connected to distributor, sending registration packet');
+        this.isConnectedDistributor = true;
         this.onD2SEvent.onConnection(this);
         if (this.context.name === 'dedicated') notification();
       },
       (options, data) => {
+        console.log('Received data from distributor:', data);
         this.onD2SEvent.onData(this, data);
       },
       (options) => {
+        console.log('Distributor connection ended');
+        this.isConnectedDistributor = false;
         this.onD2SEvent.onEnd(this);
       },
       (options, err) => {
+        console.log('Distributor connection error:', err);
+        this.isConnectedDistributor = false;
         this.onD2SEvent.onError(this);
       },
     );
 
-    setInterval(() => {
-      if (this.isConnectedDistributor != true) {
-        this.clientToDistributor.connect();
+    const tryConnect = () => {
+      if (!this.isConnectedDistributor) {
+        console.log('Attempting to connect to distributor...');
+        try {
+          this.clientToDistributor.connect();
+        } catch (err) {
+          console.error('Connection attempt failed:', err);
+        }
       }
+    };
+
+    tryConnect();
+
+    setInterval(() => {
+      tryConnect();
     }, 3000);
   }
 
