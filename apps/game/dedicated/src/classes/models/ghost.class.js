@@ -26,7 +26,7 @@ class Ghost {
     switch (this.ghostTypeId) {
       case GHOST_TYPE_ID.SMILING_GENTLE_MAN:
         {
-          user.character.life--;
+          user.character.life -= 1;
         }
         break;
       case GHOST_TYPE_ID.MASSAGER:
@@ -35,6 +35,7 @@ class Ghost {
         break;
       case GHOST_TYPE_ID.NAUGHTY_BOY:
         {
+          user.character.life -= 2;
         }
         break;
       case GHOST_TYPE_ID.DARK_HAND:
