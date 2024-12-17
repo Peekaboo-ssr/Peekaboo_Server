@@ -14,20 +14,6 @@ try {
     format: 'esm',
     sourcemap: true,
     external: [
-      // Node.js 내장 모듈
-      'fs',
-      'path',
-      'http',
-      'https',
-      'net',
-      'tls',
-      'crypto',
-      'stream',
-      'zlib',
-      'events',
-      'util',
-      'buffer',
-      'url',
       // 공통 의존성
       '@peekaboo-ssr/config',
       '@peekaboo-ssr/classes',
@@ -36,12 +22,13 @@ try {
       // protobuf 관련
       'protobufjs',
       'protobufjs/minimal',
+      'express',
     ],
     define: {
       'global.XMLHttpRequest': 'undefined',
       'process.env.NODE_ENV': '"production"',
     },
-    inject: ['./esm-shims.js'],
+    //inject: ['./esm-shims.js'],
   });
 } catch (error) {
   console.error('Build failed:', error);

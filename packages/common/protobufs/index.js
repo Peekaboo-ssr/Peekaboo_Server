@@ -1,7 +1,7 @@
 import fs from 'fs';
-import path from 'path';
 import { fileURLToPath } from 'url';
 import protobuf from 'protobufjs';
+import path from 'path';
 
 const packetNames = {
   common: {
