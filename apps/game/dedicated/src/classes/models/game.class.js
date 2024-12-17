@@ -80,7 +80,7 @@ class Game {
     );
   }
 
-  initStage() {
+  async initStage() {
     // 맨 처음 스테이지를 초기화할 때에는 day와 submissionId를 직접 지정해준다.
     if (!this.isInit) {
       this.day = config.game.submission_duration;
@@ -132,18 +132,18 @@ class Game {
     if (this.state === GAME_SESSION_STATE.INPROGRESS) {
       // 게임 상태를 END로 변경한다.
       await this.setState(GAME_SESSION_STATE.END);
-      // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
-      this.day -= 1;
-      stageEndNotification(this);
-
       // 귀신 및 게임 타이머 인터벌 삭제
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
+      // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
+      this.day -= 1;
+      await stageEndNotification(this);
+
       if (this.isInit === true) {
         this.isInit === false;
       }
-      this.initStage();
+      await this.initStage();
     }
   }
 
@@ -408,6 +408,7 @@ class Game {
     this.remainingTime -= 1;
 
     if (this.remainingTime <= 0) {
+      console.log('게임 오버!!!!!!!!!');
       this.isRemainingTimeOver = true;
       this.endStage();
     } else {

@@ -51,12 +51,13 @@ export const remainingTimeNotification = (game) => {
   });
 };
 
-export const stageEndNotification = (game) => {
+export const stageEndNotification = async (game) => {
   const startPosition = {
     x: -13.17,
     y: 1,
     z: 22.5,
   };
+  console.log('이거 보내기 전 isRemainingTimeOver :', game.isRemainingTimeOver);
 
   const payload = {
     remainingDay: game.day,
