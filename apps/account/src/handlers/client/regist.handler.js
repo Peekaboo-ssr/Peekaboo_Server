@@ -15,9 +15,6 @@ export const registAccountHandler = async (
 ) => {
   console.log('registAccount....');
   const { id, password } = payload;
-  const payloadDataForClient = {
-    globalFailCode: config.clientState.globalFailCode.NONE,
-  };
 
   try {
     // DB 검증, ID / PASSWORD 검증
@@ -25,24 +22,20 @@ export const registAccountHandler = async (
 
     // 유저가 이미 존재하는 경우 에러 반환
     if (user) {
-      payloadDataForClient.globalFailCode =
-        config.clientState.globalFailCode.DUPLICATED_USER;
-
-      const packet = createPacketS2G(
-        config.clientPacket.account.RegistAccountResponse,
-        clientKey,
-        payloadDataForClient,
-      );
-      socket.write(packet);
       throw new CustomError(
         errorCodesMap.AUTHENTICATION_ERROR,
         config.clientPacket.account.RegistAccountResponse,
+        clientKey,
+        socket,
       );
     }
 
     // 회원가입 진행
     await userCommands.createUser(databaseManager, id, password);
 
+    const payloadDataForClient = {
+      globalFailCode: config.clientState.globalFailCode.NONE,
+    };
     const packet = createPacketS2G(
       config.clientPacket.account.RegistAccountResponse,
       clientKey,

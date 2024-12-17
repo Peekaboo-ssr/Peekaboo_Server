@@ -16,25 +16,16 @@ export const loginRequestHandler = async (
   server,
 ) => {
   const { id, password } = payload;
-  const payloadData = {
-    globalFailCode: config.clientState.globalFailCode.AUTHENTICATION_FAILED,
-    userId: 'none',
-    token: 'none',
-  };
   try {
     // DB 검증, ID / PASSWORD 검증
     const user = await userCommands.findUser(databaseManager, id);
 
     if (!user || user.password !== password) {
-      const packet = createPacketS2G(
-        config.clientPacket.account.LoginResponse,
-        clientKey,
-        payloadData,
-      );
-      socket.write(packet);
       throw new CustomError(
         errorCodesMap.AUTHENTICATION_ERROR,
-        config.clientPacket.account.LoginRequest,
+        config.clientPacket.account.LoginResponse,
+        clientKey,
+        socket,
       );
     }
     // 나중에는 bcrypt 검증으로 강화 - 회원가입 기능 추가시 TODO
@@ -53,12 +44,6 @@ export const loginRequestHandler = async (
       expiresIn: config.jwt.expiresIn,
     });
 
-    const payloadDataForClient = {
-      globalFailCode: 0,
-      userId,
-      token,
-    };
-
     // 세션등록 Pub
     const responseChannel = `join_session_${clientKey}_${Date.now()}`;
     const pubMessage = {
@@ -68,7 +53,6 @@ export const loginRequestHandler = async (
       clientKey,
       uuid: userId,
     };
-
     const response = await server.pubSubManager.sendAndWaitForResponse(
       config.subChannel.session,
       responseChannel,
@@ -77,6 +61,11 @@ export const loginRequestHandler = async (
 
     if (response.isSuccess) {
       // 세션 등록 요청을 하고 클라에게 응답 전달
+      const payloadDataForClient = {
+        globalFailCode: 0,
+        userId,
+        token,
+      };
       const packetForClient = createPacketS2G(
         config.clientPacket.account.LoginResponse,
         clientKey,
@@ -84,16 +73,11 @@ export const loginRequestHandler = async (
       );
       socket.write(packetForClient);
     } else {
-      payloadDataForClient.globalFailCode = 3;
-      const packetForClient = createPacketS2G(
-        config.clientPacket.account.LoginResponse,
-        clientKey,
-        payloadDataForClient,
-      );
-      socket.write(packetForClient);
       throw new CustomError(
         errorCodesMap.AUTHENTICATION_ERROR,
-        config.clientPacket.account.LoginRequest,
+        config.clientPacket.account.LoginResponse,
+        clientKey,
+        socket,
       );
     }
   } catch (e) {
