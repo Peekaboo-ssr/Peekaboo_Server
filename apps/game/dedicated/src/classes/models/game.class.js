@@ -43,22 +43,23 @@ class Game {
     this.day = null; // 스테이지 단계
     this.submissionId = null; // 서브미션 단계
     this.difficultyId = null; // 난이도
-    this.defaultRemainingTime = null; // 스테이지 제한 시간
     this.remainingTime = null; // 스테이지 남은 시간
-    this.isRemainingTimeOver = false;
-    this.goalSoulCredit = null; // 소울 수집 목표량
-    this.soulCredit = null; // 현재 소울량
-    this.ghostSpawnPositions = null; // 귀신 스폰 지역
-    this.itemSpawnPositions = null; // 소울 아이템 스폰 지역
-    this.spawnGhost = null; // 스폰 가능한 귀신
     this.defaultRemainingTime = null; // 제한 시간
-    this.minGhostNumber = null; // 귀신 최소 스폰수
-    this.maxGhostNumber = null; // 귀신 최대 스폰수
-    this.minSoulItemNumber = null; // 소울 아이템 최소 스폰수
-    this.maxSoulItemNumber = null; // 소울 아이템 최대 스폰수
+    this.isRemainingTimeOver = false; // 제한 시간 경과로 인한 게임 오버
     this.gameAssets = getGameAssets(); // 게임 에셋 복제
 
+    // 소울 관련 데이터
+    this.goalSoulCredit = null; // 소울 수집 목표량
+    this.soulCredit = null; // 현재 소울량
+    this.itemSpawnPositions = null; // 소울 아이템 스폰 지역
+    this.minSoulItemNumber = null; // 소울 아이템 최소 스폰수
+    this.maxSoulItemNumber = null; // 소울 아이템 최대 스폰수
+
     // 귀신 관련 데이터
+    this.ghostSpawnPositions = null; // 귀신 스폰 지역
+    this.spawnGhost = null; // 스폰 가능한 귀신
+    this.minGhostNumber = null; // 귀신 최소 스폰수
+    this.maxGhostNumber = null; // 귀신 최대 스폰수
     this.ghostIdCount = 1; // 귀신에 부여할 ID (스폰될떄마다 증가)
     this.ghostCSpawn = false;
 
@@ -66,12 +67,6 @@ class Game {
     this.itemIdCount = 1; // 아이템에 부여할 ID (스폰될때마다 증가)
     this.gameQueue = new GameQueueManager(this);
     this.gameQueue.initializeQueue();
-    // this.itemQueue = new ItemQueueManager(this);
-    // this.itemQueue.initializeItemQueue();
-
-    // // 문관련 데이터
-    // this.doorQueue = new DoorQueueManager(this);
-    // this.doorQueue.initializeDoorQueue(); // Game이 완전히 초기화된 뒤에 큐 초기화
 
     // 스테이지 초기화
     this.initStage();
