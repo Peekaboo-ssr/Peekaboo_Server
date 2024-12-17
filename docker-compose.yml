@@ -11,6 +11,7 @@ services:
       - peekaboo-network
     ports:
       - '6030:6030'
+      - '8030:8030'
     env_file:
       - ./packages/common/config/.env
 
@@ -24,6 +25,7 @@ services:
       - peekaboo-network
     ports:
       - '6050:6050'
+      - '8050:8050'
     env_file:
       - ./packages/common/config/.env
     depends_on:
@@ -41,6 +43,7 @@ services:
       - peekaboo-network
     ports:
       - '6010:6010'
+      - '8010:8010'
     env_file:
       - ./packages/common/config/.env
     depends_on:
@@ -56,6 +59,7 @@ services:
       - peekaboo-network
     ports:
       - '6020:6020'
+      - '8020:8020'
     env_file:
       - ./packages/common/config/.env
     depends_on:
@@ -71,6 +75,7 @@ services:
       - peekaboo-network
     ports:
       - '6040:6040'
+      - '8040:8040'
     env_file:
       - ./packages/common/config/.env
     depends_on:
@@ -86,6 +91,7 @@ services:
       - peekaboo-network
     ports:
       - '6000:6000'
+      - '8000:8000'
     env_file:
       - ./packages/common/config/.env
     depends_on:

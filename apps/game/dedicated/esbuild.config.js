@@ -1,5 +1,5 @@
 import esbuild from 'esbuild';
-import glob from 'glob';
+import { glob } from 'glob';
 
 esbuild
   .build({

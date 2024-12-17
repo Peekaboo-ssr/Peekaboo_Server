@@ -13,20 +13,6 @@ try {
     format: 'esm',
     sourcemap: true,
     external: [
-      // Node.js 내장 모듈
-      'fs',
-      'path',
-      'http',
-      'https',
-      'net',
-      'tls',
-      'crypto',
-      'stream',
-      'zlib',
-      'events',
-      'util',
-      'buffer',
-      'url',
       // 실제 사용하는 의존성
       '@peekaboo-ssr/classes',
       '@peekaboo-ssr/config',
@@ -39,6 +25,8 @@ try {
       // protobuf 관련 (공통 의존성)
       'protobufjs',
       'protobufjs/minimal',
+      'express',
+      'prom-client',
     ],
     define: {
       'global.XMLHttpRequest': 'undefined',
