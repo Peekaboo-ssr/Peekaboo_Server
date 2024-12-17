@@ -254,7 +254,7 @@ class Game {
     // 문이 이미 생성된 상태라면 모두 MIDDLE로 초기화
     if (this.doors.length !== 0) {
       for (let i in this.doors) {
-        this.doors[i].setState(DOOR_STATE.DOOR_MIDDLE);
+        this.doors[i].setStatus(DOOR_STATE.DOOR_MIDDLE);
       }
     } else {
       for (let i = 0; i < config.game.max_door_num; i++) {
