@@ -142,8 +142,6 @@ export const itemDiscardRequestHandler = async ({
       throw new CustomError(ErrorCodesMaps.ITEM_DETERIORATION);
     }
 
-    item.mapOn = true;
-
     // item.position.updateClassPosition(itemInfo.position);
     item.position.updateClassPosition(user.character.position);
 

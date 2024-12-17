@@ -218,7 +218,8 @@ message S2C_StageEndNotification {
 
 message S2C_SubmissionEndNotification {
   bool result = 1;
-  uint32 submissionId = 2;
+  string day = 2;
+  uint32 submissionValue = 3;
 }
 
 message C2S_RegistAccountRequest {

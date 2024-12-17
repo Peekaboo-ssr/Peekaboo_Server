@@ -19,6 +19,7 @@ import { config } from '../../config/config.js';
 import { getGameAssets } from '../../init/load.assets.js';
 import { setGameStateRedis } from '../../redis/game.redis.js';
 import { itemDeleteNotification } from '../../notifications/item/item.notification.js';
+import { extractSoulNotification } from '../../notifications/extractor/extractor.notification.js';
 import { getRandomInt } from '../../utils/math/getRandomInt.js';
 import Item from './item.class.js';
 import { Position } from './moveInfo.class.js';
@@ -41,6 +42,7 @@ class Game {
     this.state = GAME_SESSION_STATE.PREPARE; // 게임 상태 (준비, 플레이, 종료)
     this.inviteCode = inviteCode; // 게임 초대 코드
     this.day = null; // 스테이지 단계
+    this.submissionDay = null; // 서브미션 데이
     this.submissionId = null; // 서브미션 단계
     this.difficultyId = null; // 난이도
     this.remainingTime = null; // 스테이지 남은 시간
@@ -84,6 +86,7 @@ class Game {
       this.day = config.game.submission_duration;
       const initSubMissionData = this.gameAssets.submission.data[0];
       this.submissionId = initSubMissionData.Id;
+      this.submissionDay = initSubMissionData.Day;
       this.goalSoulAmount = initSubMissionData.SubmissionValue;
       this.soulCredit = 1000;
       this.isRemainingTimeOver = false;
@@ -436,7 +439,10 @@ class Game {
       }
       // 영혼 수집량을 0으로 초기화 or goalSoulAmount만큼 빼주기
       this.soulCredit -= this.goalSoulCredit;
+      // 영혼 할당량 뺀 다음 Notification 날리기
+      extractSoulNotification(this);
       this.submissionId = nextSubMissionData.Id;
+      this.submissionDay = nextSubMissionData.Day;
       this.goalSoulCredit = nextSubMissionData.SubmissionValue;
 
       return true;

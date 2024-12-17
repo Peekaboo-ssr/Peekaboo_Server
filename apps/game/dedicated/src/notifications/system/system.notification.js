@@ -61,7 +61,7 @@ export const stageEndNotification = (game) => {
   const payload = {
     remainingDay: game.day,
     startPosition,
-    isRemainingOver: game.isRemainingOver,
+    isRemainingTimeOver: game.isRemainingTimeOver,
   };
 
   game.users.forEach((user) => {
@@ -77,7 +77,8 @@ export const stageEndNotification = (game) => {
 export const submissionEndNotification = (game, result) => {
   const payload = {
     result,
-    submissionId: result ? game.submissionId : 0,
+    day: game.submissionDay,
+    submissionValue: game.goalSoulCredit,
   };
   game.users.forEach((user) => {
     const packet = createPacketS2G(

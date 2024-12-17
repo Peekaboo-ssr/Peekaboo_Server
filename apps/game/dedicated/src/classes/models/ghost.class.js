@@ -35,7 +35,7 @@ class Ghost {
         break;
       case GHOST_TYPE_ID.NAUGHTY_BOY:
         {
-          user.character.life -= 2;
+          user.character.life -= 1;
         }
         break;
       case GHOST_TYPE_ID.DARK_HAND:

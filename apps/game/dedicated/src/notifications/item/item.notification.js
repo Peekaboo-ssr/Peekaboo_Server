@@ -33,6 +33,10 @@ export const itemUseNotification = (game, userId, itemId) => {
 };
 
 export const itemDiscardNotification = (game, userId, itemId) => {
+  const item = game.getItem(itemId);
+
+  item.mapOn = true;
+
   const payload = {
     userId,
     itemId,
