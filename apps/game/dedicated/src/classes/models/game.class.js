@@ -1,5 +1,5 @@
 import IntervalManager from '../managers/interval.manager.js';
-import { GAME_SESSION_STATE } from '../../constants/state.js';
+import { DOOR_STATE, GAME_SESSION_STATE } from '../../constants/state.js';
 import { Character } from './character.class.js';
 import {
   ghostDeleteNotification,
@@ -256,9 +256,16 @@ class Game {
   }
 
   initDoors() {
-    for (let i = 0; i < config.game.max_door_num; i++) {
-      const door = new Door(i + 1);
-      this.doors.push(door);
+    // 문이 이미 생성된 상태라면 모두 MIDDLE로 초기화
+    if (this.doors.length !== 0) {
+      for (let i in this.doors) {
+        this.doors[i].setState(DOOR_STATE.DOOR_MIDDLE);
+      }
+    } else {
+      for (let i = 0; i < config.game.max_door_num; i++) {
+        const door = new Door(i + 1);
+        this.doors.push(door);
+      }
     }
   }
 

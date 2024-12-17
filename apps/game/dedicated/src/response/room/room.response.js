@@ -20,6 +20,7 @@ export const sendCreateRoomResponse = async (
       gameSessionId: gameId,
       inviteCode,
     };
+    console.log('createRoomResponsePayload: ', payloadData);
     const packet = createPacketS2G(
       PACKET_TYPE.game.CreateRoomResponse,
       clientKey,
