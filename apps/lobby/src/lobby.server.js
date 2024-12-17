@@ -5,8 +5,6 @@ import RedisManager from '@peekaboo-ssr/classes/RedisManager';
 import PubSubManager from '@peekaboo-ssr/classes/PubSubManager';
 import G2SEventHandler from '@peekaboo-ssr/events/G2SEvent';
 import { handlers } from './handlers/index.js';
-import { Room } from './classes/models/room.class.js';
-import { rooms } from '../room/room.js';
 import cluster from 'cluster';
 import express from 'express';
 import client from 'prom-client';
@@ -30,8 +28,6 @@ class LobbyServer extends TcpServer {
         console.log('Distributor Notification: ', data);
       },
     );
-    rooms.push(new Room('tempId001', 'EXAMPLE'));
-    rooms.push(new Room('tempId002', 'EXAMPLE'));
 
     const app = express();
     const register = new client.Registry();

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import './service.data.proto';
+import '../global/enum.global.proto';
 
 package service;
 
@@ -48,4 +49,11 @@ message JoinDedicatedRequest {
 
 message ExitDedicatedRequest {
   string clientKey = 1;
+}
+
+message UpdateRoomInfoRequest {
+  string gameSessionId = 1;
+  uint32 numberOfPlayer = 2;
+  uint32 latency = 3;
+  GameSessionState gameSessionState = 4;
 }

@@ -14,9 +14,8 @@ export const startStageRequestHandler = async ({
   payload,
   server,
 }) => {
+  const { gameSessionId, difficultyId } = payload;
   try {
-    const { gameSessionId, difficultyId } = payload;
-
     if (server.game.day === 0) {
       const submissionResult = server.game.endSubmission();
       submissionEndNotification(server.game, submissionResult);
@@ -27,6 +26,7 @@ export const startStageRequestHandler = async ({
         return;
       }
     }
+
     // 게임이 이미 플레이 중이라면
     if (server.game.state === GAME_SESSION_STATE.INPROGRESS) {
       console.log(`이미 게임 플레이 중입니다.`);

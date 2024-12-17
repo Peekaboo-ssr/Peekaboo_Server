@@ -13,7 +13,7 @@ export class Character {
     this.life = 3;
     this.state = CHARACTER_STATE.IDLE;
     this.speed = 1;
-    this.latency = null;
+    this.latency = 0;
     this.lastUpdateTime = Date.now();
     this.inventory = new Inventory();
   }

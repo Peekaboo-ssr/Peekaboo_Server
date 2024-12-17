@@ -3,10 +3,11 @@ import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import { parsePacketG2S } from '@peekaboo-ssr/utils/parsePacket';
 
 class G2SEventHandler extends BaseEvent {
-  onConnection(socket) {
+  onConnection(socket, server) {
     console.log(
       `Gate connected from: ${socket.remoteAddress}:${socket.remotePort}`,
     );
+    server.gateSocket = socket;
     socket.buffer = Buffer.alloc(0);
   }
 

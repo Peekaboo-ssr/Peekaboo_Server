@@ -8,6 +8,7 @@ const PUB_ACTION = {
   CreateDedicatedRequest: 7,
   FindDedicateByInviteCodeRequest: 8,
   FindDedicateByIdRequest: 9,
+  WaitingRoomInfosRequest: 10,
 };
 
 export default PUB_ACTION;

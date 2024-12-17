@@ -11,6 +11,7 @@ import User from './classes/models/user.class.js';
 import { loadProtos } from './init/load.protos.js';
 import { loadGameAssets } from './init/load.assets.js';
 import { sendCreateRoomResponse } from './response/room/room.response.js';
+import IntervalManager from './classes/managers/interval.manager.js';
 
 class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
@@ -43,7 +44,7 @@ class DedicateServer {
         const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
         const packet = createPacketS2S(
           PACKET_TYPE.service.CreateDedicatedRequest,
-          'dedicated',
+          'host.docker.internal',
           'gateway',
           {
             hostKey: clientKey,
@@ -115,6 +116,26 @@ class DedicateServer {
   async initializeGame(id, inviteCode, userId, clientKey) {
     // 레디스에 해당 게임 저장
     await setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
+    // 세션 서비스에 주기적으로 방 정보를 갱신하도록 요청
+    IntervalManager.getInstance().addGameRoomInfoInterval(
+      this.game.id,
+      () => {
+        const packetForSession = createPacketS2S(
+          PACKET_TYPE.service.UpdateRoomInfoRequest,
+          'dedicated',
+          'session',
+          {
+            gameSessionId: this.game.id,
+            numberOfPlayer: this.game.users.length,
+            latency: Math.floor(this.game.users[0].character.latency),
+            gameSessionState: this.game.state,
+          },
+        );
+        this.clientToDistributor.write(packetForSession);
+      },
+      5000,
+    );
+
     // createRoomResponse를 보내준다.
     console.log(
       `----------- createRoom Complete : ${this.game.id} -----------`,

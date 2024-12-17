@@ -3,6 +3,7 @@ import serviceHeader from '@peekaboo-ssr/modules-constants/serviceHeader';
 import routeHeader from '@peekaboo-ssr/modules-constants/routeHeader';
 import pubAction from '@peekaboo-ssr/modules-constants/pubAction';
 import subChannel from '@peekaboo-ssr/modules-constants/subChannel';
+import clientState from '@peekaboo-ssr/modules-constants/clientState';
 
 import {
   DB1_NAME,
@@ -59,6 +60,7 @@ const SHARED_CONFIG = {
   },
   pubAction: pubAction,
   subChannel: subChannel,
+  clientState,
 };
 
 export default SHARED_CONFIG;

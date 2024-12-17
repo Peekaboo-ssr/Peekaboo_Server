@@ -3,7 +3,8 @@ const CLIENT_PACKET = {
     // 방 : 600번대
     CreateRoomRequest: 601,
     JoinRoomRequest: 603,
-    JoinRoomResponse: 604, // 참가 실패 시 게임에서도 response 해줌.
+    JoinRoomByGameSessionIdRequest: 604,
+    JoinRoomResponse: 605, // 참가 실패 시 게임에서도 response 해줌.
   },
   account: {
     // 로그인, 로비 : 500번대
@@ -17,10 +18,8 @@ const CLIENT_PACKET = {
   lobby: {
     EnterLobbyRequest: 506,
     EnterLobbyResponse: 507,
-    RefreshLobbyRequest: 508,
-    RefreshLobbyResponse: 509,
-    SearchRoomRequest: 510,
-    SearchRoomResponse: 511,
+    WaitingRoomListRequest: 508,
+    WaitingRoomListResponse: 509,
   },
   dedicated: {
     // 1 ~ 15
@@ -83,8 +82,8 @@ const CLIENT_PACKET = {
     StageEndNotification: 408,
     SubmissionEndNotification: 409,
     CreateRoomResponse: 602,
-    JoinRoomResponse: 604,
-    JoinRoomNotification: 605,
+    JoinRoomResponse: 605,
+    JoinRoomNotification: 606,
   },
 };
 

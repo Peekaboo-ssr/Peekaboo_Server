@@ -31,7 +31,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   const clientsData = [
     {
       userData: {
-        id: 'test2',
+        id: 'test2123',
         password: '1234',
         token: 'tokenTest2',
         userId: 'b25ba876-3939-48cd-a1dd-ce16eacf935c',
@@ -75,8 +75,29 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     scenarioManagers.push(scenario);
   }
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
-  await runScenario(clients, scenarioManagers);
+  await waitRoomScenario(clients, scenarioManagers);
 })();
+
+const waitRoomScenario = async (clients, scenarioManagers) => {
+  const firstClientUserData = clients[0].userData;
+  // 모든 클라이언트 로그인
+  for (let i = 0; i < clients.length; i++) {
+    const { userData } = clients[i];
+    await scenarioManagers[i].loginScenario(userData);
+  }
+
+  await delay(5000);
+
+  // 모든 클라이언트 로비 진입
+  for (let i = 0; i < clients.length; i++) {
+    const { userData } = clients[i];
+    await scenarioManagers[i].enterLobbyScenario(userData);
+  }
+  await delay(5000);
+  // await scenarioManagers[0].enterLobbyScenario(firstClientUserData);
+  // await delay(5000);
+  // await scenarioManagers[0].waitingRoomScenario(firstClientUserData);
+};
 
 const runScenario = async (clients, scenarioManagers) => {
   // 모든 클라이언트 로그인

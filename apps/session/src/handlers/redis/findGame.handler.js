@@ -13,7 +13,10 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
       distributorKey: null,
     };
 
-    const { dedicateKey, distributorKey } = getGameByInviteCode(inviteCode);
+    const { dedicateKey, distributorKey } = getGameByInviteCode(
+      serverInstance.gameSessions,
+      inviteCode,
+    );
     console.log(dedicateKey, distributorKey);
 
     if (!dedicateKey || !distributorKey) {
@@ -44,8 +47,10 @@ export const FindDedicateByIdHandler = async (serverInstance, data) => {
       distributorKey: null,
     };
 
-    const { dedicateKey, distributorKey } =
-      getGameByGameSessionId(gameSessionId);
+    const { dedicateKey, distributorKey } = getGameByGameSessionId(
+      serverInstance.gameSessions,
+      gameSessionId,
+    );
 
     if (!dedicateKey || !distributorKey) {
       serverInstance.pubSubManager.publisher.publish(

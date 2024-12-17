@@ -92,17 +92,15 @@ class Game {
       this.isRemainingTimeOver = false;
     }
 
-    // 귀신 스폰 가능 지점 초기화 => 원본 데이터 유지를 위한 복제
-    // this.ghostSpawnPositions = [...this.gameAssets.ghostSpawnPos.data];
-    // this.itemSpawnPositions = [...this.gameAssets.soulItemPos.data];
-
     // 문, 아이템, 귀신 초기화
     this.initDoors();
     this.initItems();
     this.initGhosts();
 
     // 게임 상태를 준비상태로 변경
-    this.state = GAME_SESSION_STATE.PREPARE;
+    if (this.state !== GAME_SESSION_STATE.PREPARE) {
+      this.state = GAME_SESSION_STATE.PREPARE;
+    }
     this.isInit = true;
   }
 
@@ -185,6 +183,9 @@ class Game {
     // 인원이 없는 경우 모든 인터벌 삭제
     if (this.users.length <= 0) {
       IntervalManager.getInstance().clearAll();
+      console.log('-------남은 유저가 없어 종료합니다-------');
+      // 아래 데디 자동 끄기는 로깅작업이 끝나면 진행하도록 함.
+      // process.exit(1);
     }
   }
 

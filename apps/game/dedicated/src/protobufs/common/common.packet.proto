@@ -68,18 +68,18 @@ message GamePacket {
     S2C_ChangeNicknameResponse changeNicknameResponse = 505;
     C2S_EnterLobbyRequest enterLobbyRequest = 506;
     S2C_EnterLobbyResponse enterLobbyResponse = 507;
-    C2S_RefreshLobbyRequest refreshLobbyRequest = 508;
-    S2C_RefreshLobbyResponse refreshLobbyResponse = 509;
-    C2S_SearchRoomRequest searchRoomRequest = 510;
-    S2C_SearchRoomResponse searchRoomResponse = 511;
+    C2S_WaitingRoomListRequest waitingRoomListRequest = 508;
+    S2C_WaitingRoomListResponse waitingRoomListResponse = 509;
 
     C2S_CreateRoomRequest createRoomRequest = 601;
     S2C_CreateRoomResponse createRoomResponse = 602;
     C2S_JoinRoomRequest joinRoomRequest = 603;
-    S2C_JoinRoomResponse joinRoomResponse = 604;
-    S2C_JoinRoomNotification joinRoomNotification = 605;
+    C2S_JoinRoomByGameSessionIdRequest joinRoomByGameSessionIdRequest = 604;
+    S2C_JoinRoomResponse joinRoomResponse = 605;
+    S2C_JoinRoomNotification joinRoomNotification = 606;
   }
 }
+
 
 message ServicePacket {
   oneof payload {
@@ -91,5 +91,6 @@ message ServicePacket {
     ExitDedicatedRequest exitDedicatedRequest = 6;
     ConnectDedicatedRequest connectDedicateRequest = 7;
     JoinDedicatedRequest joinDedicatedRequest = 8;
+    UpdateRoomInfoRequest updateRoomInfoRequest = 9;
   }
 }
