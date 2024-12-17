@@ -1,6 +1,5 @@
 import config from '@peekaboo-ssr/config/lobby';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
-import { rooms } from '../../../room/room.js';
 
 export const enterLobbyHandler = async (socket, clientKey, payload, server) => {
   try {
@@ -22,27 +21,28 @@ export const enterLobbyHandler = async (socket, clientKey, payload, server) => {
       responseChannel,
       messageForSession,
     );
+    const payloadDataForClient = {
+      globalFailCode: null,
+    };
 
     if (response.isSuccess) {
-      const roomInfos = rooms.map((room) => {
-        const roomInfo = {
-          gameSessionId: room.gameSessionId,
-          roomName: room.roomName,
-          numberOfPlayer: room.users.length,
-        };
-        return roomInfo;
-      });
-      const payloadDataForClient = {
-        roomInfos,
-      };
+      payloadDataForClient.globalFailCode =
+        config.clientState.globalFailCode.NONE;
       const packetForClient = createPacketS2G(
         config.clientPacket.lobby.EnterLobbyResponse,
         clientKey,
         payloadDataForClient,
       );
       socket.write(packetForClient);
-    } else {
-      console.error('세션 등록 중 에러 발생!!');
+    } else if (!response.isSuccess) {
+      payloadDataForClient.globalFailCode =
+        config.clientState.globalFailCode.UNKNOWN_ERROR;
+      const packetForClient = createPacketS2G(
+        config.clientPacket.lobby.EnterLobbyResponse,
+        clientKey,
+        payloadDataForClient,
+      );
+      socket.write(packetForClient);
     }
   } catch (e) {
     console.error('에러 발생: ', e.message);

@@ -2,6 +2,9 @@ import config from '@peekaboo-ssr/config/account';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 import databaseManager from '@peekaboo-ssr/classes/DatabaseManager';
 import userCommands from '@peekaboo-ssr/commands/userCommands';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
@@ -13,23 +16,26 @@ export const loginRequestHandler = async (
   server,
 ) => {
   const { id, password } = payload;
+  const payloadData = {
+    globalFailCode: config.clientState.globalFailCode.AUTHENTICATION_FAILED,
+    userId: 'none',
+    token: 'none',
+  };
   try {
     // DB 검증, ID / PASSWORD 검증
     const user = await userCommands.findUser(databaseManager, id);
 
     if (!user || user.password !== password) {
-      const payloadData = {
-        globalFailCode: 3,
-        userId: 'none',
-        token: 'none',
-      };
       const packet = createPacketS2G(
         config.clientPacket.account.LoginResponse,
         clientKey,
         payloadData,
       );
       socket.write(packet);
-      throw new Error(`비밀번호가 맞지 않습니다.`);
+      throw new CustomError(
+        errorCodesMap.AUTHENTICATION_ERROR,
+        config.clientPacket.account.LoginRequest,
+      );
     }
     // 나중에는 bcrypt 검증으로 강화 - 회원가입 기능 추가시 TODO
     // const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -85,8 +91,12 @@ export const loginRequestHandler = async (
         payloadDataForClient,
       );
       socket.write(packetForClient);
+      throw new CustomError(
+        errorCodesMap.AUTHENTICATION_ERROR,
+        config.clientPacket.account.LoginRequest,
+      );
     }
   } catch (e) {
-    console.error(e);
+    handleError(e);
   }
 };

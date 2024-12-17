@@ -21,6 +21,7 @@ export const createDedicatedHandler = (server, payload) => {
     distributorKey,
     gameSessionId,
     inviteCode,
+    hostKey,
   };
   server.pubSubManager.sendMessage(config.subChannel.session, pubMessage);
 };

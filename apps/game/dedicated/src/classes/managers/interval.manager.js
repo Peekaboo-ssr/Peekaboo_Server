@@ -43,6 +43,11 @@ class IntervalManager extends BaseManager {
     this.intervals.get(gameId).set(type, setInterval(callback, interval));
   }
 
+  addGameRoomInfoInterval(gameId, callback, interval, type = 'room') {
+    if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());
+    this.intervals.get(gameId).set(type, setInterval(callback, interval));
+  }
+
   // 유저 인터벌 삭제
   removeUserInterval(userId) {
     if (this.intervals.has(userId)) {

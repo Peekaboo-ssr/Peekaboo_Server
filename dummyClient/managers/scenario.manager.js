@@ -19,6 +19,14 @@ export class ScenarioManager {
     );
   }
 
+  async waitingRoomScenario(userData) {
+    const waitingRoomData = { userId: userData.userId };
+    this.client.sendPacket(
+      this.CLIENT_PACKET.lobby.WaitingRoomListRequest,
+      waitingRoomData,
+    );
+  }
+
   async createRoomScenario(userData) {
     const createRoomData = {
       userId: userData.id,

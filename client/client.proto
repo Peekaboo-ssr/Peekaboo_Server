@@ -1,10 +1,12 @@
 syntax = "proto3";
 
+
 enum GlobalFailCode {
   NONE = 0;
   UNKNOWN = 1;
   INVALID_REQUEST = 2;
   AUTHENTICATION_FAILED = 3;
+  DUPLICATED_USER = 4;
 }
 
 enum UserState {
@@ -112,7 +114,8 @@ message ProfileInfo {
 message RoomInfo {
   string gameSessionId = 1;
   string roomName = 2;
-  uint32 numberOfPlayer =3;
+  uint32 numberOfPlayer = 3;
+  uint32 latency = 4;
 }
 
 message C2S_PlayerMoveRequest {
@@ -339,7 +342,6 @@ message C2S_RegistAccountRequest {
 
 message S2C_RegistAccountResponse {
   GlobalFailCode globalFailCode = 1;
-  string message = 2;
 }
 
 message C2S_LoginRequest {
@@ -356,7 +358,6 @@ message S2C_LoginResponse {
 message C2S_ChangeNicknameRequest {
   string userId = 1;
   string nickname = 2; 
-  string token = 3;
 }
 
 message S2C_ChangeNicknameResponse {
@@ -369,24 +370,16 @@ message C2S_EnterLobbyRequest {
 }
 
 message S2C_EnterLobbyResponse {
-  repeated RoomInfo roomInfos = 1;
+  GlobalFailCode globalFailCode = 1;
 }
 
-message C2S_RefreshLobbyRequest {
+message C2S_WaitingRoomListRequest {
   string userId = 1;
 }
 
-message S2C_RefreshLobbyResponse {
+message S2C_WaitingRoomListResponse {
   repeated RoomInfo roomInfos = 1;
   GlobalFailCode globalFailCode = 2;
-}
-
-message C2S_SearchRoomRequest {
- string searchText = 1;
-}
-
-message S2C_SearchRoomResponse {
- repeated RoomInfo roomInfos = 1;
 }
 
 message C2S_CreateRoomRequest {
@@ -407,6 +400,12 @@ message C2S_JoinRoomRequest {
   string token = 3;
 }
 
+message C2S_JoinRoomByGameSessionIdRequest {
+  string userId = 1;
+  string inviteCode = 2;
+  string token = 3;
+}
+
 message S2C_JoinRoomResponse {
   GlobalFailCode globalFailCode  = 1;
   string message = 2;
@@ -417,6 +416,7 @@ message S2C_JoinRoomResponse {
 message S2C_JoinRoomNotification {
   string userId = 1;
 }
+
 
 
 message GamePacket {
@@ -483,15 +483,14 @@ message GamePacket {
     S2C_ChangeNicknameResponse changeNicknameResponse = 505;
     C2S_EnterLobbyRequest enterLobbyRequest = 506;
     S2C_EnterLobbyResponse enterLobbyResponse = 507;
-    C2S_RefreshLobbyRequest refreshLobbyRequest = 508;
-    S2C_RefreshLobbyResponse refreshLobbyResponse = 509;
-    C2S_SearchRoomRequest searchRoomRequest = 510;
-    S2C_SearchRoomResponse searchRoomResponse = 511;
+    C2S_WaitingRoomListRequest waitingRoomListRequest = 508;
+    S2C_WaitingRoomListResponse waitingRoomListResponse = 509;
 
     C2S_CreateRoomRequest createRoomRequest = 601;
     S2C_CreateRoomResponse createRoomResponse = 602;
     C2S_JoinRoomRequest joinRoomRequest = 603;
-    S2C_JoinRoomResponse joinRoomResponse = 604;
-    S2C_JoinRoomNotification joinRoomNotification = 605;
+    C2S_JoinRoomByGameSessionIdRequest joinRoomByGameSessionIdRequest = 604;
+    S2C_JoinRoomResponse joinRoomResponse = 605;
+    S2C_JoinRoomNotification joinRoomNotification = 606;
   }
 }

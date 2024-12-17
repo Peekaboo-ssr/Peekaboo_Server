@@ -12,9 +12,10 @@ export const USER_STATE = {
 };
 
 export const GAME_SESSION_STATE = {
-  PREPARE: 0, // 준비단계
-  INPROGRESS: 1, // 진행중
-  END: 2, // 종료
+  GAME_SESSION_STATE_NONE: 0,
+  PREPARE: 1, // 준비단계
+  INPROGRESS: 2, // 진행중
+  END: 3, // 종료
 };
 
 export const CHARACTER_STATE = {

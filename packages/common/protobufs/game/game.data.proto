@@ -67,5 +67,6 @@ message ProfileInfo {
 message RoomInfo {
   string gameSessionId = 1;
   string roomName = 2;
-  uint32 numberOfPlayer =3;
+  uint32 numberOfPlayer = 3;
+  uint32 latency = 4;
 }

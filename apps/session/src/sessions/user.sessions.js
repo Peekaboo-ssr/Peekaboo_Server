@@ -1,5 +1,3 @@
-export const userSessions = {};
-
 // 음...
 /**
  * 세션에 대한 정리
@@ -13,7 +11,7 @@ export const userSessions = {};
  */
 
 // 특정 타입 세션에 참가 처리하는 함수
-export const joinSessionByType = (type, userData) => {
+export const joinSessionByType = (userSessions, type, userData) => {
   // 만약 해당 유저의 세션이 없다면 등록해줌.
   if (!userSessions[userData.clientKey]) {
     userSessions[userData.clientKey] = {
@@ -28,7 +26,7 @@ export const joinSessionByType = (type, userData) => {
 };
 
 // 세션에 나가기 처리하는 함수
-export const exitUserFromSession = (clientKey) => {
+export const exitUserFromSession = (userSessions, clientKey) => {
   // 만약 해당 유저의 세션이 없다면 return
   if (!userSessions[clientKey]) {
     console.error(`${clientKey} 클라이언트의 세션 기록이 없습니다.`);
@@ -37,7 +35,7 @@ export const exitUserFromSession = (clientKey) => {
   delete userSessions[clientKey];
 };
 
-export const getSessionByType = (type) => {
+export const getSessionByType = (userSessions, type) => {
   return userSessions[type];
 };
 

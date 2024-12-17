@@ -7,6 +7,7 @@ enum GlobalFailCode {
   UNKNOWN = 1;
   INVALID_REQUEST = 2;
   AUTHENTICATION_FAILED = 3;
+  DUPLICATED_USER = 4;
 }
 
 enum UserState {

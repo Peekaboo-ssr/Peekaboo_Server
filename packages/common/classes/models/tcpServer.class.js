@@ -18,6 +18,7 @@ class TcpServer {
     this.clientToDistributor = null;
     this.handlers = null;
     this.onD2SEvent = new D2SEventHandler();
+    this.gateSocket = null;
 
     this.initServer();
   }

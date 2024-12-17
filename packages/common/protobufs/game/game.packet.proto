@@ -246,7 +246,6 @@ message S2C_LoginResponse {
 message C2S_ChangeNicknameRequest {
   string userId = 1;
   string nickname = 2; 
-  string token = 3;
 }
 
 message S2C_ChangeNicknameResponse {
@@ -259,24 +258,16 @@ message C2S_EnterLobbyRequest {
 }
 
 message S2C_EnterLobbyResponse {
-  repeated RoomInfo roomInfos = 1;
+  GlobalFailCode globalFailCode = 1;
 }
 
-message C2S_RefreshLobbyRequest {
+message C2S_WaitingRoomListRequest {
   string userId = 1;
 }
 
-message S2C_RefreshLobbyResponse {
+message S2C_WaitingRoomListResponse {
   repeated RoomInfo roomInfos = 1;
   GlobalFailCode globalFailCode = 2;
-}
-
-message C2S_SearchRoomRequest {
- string searchText = 1;
-}
-
-message S2C_SearchRoomResponse {
- repeated RoomInfo roomInfos = 1;
 }
 
 message C2S_CreateRoomRequest {
@@ -292,6 +283,12 @@ message S2C_CreateRoomResponse {
 }
 
 message C2S_JoinRoomRequest {
+  string userId = 1;
+  string inviteCode = 2;
+  string token = 3;
+}
+
+message C2S_JoinRoomByGameSessionIdRequest {
   string userId = 1;
   string inviteCode = 2;
   string token = 3;

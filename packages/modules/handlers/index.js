@@ -2,6 +2,7 @@ import servicePacket from '@peekaboo-ssr/modules-constants/servicePacket';
 import { connectedServiceNotificationHandler } from './connection/connectService.handler.js';
 import { createDedicatedHandler } from './dedicated/createDedicated.handler.js';
 import { connectDedicatedHandler } from './dedicated/connectDedicated.handler.js';
+import { updateRoomInfoHandler } from './dedicated/updateRoomInfo.handler.js';
 
 export const handlers = {
   [servicePacket.ConnectedServiceNotification]: {
@@ -12,6 +13,9 @@ export const handlers = {
   },
   [servicePacket.ConnectDedicateRequest]: {
     handler: connectDedicatedHandler,
+  },
+  [servicePacket.UpdateRoomInfoRequest]: {
+    handler: updateRoomInfoHandler,
   },
 };
 

@@ -7,7 +7,9 @@ const handleError = (error) => {
     responseCode = error.code;
     message = error.message;
     console.error(`에러코드: ${responseCode}, 메세지: ${message}`);
-  } else if (error.packetType) {
+  }
+  // 패킷타입이 있다면 실패 응답도 수행
+  else if (error.packetType) {
   } else {
     responseCode = errorCodesMap.SOCKET_ERROR.code;
     message = error.message;

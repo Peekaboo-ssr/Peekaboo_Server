@@ -1,3 +1,6 @@
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { joinSessionByType } from '../../sessions/user.sessions.js';
 
 export const joinSessionHandler = async (serverInstance, data) => {
@@ -11,24 +14,28 @@ export const joinSessionHandler = async (serverInstance, data) => {
     isSuccess: false,
   };
 
-  joinSessionByType(type, userData);
+  try {
+    if (!serverInstance.userSessions[clientKey]) {
+      throw new CustomError(Error);
+    }
 
-  if (responseChannel) {
-    try {
+    joinSessionByType(serverInstance.userSessions, type, userData);
+
+    if (responseChannel) {
       resMessage.isSuccess = true;
       serverInstance.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
-    } catch (e) {
-      console.log('에러 발생: ', e);
-      const resMessage = {
-        isSuccess: false,
-      };
-      serverInstance.pubSubManager.publisher.publish(
-        responseChannel,
-        JSON.stringify(resMessage),
-      );
     }
+  } catch (e) {
+    console.log('에러 발생: ', e);
+    const resMessage = {
+      isSuccess: false,
+    };
+    serverInstance.pubSubManager.publisher.publish(
+      responseChannel,
+      JSON.stringify(resMessage),
+    );
   }
 };

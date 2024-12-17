@@ -20,6 +20,10 @@ class SessionServer extends TcpServer {
     );
 
     this.handlers = handlers;
+    this.gateSocket = null;
+
+    this.gameSessions = {};
+    this.userSessions = {};
 
     this.redisManager = new RedisManager(); // RedisManager 인스턴스 생성
     this.pubSubManager = new PubSubManager(this.redisManager); // PubSubManager 프로퍼티로 추가

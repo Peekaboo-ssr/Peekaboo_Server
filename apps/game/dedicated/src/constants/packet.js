@@ -76,10 +76,6 @@ export const PACKET_TYPE = {
     ChangeNicknameResponse: 505,
     EnterLobbyRequest: 506,
     EnterLobbyResponse: 507,
-    RefreshLobbyRequest: 508,
-    RefreshLobbyResponse: 509,
-    SearchRoomRequest: 510,
-    SearchRoomResponse: 511,
 
     // 방 : 600번대
     CreateRoomRequest: 601,
@@ -97,6 +93,7 @@ export const PACKET_TYPE = {
     ExitDedicatedRequest: 6,
     ConnectDedicateRequest: 7,
     JoinDedicatedRequest: 8,
+    UpdateRoomInfoRequest: 9,
   },
 };
 
@@ -175,10 +172,6 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.game.ChangeNicknameResponse]: 'changeNicknameResponse',
     [PACKET_TYPE.game.EnterLobbyRequest]: 'enterLobbyRequest',
     [PACKET_TYPE.game.EnterLobbyResponse]: 'enterLobbyResponse',
-    [PACKET_TYPE.game.RefreshLobbyRequest]: 'refreshLobbyRequest',
-    [PACKET_TYPE.game.RefreshLobbyResponse]: 'refreshLobbyResponse',
-    [PACKET_TYPE.game.SearchRoomRequest]: 'searchRoomRequest',
-    [PACKET_TYPE.game.SearchRoomResponse]: 'searchRoomResponse',
 
     // Room: 600s
     [PACKET_TYPE.game.CreateRoomRequest]: 'createRoomRequest',
@@ -198,5 +191,6 @@ export const PACKET_MAPS = {
     [PACKET_TYPE.service.ExitDedicatedRequest]: 'exitDedicatedRequest',
     [PACKET_TYPE.service.ConnectDedicateRequest]: 'connectDedicateRequest',
     [PACKET_TYPE.service.JoinDedicatedRequest]: 'joinDedicatedRequest',
+    [PACKET_TYPE.service.UpdateRoomInfoRequest]: 'updateRoomInfoRequest',
   },
 };
