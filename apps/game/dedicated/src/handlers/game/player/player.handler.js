@@ -23,19 +23,24 @@ export const playerStateChangeRequestHandler = async (
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
-    user.character.state = playerStateInfo.characterState;
+    if (
+      user.character.state !== CHARACTER_STATE.DIED ||
+      user.character.state !== CHARACTER_STATE.EXIT
+    ) {
+      user.character.state = playerStateInfo.characterState;
 
-    playerStateChangeNotification(server.game, payload);
+      playerStateChangeNotification(server.game, payload);
 
-    // console.log(`player State : ${playerStateInfo.characterState}`);
+      // console.log(`player State : ${playerStateInfo.characterState}`);
 
-    // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
-    if (user.character.state === CHARACTER_STATE.EXIT) {
-      await server.game.endStage();
-      // if (.checkStageEnd()) {
-      //   // 스테이지 종료 조건이 만족했다면,
+      // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
+      if (user.character.state === CHARACTER_STATE.EXIT) {
+        await server.game.endStage();
+        // if (.checkStageEnd()) {
+        //   // 스테이지 종료 조건이 만족했다면,
 
-      // }
+        // }
+      }
     }
   } catch (e) {
     handleError(e);
@@ -62,9 +67,10 @@ export const playerAttackedRequestHandler = async (
     }
 
     //어택 타입에 따른 life 수치 조절, user.character.state 변경
-    ghost.attack(user);
+    await ghost.attack(user);
 
     if (user.character.life <= 0) {
+      console.log('주금');
       user.character.state = CHARACTER_STATE.DIED;
     } else {
       user.character.state = CHARACTER_STATE.ATTACKED;
@@ -101,6 +107,7 @@ export const playerAttackedRequestHandler = async (
       for (let i = 0; i < length; i++) {
         const itemId = user.character.inventory.removeInventorySlot(i);
         if (!itemId) {
+          // 여기 나중에 합쳐줘도 괜찮을 것 같음.
           itemDiscardResponse(socket, i + 1);
           itemDiscardNotification(user.id, itemId);
         }

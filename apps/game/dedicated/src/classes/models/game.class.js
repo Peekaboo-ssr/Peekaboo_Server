@@ -101,10 +101,11 @@ class Game {
       this.isInit = true;
     }
 
-    // 문, 아이템, 귀신 초기화
+    // 문, 아이템, 귀신, 플레이어 초기화
     this.initDoors();
     this.initItems();
     this.initGhosts();
+    this.initPlayers();
 
     // 게임 상태를 준비상태로 변경
     if (this.state !== config.clientState.gameState.PREPARE) {
@@ -217,6 +218,7 @@ class Game {
     const difficultyData = this.gameAssets.difficulty.data.find(
       (data) => data.Id === this.difficultyId,
     );
+
     if (!difficultyData) {
       console.error(`Not exist difficulty data`);
     }
@@ -286,6 +288,20 @@ class Game {
     const deleteGhosts = this.ghosts.map((ghost) => ghost.id);
     ghostDeleteNotification(this, deleteGhosts);
     this.ghosts = [];
+  }
+
+  initPlayers() {
+    const startPosition = new Position(-13.17, 1, 22.5);
+    // 위치 및 상태초기화
+    this.users.forEach((user) => {
+      user.character.position.updateClassPosition(startPosition);
+
+      // Q. 사망하고 다시 스폰된 플레이어 생명력을 통지할지??
+      if (user.character.state === CHARACTER_STATE.DIED) {
+        user.character.life = 1;
+      }
+      user.character.state = CHARACTER_STATE.IDLE;
+    });
   }
 
   spawnItems() {
@@ -412,6 +428,10 @@ class Game {
 
     if (this.remainingTime <= 0) {
       console.log('게임 오버!!!!!!!!!');
+      // Q. 클라에 죽은 상태 변경을 안보내도 되는지??
+      this.users.forEach((user) => {
+        user.character.state = CHARACTER_STATE.DIED;
+      });
       this.isRemainingTimeOver = true;
       this.endStage();
     }
@@ -419,10 +439,11 @@ class Game {
 
   // 모든 플레이어가 죽었거나 탈출했는지 검사하는 함수
   checkStageEnd() {
+    console.log('checkStageEnd.....');
     const isEndStage = this.users.every((user) => {
       return user.character.state === CHARACTER_STATE.DIED;
     });
-
+    console.log(isEndStage);
     return isEndStage;
   }
 
