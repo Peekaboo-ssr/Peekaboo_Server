@@ -27,6 +27,7 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.GhostStateChangeRequest]: 'ghostStateChangeRequest',
   [clientPacket.dedicated.GhostStateChangeNotification]:
     'ghostStateChangeNotification',
+  [clientPacket.dedicated.GhostDeleteNotification]: 'ghostDeleteNotification',
   [clientPacket.dedicated.ItemChangeRequest]: 'itemChangeRequest',
   [clientPacket.dedicated.ItemChangeNotification]: 'itemChangeNotification',
   [clientPacket.dedicated.StartStageRequest]: 'startStageRequest',

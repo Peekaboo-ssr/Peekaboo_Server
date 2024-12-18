@@ -116,12 +116,13 @@ export const createPacketS2G = (packetType, clientKey, payloadData = {}) => {
     packetType !== clientPacket.dedicated.GhostMoveNotification &&
     packetType !== clientPacket.dedicated.PingRequest &&
     packetType !== clientPacket.dedicated.PlayerStateChangeNotification
-  )
+  ) {
     console.log(
       `#@!SEND!@# PacketType : ${
         clientProtoNames[packetType]
       } => Payload ${JSON.stringify(oneOfPayloadData)}`,
     );
+  }
 
   payloadLengthBuffer.writeUInt32BE(payloadBuffer.length);
 

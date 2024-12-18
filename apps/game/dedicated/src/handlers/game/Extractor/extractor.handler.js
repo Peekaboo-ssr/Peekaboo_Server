@@ -40,7 +40,7 @@ export const extractorSoulHandler = async (
         console.error(`Extractor : Item is Not SoulItem`);
         return;
       }
-      const soulItemData = this.gameAssets.item.data.find(
+      const soulItemData = server.game.gameAssets.item.data.find(
         (data) => data.id === item.typeId,
       );
       soulValue += soulItemData.Value;
