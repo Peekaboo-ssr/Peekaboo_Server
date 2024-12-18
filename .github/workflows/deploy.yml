@@ -18,7 +18,7 @@ jobs:
           script: |
             # 프로젝트 디렉토리로 이동
             cd /home/ubuntu/Peekaboo_TestServer
-            git pull  # 최신 코드 가져오기
+            git pull origin gitActionTest # 최신 코드 가져오기
 
             # Dedicated 서버 빌드
             cd apps/game/dedicated
