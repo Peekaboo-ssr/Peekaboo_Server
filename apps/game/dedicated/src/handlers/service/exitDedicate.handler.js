@@ -32,8 +32,7 @@ export const exitDedicatedHandler = async (server, payload) => {
     if (server.game.users.length <= 0) {
       IntervalManager.getInstance().clearAll();
       console.log('-------남은 유저가 없어 종료합니다-------');
-      // 아래 데디 자동 끄기는 로깅작업이 끝나면 진행하도록 함.
-      // process.exit(1);
+      process.exit(1);
     }
   } catch (e) {
     handleError(e);

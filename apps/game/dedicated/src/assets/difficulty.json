@@ -5,7 +5,7 @@
     {
       "Id": 101,
       "DifName": "EASY",
-      "SpawnGhost": [1003],
+      "SpawnGhost": [1005],
       "MinGhostNumber": 1,
       "MaxGhostNumber": 1,
       "TimeLimit": 30,
