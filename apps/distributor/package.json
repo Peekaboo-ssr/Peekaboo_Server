@@ -14,6 +14,7 @@
     "@peekaboo-ssr/config": "*",
     "@peekaboo-ssr/classes": "*",
     "@peekaboo-ssr/events": "*",
-    "@peekaboo-ssr/utils": "*"
+    "@peekaboo-ssr/utils": "*",
+    "@peekaboo-ssr/error": "*"
   }
 }

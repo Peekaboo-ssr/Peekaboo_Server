@@ -1,20 +1,20 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { handleError } from '../../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 
-export const doorToggleRequestHandler = async ({
+export const doorToggleRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { doorId, doorState } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     // 문 상호작용 요청을 단일 Queue에 추가

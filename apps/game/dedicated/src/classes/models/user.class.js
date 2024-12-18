@@ -1,13 +1,12 @@
-import { USER_STATE } from '../../constants/state.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 
 class User {
   constructor(id, clientKey) {
     // 유저 기본 정보
     this.id = id;
     this.clientKey = clientKey;
-    this.state = USER_STATE.STAY;
+    this.state = config.clientState.userState.INGAME;
     this.exp = 0;
 
     // 게임 관련 정보
@@ -32,7 +31,7 @@ class User {
     const now = Date.now();
 
     const pingPacket = createPacketS2G(
-      PACKET_TYPE.game.PingRequest,
+      config.clientPacket.dedicated.PingRequest,
       this.clientKey,
       {
         timestamp: now,

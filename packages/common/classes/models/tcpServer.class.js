@@ -64,7 +64,7 @@ class TcpServer {
         if (this.context.name === 'dedicated') notification();
       },
       (options, data) => {
-        console.log('Received data from distributor:', data);
+        // console.log('Received data from distributor:', data);
         this.onD2SEvent.onData(this, data);
       },
       (options) => {

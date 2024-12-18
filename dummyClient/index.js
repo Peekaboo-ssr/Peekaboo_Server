@@ -12,7 +12,6 @@ import {
   headerConfig,
   packetNames,
 } from './config/config.js';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const protoDir = path.join(__dirname, '../packages/common/protobufs');

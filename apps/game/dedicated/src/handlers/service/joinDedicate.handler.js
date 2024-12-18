@@ -1,6 +1,6 @@
 import User from '../../classes/models/user.class.js';
-import { createPacketS2S } from '../../utils/packet/create.packet.js';
-import { config } from '../../config/config.js';
+import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 
@@ -16,9 +16,10 @@ export const joinDedicatedHandler = (server, payload) => {
     const payloadForGate = {
       dedicateKey: server.context.host + ':' + server.context.port,
       clientKey,
+      userId,
     };
     const packetForGate = createPacketS2S(
-      config.service.ConnectDedicateRequest,
+      config.servicePacket.ConnectDedicatedRequest,
       'dedicated',
       'gateway',
       payloadForGate,

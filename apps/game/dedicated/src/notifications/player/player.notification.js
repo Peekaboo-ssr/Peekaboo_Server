@@ -1,5 +1,5 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 import { CHARACTER_STATE } from '../../constants/state.js';
 
 /**
@@ -72,7 +72,7 @@ export const usersLocationNotification = (game) => {
 
   game.users.forEach((user) => {
     const userLocationPayload = createPacketS2G(
-      PACKET_TYPE.game.PlayerMoveNotification,
+      config.clientPacket.dedicated.PlayerMoveNotification,
       user.clientKey,
       payload,
     );
@@ -83,7 +83,7 @@ export const usersLocationNotification = (game) => {
 export const playerStateChangeNotification = (game, payload) => {
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.PlayerStateChangeNotification,
+      config.clientPacket.dedicated.PlayerStateChangeNotification,
       user.clientKey,
       payload,
     );

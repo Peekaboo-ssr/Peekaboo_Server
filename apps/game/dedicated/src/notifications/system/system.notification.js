@@ -1,5 +1,5 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 
 /**
  * 연결 종료한 유저를 접속 중인 다른 유저들에게 disconnectPlayerNotification로 알려주는 함수
@@ -12,12 +12,14 @@ export const disconnectPlayerNotification = async (game, disconnectUserId) => {
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.DisconnectPlayerNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (user.id !== disconnectUserId) {
+      const packet = createPacketS2G(
+        config.clientPacket.dedicated.DisconnectPlayerNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 
@@ -26,7 +28,7 @@ export const blockInteractionNotification = (game) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.BlockInteractionNotification,
+      config.clientPacket.dedicated.BlockInteractionNotification,
       user.clientKey,
       payload,
     );
@@ -42,7 +44,7 @@ export const remainingTimeNotification = (game) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.RemainingTimeNotification,
+      config.clientPacket.dedicated.RemainingTimeNotification,
       user.clientKey,
       payload,
     );
@@ -67,7 +69,7 @@ export const stageEndNotification = async (game) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.StageEndNotification,
+      config.clientPacket.dedicated.StageEndNotification,
       user.clientKey,
       payload,
     );
@@ -83,7 +85,7 @@ export const submissionEndNotification = (game, result) => {
   };
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.SubmissionEndNotification,
+      config.SubmissionEndNotification,
       user.clientKey,
       payload,
     );

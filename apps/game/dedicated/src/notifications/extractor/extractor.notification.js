@@ -1,5 +1,5 @@
-import { PACKET_TYPE } from '../../constants/packet.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
 export const extractSoulNotification = (game) => {
   const payload = {
@@ -9,7 +9,7 @@ export const extractSoulNotification = (game) => {
   // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
   game.users.forEach((user) => {
     const responseData = createPacketS2G(
-      PACKET_TYPE.game.ExtractSoulNotification,
+      config.clientPacket.dedicated.ExtractSoulNotification,
       user.clientKey,
       payload,
     );

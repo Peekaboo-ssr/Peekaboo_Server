@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/*",
     "apps/*/master",
+    "apps/*/dedicated",
     "packages/common/*",
     "packages/modules/*"
   ],
@@ -19,6 +20,7 @@
   "dependencies": {
     "dotenv-flow": "^4.1.0",
     "esbuild": "^0.24.0",
+    "esbuild-plugin-copy": "^2.1.1",
     "express": "^4.21.2",
     "glob": "^11.0.0",
     "prom-client": "^15.1.3",

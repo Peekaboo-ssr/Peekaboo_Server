@@ -1,22 +1,17 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { handleError } from '../../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 
 // 호스트 유저만 요청을 보냅니다.
-export const moveGhostRequestHandler = ({
-  socket,
-  clientKey,
-  payload,
-  server,
-}) => {
+export const moveGhostRequestHandler = (socket, clientKey, payload, server) => {
   try {
     const { ghostMoveInfos } = payload;
 
     // 유저 찾기
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     // 해당 게임 세션에 고스트들의 정보 저장

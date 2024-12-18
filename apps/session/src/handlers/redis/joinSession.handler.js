@@ -18,6 +18,13 @@ export const joinSessionHandler = async (serverInstance, data) => {
   try {
     joinSessionByType(serverInstance.userSessions, type, userData);
 
+    // 만약 게임 세션에 참가할 예정이라면 gameSessionId, inviteCode만 추가
+    if (type === 'game' && !serverInstance.gameSessions[data.gameUUID]) {
+      serverInstance.gameSessions[data.gameUUID] = {
+        inviteCode: data.inviteCode,
+      };
+    }
+
     if (responseChannel) {
       resMessage.isSuccess = true;
       serverInstance.pubSubManager.publisher.publish(
@@ -26,7 +33,6 @@ export const joinSessionHandler = async (serverInstance, data) => {
       );
     }
   } catch (e) {
-    console.log('에러 발생: ', e);
     const resMessage = {
       isSuccess: false,
     };

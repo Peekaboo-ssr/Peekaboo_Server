@@ -3,9 +3,8 @@ import RedisManager from './redis.manager.js'; // Updated RedisManager
 import { doorToggleNotification } from '../../notifications/door/door.notification.js';
 import { itemGetNotification } from '../../notifications/item/item.notification.js';
 import { itemGetResponse } from '../../response/item/item.response.js';
-import CustomError from '../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../Error/error.codes.js';
-import { handleError } from '../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { getUserByClientKey } from '../../sessions/user.sessions.js';
 
 class GameQueueManager {
@@ -43,7 +42,7 @@ class GameQueueManager {
           await this.handleItemJob(data);
           break;
         default:
-          throw new CustomError('UNKNOWN_JOB_TYPE');
+          throw new CustomError(errorCodesMap.UNKNOWN_JOB_TYPE);
       }
     });
 
@@ -57,7 +56,7 @@ class GameQueueManager {
 
     const door = this.game.getDoor(doorId);
     if (!door) {
-      throw new CustomError(ErrorCodesMaps.DOOR_NOT_FOUND);
+      throw new CustomError(errorCodesMap.DOOR_NOT_FOUND);
     }
 
     if (!door.checkDoorInteraction(doorState)) {
@@ -75,7 +74,7 @@ class GameQueueManager {
 
     const user = getUserByClientKey(this.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const item = this.game.getItem(itemId);

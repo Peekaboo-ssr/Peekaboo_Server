@@ -15,6 +15,14 @@ const errorResponse = {
       token: 'none',
     },
   },
+  [clientPacket.dedicated.CreateRoomResponse]: {
+    payloadData: {
+      globalFailCode: clientState.globalFailCode.INVALID_REQUEST,
+      message: '정상적인 요청이 아니거나 생성 중 오류가 발생했습니다.',
+      gameSessionId: '',
+      inviteCode: '',
+    },
+  },
 };
 
 export default errorResponse;

@@ -1,5 +1,5 @@
 import redisManager from '../classes/managers/redis.manager.js';
-import { config } from '../config/config.js';
+import config from '@peekaboo-ssr/config/game';
 
 /**
  * 해당 유저의 정보를 Redis에 저장하는 함수입니다.

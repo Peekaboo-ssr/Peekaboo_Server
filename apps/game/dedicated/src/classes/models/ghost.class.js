@@ -1,4 +1,4 @@
-import { GHOST_TYPE_ID } from '../../constants/ghost.js';
+import { GHOST_TYPE_ID } from '../../constants/game.js';
 import { Position, Rotation } from './moveInfo.class.js';
 
 class Ghost {

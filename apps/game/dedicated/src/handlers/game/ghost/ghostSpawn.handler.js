@@ -1,21 +1,21 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import Ghost from '../../../classes/models/ghost.class.js';
 import { ghostSpawnNotification } from '../../../notifications/ghost/ghost.notification.js';
 import { getRandomInt } from '../../../utils/math/getRandomInt.js';
-import { handleError } from '../../../Error/error.handler.js';
 
 /**
  * 귀신 생성 요청에 따른 핸들러 함수입니다.
  */
-export const ghostSpawnHandler = ({ socket, clientKey, payload, server }) => {
+export const ghostSpawnHandler = (socket, clientKey, payload, server) => {
   try {
     const { ghostTypeId } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const positionIndex = getRandomInt(

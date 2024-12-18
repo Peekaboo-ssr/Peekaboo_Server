@@ -10,6 +10,7 @@ import { createRoutingTable } from './routes/create.routes.js';
 import express from 'express';
 import client from 'prom-client';
 import os from 'os';
+import { handlers } from './handlers/index.js';
 
 class GatewayServer extends TcpServer {
   constructor() {
@@ -20,6 +21,7 @@ class GatewayServer extends TcpServer {
       new C2GEventHandler(),
     );
     this.S2GEventHandler = new S2GEventHandler();
+    this.handlers = handlers;
     this.index = 0;
     /**
      * connectClients

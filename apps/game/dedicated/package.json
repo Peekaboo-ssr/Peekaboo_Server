@@ -2,7 +2,7 @@
   "name": "dedicated",
   "version": "1.0.0",
   "description": "데디케이티드 서버",
-  "main": "dedicated.server.js",
+  "main": "dedicate.server.js",
   "type": "module",
   "scripts": {
     "create:dedicate": "node src/dedicate.server.js",
@@ -11,17 +11,15 @@
     "docker:build": "docker build -t dedicated_server ."
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "@peekaboo-ssr/config": "*",
+    "@peekaboo-ssr/classes": "*",
+    "@peekaboo-ssr/events": "*",
+    "@peekaboo-ssr/utils": "*",
+    "@peekaboo-ssr/error": "*",
     "bull": "^4.16.4",
     "crypto": "^1.0.1",
-    "dotenv": "^16.4.5",
     "ioredis": "^5.4.1",
-    "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "long": "^5.2.3",
-    "mysql2": "^3.11.4",
-    "protobufjs": "^7.4.0",
-    "uuid": "^11.0.3",
-    "yarn": "^1.22.22"
+    "long": "^5.2.3"
   }
 }

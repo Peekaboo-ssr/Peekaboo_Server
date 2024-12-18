@@ -1,5 +1,9 @@
 // 각 핸들러들의 베이스가 되는 핸들러
 class BaseEvent {
+  constructor() {
+    this.isConnected = false;
+  }
+
   onConnection(socket) {
     throw new Error('onConnection must be implemented');
   }

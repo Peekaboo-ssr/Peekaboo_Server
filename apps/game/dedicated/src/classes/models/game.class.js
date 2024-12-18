@@ -1,35 +1,43 @@
+// asset
+import { getGameAssets } from '../../load.assets.js';
+// managers
 import IntervalManager from '../managers/interval.manager.js';
-import { DOOR_STATE, GAME_SESSION_STATE } from '../../constants/state.js';
+import GameQueueManager from '../managers/gameQueue.manager.js';
+// class
+import Item from './item.class.js';
+import Ghost from './ghost.class.js';
+import { Position } from './moveInfo.class.js';
 import { Character } from './character.class.js';
+import { Door } from './door.class.js';
+// notification
 import {
   ghostDeleteNotification,
   ghostsLocationNotification,
-  ghostSpawnNotification,
 } from '../../notifications/ghost/ghost.notification.js';
 import {
-  disconnectPlayerNotification,
   remainingTimeNotification,
   stageEndNotification,
 } from '../../notifications/system/system.notification.js';
-// import ItemQueueManager from '../managers/itemQueueManager.js';
-// import DoorQueueManager from '../managers/doorQueueManager.js';
-import GameQueueManager from '../managers/gameQueue.manager.js';
-import { Door } from './door.class.js';
-import { config } from '../../config/config.js';
-import { getGameAssets } from '../../init/load.assets.js';
-import { setGameStateRedis } from '../../redis/game.redis.js';
 import { itemDeleteNotification } from '../../notifications/item/item.notification.js';
 import { extractSoulNotification } from '../../notifications/extractor/extractor.notification.js';
+// utils
+import { setGameStateRedis } from '../../redis/game.redis.js';
 import { getRandomInt } from '../../utils/math/getRandomInt.js';
-import Item from './item.class.js';
-import { Position } from './moveInfo.class.js';
-import Ghost from './ghost.class.js';
+// config
+import config from '@peekaboo-ssr/config/game';
+import { DOOR_STATE } from '../../constants/state.js';
+import {
+  SUBMISSION_DURATION,
+  MAX_PLAYER,
+  MAX_DOOR_NUM,
+} from '../../constants/game.js';
 
 class Game {
   constructor(id, inviteCode) {
     this.id = id;
     this.socket = null; // 자체적으로 게이트웨이에 보내기 위한 socket
     this.hostId = null;
+    this.isCreated = false;
     this.isInit = false;
 
     // 게임 관련 오브젝트를 저장한 배열
@@ -39,7 +47,7 @@ class Game {
     this.doors = []; // 문
 
     // 게임 관련 데이터
-    this.state = GAME_SESSION_STATE.PREPARE; // 게임 상태 (준비, 플레이, 종료)
+    this.state = config.clientState.gameState.PREPARE; // 게임 상태 (준비, 플레이, 종료)
     this.inviteCode = inviteCode; // 게임 초대 코드
     this.day = null; // 스테이지 단계
     this.submissionDay = null; // 서브미션 데이
@@ -83,7 +91,7 @@ class Game {
   async initStage() {
     // 맨 처음 스테이지를 초기화할 때에는 day와 submissionId를 직접 지정해준다.
     if (!this.isInit) {
-      this.day = config.game.submission_duration;
+      this.day = SUBMISSION_DURATION;
       const initSubMissionData = this.gameAssets.submission.data[0];
       this.submissionId = initSubMissionData.Id;
       this.submissionDay = initSubMissionData.Day;
@@ -98,8 +106,8 @@ class Game {
     this.initGhosts();
 
     // 게임 상태를 준비상태로 변경
-    if (this.state !== GAME_SESSION_STATE.PREPARE) {
-      this.state = GAME_SESSION_STATE.PREPARE;
+    if (this.state !== config.clientState.gameState.PREPARE) {
+      this.state = config.clientState.gameState.PREPARE;
     }
     this.isInit = true;
   }
@@ -107,7 +115,7 @@ class Game {
   // stage 시작
   async startStage() {
     // 게임 상태 변경
-    await this.setState(GAME_SESSION_STATE.INPROGRESS);
+    await this.setState(config.clientState.gameState.INPROGRESS);
 
     // 게임 남은 시간 초기화
     this.remainingTime = this.defaultRemainingTime;
@@ -127,9 +135,9 @@ class Game {
 
   // 스테이지 종료 로직
   async endStage() {
-    if (this.state === GAME_SESSION_STATE.INPROGRESS) {
+    if (this.state === config.clientState.gameState.INPROGRESS) {
       // 게임 상태를 END로 변경한다.
-      await this.setState(GAME_SESSION_STATE.END);
+      await this.setState(config.clientState.gameState.END);
       // 귀신 및 게임 타이머 인터벌 삭제
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
@@ -146,7 +154,7 @@ class Game {
   }
 
   async addUser(user, isHost = false) {
-    if (this.users.length >= config.game.max_player) {
+    if (this.users.length >= MAX_PLAYER) {
       return false;
     }
 
@@ -161,32 +169,16 @@ class Game {
     this.users.push(user);
 
     // 핑 인터벌 추가
-    IntervalManager.getInstance().addPingInterval(
-      user.id,
-      () => user.ping(this.socket),
-      1000,
-      'user',
-    );
+    setTimeout(() => {
+      IntervalManager.getInstance().addPingInterval(
+        user.id,
+        () => user.ping(this.socket),
+        1000,
+        'user',
+      );
+    }, 3000);
 
     return true;
-  }
-
-  async removeUser(userId) {
-    const removeUserIndex = this.users.findIndex((user) => user.id === userId);
-    this.users.splice(removeUserIndex, 1);
-
-    // 연결을 종료한 사실을 다른 유저들에게 disconnectPlayerNotification로 알려준다.
-    await disconnectPlayerNotification(this, userId);
-
-    IntervalManager.getInstance().removeUserInterval(userId);
-
-    // 인원이 없는 경우 모든 인터벌 삭제
-    if (this.users.length <= 0) {
-      IntervalManager.getInstance().clearAll();
-      console.log('-------남은 유저가 없어 종료합니다-------');
-      // 아래 데디 자동 끄기는 로깅작업이 끝나면 진행하도록 함.
-      // process.exit(1);
-    }
   }
 
   getUser(userId) {
@@ -261,7 +253,7 @@ class Game {
         this.doors[i].setStatus(DOOR_STATE.DOOR_MIDDLE);
       }
     } else {
-      for (let i = 0; i < config.game.max_door_num; i++) {
+      for (let i = 0; i < MAX_DOOR_NUM; i++) {
         const door = new Door(i + 1);
         this.doors.push(door);
       }
@@ -403,7 +395,7 @@ class Game {
   }
 
   gameTimer() {
-    if (this.state !== GAME_SESSION_STATE.INPROGRESS) {
+    if (this.state !== config.clientState.gameState.INPROGRESS) {
       return;
     }
     this.remainingTime -= 1;

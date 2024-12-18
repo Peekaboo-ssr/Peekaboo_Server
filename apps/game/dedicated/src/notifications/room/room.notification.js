@@ -1,6 +1,5 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
-import { GAME_SESSION_STATE } from '../../constants/state.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 
 /**
  * 방에 참가한 플레이어 정보를 기존 유저들에게 알리는 함수
@@ -34,7 +33,7 @@ export const startStageNotification = (game, itemInfos, ghostInfos) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.StartStageNotification,
+      config.clientPacket.dedicated.StartStageNotification,
       user.clientKey,
       payload,
     );

@@ -2,7 +2,6 @@ import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import servicePacket from '@peekaboo-ssr/modules-constants/servicePacket';
 import serviceHeader from '@peekaboo-ssr/modules-constants/serviceHeader';
 import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
-import { getHandlerByPacketType } from '@peekaboo-ssr/modules-handlers/index';
 import { parsePacketS2S } from '@peekaboo-ssr/utils/parsePacket';
 
 class D2SEventHandler extends BaseEvent {
@@ -78,7 +77,8 @@ class D2SEventHandler extends BaseEvent {
         server.clientToDistributor.buffer =
           server.clientToDistributor.buffer.subarray(totalPacketLength);
 
-        const handler = getHandlerByPacketType(packetType);
+        const handler = server.getServiceHandlerByPacketType(packetType);
+
         await handler(server, payload);
       } catch (e) {
         console.error(e);

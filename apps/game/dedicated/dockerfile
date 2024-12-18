@@ -1,20 +1,56 @@
-# Node.js 공식 이미지 기반 (LTS 버전)
-FROM node:20-alpine
-
-# 작업 디렉토리 생성
+# 빌드 스테이지
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# package.json과 package-lock.json 복사
-COPY package.json yarn.lock ./
+# 워크스페이스 설정 파일들 복사
+COPY package.json yarn.lock turbo.json ./
+COPY apps/game/dedicated/package.json ./apps/game/dedicated/
+COPY packages/common ./packages/common
+COPY packages/modules ./packages/modules
+
+RUN apk add --no-cache docker-cli && \
+    which docker && \
+    docker --version && \
+    curl -fsSL https://get.docker.com | sh
 
 # 의존성 설치
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
-# 프로젝트 전체 소스 복사
-COPY . .
+# game/dedicated 서비스 소스 복사
+COPY apps/game/dedicated ./apps/game/dedicated
 
-# 애플리케이션이 실행될 포트 노출
-# EXPOSE 6666
+# Protobuf 파일들 복사
+COPY packages/common/protobufs ./protobufs
 
-# 애플리케이션 실행 커맨드
-CMD ["yarn", "create:dedicate"]
+# 공통 환경 변수 파일 복사
+COPY packages/common/config/.env ./packages/common/config/.env
+
+# 빌드
+WORKDIR /app/apps/game/dedicated
+RUN yarn add glob@^11.0.0 esbuild del-cli --dev
+RUN NODE_ENV=development yarn build
+
+# 실행 스테이지
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+COPY --from=builder /usr/bin/docker /usr/bin/docker
+
+# package.json 파일들 복사
+COPY package.json yarn.lock turbo.json ./
+COPY apps/game/dedicated/package.json ./apps/game/dedicated/
+COPY packages/common ./packages/common
+COPY packages/modules ./packages/modules
+
+# 빌드된 파일들 복사
+COPY --from=builder /app/apps/game/dedicated/dist ./dist
+COPY --from=builder /app/protobufs ./protobufs
+COPY --from=builder /app/packages/common/config/.env ./packages/common/config/.env
+COPY --from=builder /app/node_modules ./node_modules
+
+# 실행 환경 설정
+ENV NODE_ENV=production
+EXPOSE 6000
+
+# 실행
+CMD ["node", "dist/dedicate.server.js"]

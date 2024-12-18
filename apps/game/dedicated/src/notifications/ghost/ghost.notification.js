@@ -1,7 +1,7 @@
-import { PACKET_TYPE } from '../../constants/packet.js';
-import CustomError from '../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../Error/error.codes.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
 /**
  * 귀신의 움직임값을 보내주는 함수입니다.
@@ -33,7 +33,7 @@ export const ghostsLocationNotification = (game) => {
       return;
     }
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostMoveNotification,
+      config.clientPacket.dedicated.GhostMoveNotification,
       user.clientKey,
       payload,
     );
@@ -51,7 +51,7 @@ export const ghostStateChangeNotification = (game, ghostId, characterState) => {
   // 고스트 검증
   const ghost = game.getGhost(ghostId);
   if (!ghost) {
-    throw new CustomError(ErrorCodesMaps.GHOST_NOT_FOUND);
+    throw new CustomError(errorCodesMap.GHOST_NOT_FOUND);
   }
   ghost.setState(characterState);
 
@@ -66,7 +66,7 @@ export const ghostStateChangeNotification = (game, ghostId, characterState) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostStateChangeNotification,
+      config.clientPacket.dedicated.GhostStateChangeNotification,
       user.clientKey,
       payload,
     );
@@ -85,7 +85,7 @@ export const ghostSpecialStateNotification = (game, payload) => {
   // 고스트 검증
   const ghost = game.getGhost(ghostId);
   if (!ghost) {
-    throw new CustomError(ErrorCodesMaps.GHOST_NOT_FOUND);
+    throw new CustomError(errorCodesMap.GHOST_NOT_FOUND);
   }
 
   const data = {
@@ -96,7 +96,7 @@ export const ghostSpecialStateNotification = (game, payload) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostSpecialStateNotification,
+      config.clientPacket.dedicated.GhostSpecialStateNotification,
       user.clientKey,
       data,
     );
@@ -112,7 +112,7 @@ export const ghostSpawnNotification = (game, ghostInfo) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostSpawnNotification,
+      config.clientPacket.dedicated.GhostSpawnNotification,
       user.clientKey,
       payload,
     );
@@ -128,7 +128,7 @@ export const ghostDeleteNotification = (game, ghostIds) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.GhostDeleteNotification,
+      config.clientPacket.dedicated.GhostDeleteNotification,
       user.clientKey,
       payload,
     );
