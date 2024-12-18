@@ -69,7 +69,6 @@ class S2DEventHandler {
           await handler(socket, payload);
         } else {
           // 보내야 할 서비스 라우팅하기
-          console.log(packetType);
           const receiverSocket = findServiceByReceiver(receiver);
 
           if (receiverSocket === null) {

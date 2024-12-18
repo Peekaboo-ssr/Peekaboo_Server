@@ -1,5 +1,6 @@
 import config from '@peekaboo-ssr/config/shared';
 import clientPacket from '@peekaboo-ssr/modules-constants/clientPacket';
+import clientProtoNames from '@peekaboo-ssr/modules-constants/clientProtoNames';
 import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import { parsePacketG2S } from '@peekaboo-ssr/utils/parsePacket';
 
@@ -71,7 +72,7 @@ class G2SEventHandler extends BaseEvent {
           )
             console.log(
               `#@!RECV!@# PacketType : ${
-                PACKET_MAPS.client[packetType]
+                clientProtoNames[packetType]
               } => Payload ${JSON.stringify(payload)}`,
             );
         }

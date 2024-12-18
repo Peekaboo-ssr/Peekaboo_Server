@@ -157,8 +157,6 @@ class Client {
 
   // 패킷 처리
   handlePacket = (packetType, payload) => {
-    //console.log(packetType, payload);
-
     switch (packetType) {
       case PACKET_TYPE.PlayerMoveNotification:
         {

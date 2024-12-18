@@ -59,7 +59,6 @@ class S2GEventHandler extends BaseEvent {
       try {
         socket.buffer = socket.buffer.subarray(offset);
         // 여기서 클라이언트를 찾아서 보내는 작업 하면 될 것 같음.
-        console.log(packetType);
         const client = getSocketByClientKey(clients, clientKey);
         if (!client) {
           throw new CustomError(errorCodesMap.SOCKET_ERROR);
