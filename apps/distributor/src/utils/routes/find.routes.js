@@ -12,7 +12,6 @@ export const findServiceByReceiver = (receiver) => {
   console.log('findService...............');
   console.log('receiver: ', receiver);
   if (receiver.includes(':')) {
-    console.log('!dedicate: ', key);
     return serviceMap.dedicates[receiver].socket;
     // for (const [key, value] of Object.entries(serviceMap.dedicates)) {
     //   console.log('!dedicate: ', key);
