@@ -8,7 +8,6 @@ export const pingHandler = (socket, clientKey, payload, server) => {
   try {
     console.log('ping........');
     const user = getUserByClientKey(server.game.users, clientKey);
-    console.log('핑마다 찾은 유저: ', user);
     if (!user) {
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }

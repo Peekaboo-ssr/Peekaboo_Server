@@ -1,6 +1,7 @@
 import clientHeader from '@peekaboo-ssr/modules-constants/clientHeader';
 import serviceHeader from '@peekaboo-ssr/modules-constants/serviceHeader';
 import serviceProtoNames from '@peekaboo-ssr/modules-constants/serviceProtoNames';
+import clientPacket from '@peekaboo-ssr/modules-constants/clientPacket';
 import clientProtoNames from '@peekaboo-ssr/modules-constants/clientProtoNames';
 import protoMessages from '@peekaboo-ssr/protobufjs/protoMessages';
 import config from '@peekaboo-ssr/config/shared';
@@ -107,6 +108,20 @@ export const createPacketS2G = (packetType, clientKey, payloadData = {}) => {
   } catch (e) {
     console.error(e);
   }
+
+  // Send Logging Test
+  // PingRequest, PlayerMoveNotification, GhostMoveNotification는 제외
+  if (
+    packetType !== clientPacket.dedicated.PlayerMoveNotification &&
+    packetType !== clientPacket.dedicated.GhostMoveNotification &&
+    packetType !== clientPacket.dedicated.PingRequest &&
+    packetType !== clientPacket.dedicated.PlayerStateChangeNotification
+  )
+    console.log(
+      `#@!SEND!@# PacketType : ${
+        clientProtoNames[packetType]
+      } => Payload ${JSON.stringify(oneOfPayloadData)}`,
+    );
 
   payloadLengthBuffer.writeUInt32BE(payloadBuffer.length);
 
