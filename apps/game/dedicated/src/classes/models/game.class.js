@@ -31,6 +31,7 @@ import {
   MAX_PLAYER,
   MAX_DOOR_NUM,
 } from '../../constants/game.js';
+import { CHARACTER_STATE } from '../../constants/state.js';
 
 class Game {
   constructor(id, inviteCode) {
