@@ -3,7 +3,6 @@ import config from '@peekaboo-ssr/config/shared';
 export const connectDedicatedHandler = (server, payload) => {
   console.log('connectDedicated...');
   const { dedicateKey, clientKey, userId } = payload;
-  console.log(dedicateKey, clientKey);
 
   // 게이트웨이의 데디맵에 유저를 추가함.
   server.mapClients.dedicates[dedicateKey].users.push(clientKey);
@@ -16,6 +15,7 @@ export const connectDedicatedHandler = (server, payload) => {
     action: config.pubAction.JoinSessionRequest,
     type: 'game',
     clientKey,
+    uuid: userId,
   };
 
   server.pubSubManager.sendMessage(config.subChannel.session, pubMessage);

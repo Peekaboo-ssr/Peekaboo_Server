@@ -76,6 +76,14 @@ const errorCodesMap = {
     code: 10018,
     message: '아이템 검증 오류',
   },
+  UNKNOWN_JOB_TYPE: {
+    code: 10019,
+    message: '알 수 없는 큐 타입',
+  },
+  DOOR_NOT_FOUND: {
+    code: 10020,
+    message: '문 검증 오류',
+  },
 };
 
 export default errorCodesMap;

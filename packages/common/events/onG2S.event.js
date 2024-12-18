@@ -1,4 +1,5 @@
 import config from '@peekaboo-ssr/config/shared';
+import clientPacket from '@peekaboo-ssr/modules-constants/clientPacket';
 import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import { parsePacketG2S } from '@peekaboo-ssr/utils/parsePacket';
 
@@ -7,7 +8,13 @@ class G2SEventHandler extends BaseEvent {
     console.log(
       `Gate connected from: ${socket.remoteAddress}:${socket.remotePort}`,
     );
-    server.gateSocket = socket;
+    this.isConnected = true;
+    if (server.context.name === 'dedicated') {
+      server.game.socket = socket;
+    } else {
+      server.gateSocket = socket;
+    }
+
     socket.buffer = Buffer.alloc(0);
   }
 
@@ -55,6 +62,20 @@ class G2SEventHandler extends BaseEvent {
         const payload = parsePacketG2S(packetType, payloadBuffer);
         socket.buffer = socket.buffer.subarray(offset);
 
+        if (server.context.name === 'dedicated') {
+          if (
+            packetType !== clientPacket.dedicated.PlayerMoveRequest &&
+            packetType !== clientPacket.dedicated.GhostMoveRequest &&
+            packetType !== clientPacket.dedicated.PingResponse &&
+            packetType !== clientPacket.dedicated.PlayerStateChangeRequest
+          )
+            console.log(
+              `#@!RECV!@# PacketType : ${
+                PACKET_MAPS.client[packetType]
+              } => Payload ${JSON.stringify(payload)}`,
+            );
+        }
+
         const handler = server.getClientHandlerByPacketType(packetType);
 
         await handler(socket, clientKey, payload, server);
@@ -64,11 +85,11 @@ class G2SEventHandler extends BaseEvent {
     }
   }
 
-  onEnd(socket) {
+  onEnd(socket, server) {
     console.log('onClose', socket.remoteAddress, socket.remotePort);
   }
 
-  onError(socket, err) {
+  onError(socket, err, server) {
     console.log('onClose', socket.remoteAddress, socket.remotePort);
   }
 }

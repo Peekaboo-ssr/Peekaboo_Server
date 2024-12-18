@@ -1,6 +1,5 @@
 import { sendInfo } from '../../notifications/connection.notification.js';
 import { serviceMap } from '../../source/connection.source.js';
-
 /**
  * 연결된 서비스를 serviceMap에 등록하는 함수입니다.
  */

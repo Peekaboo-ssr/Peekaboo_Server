@@ -1,5 +1,8 @@
 import BaseEvent from '@peekaboo-ssr/events/BaseEvent';
 import config from '@peekaboo-ssr/config/gateway';
+import handleError from '@peekaboo-ssr/error/handleError';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { getSocketByClientKey } from '../sessions/find.session.js';
 import { sendPacketToClient } from '../response/client.response.js';
 
@@ -56,13 +59,14 @@ class S2GEventHandler extends BaseEvent {
       try {
         socket.buffer = socket.buffer.subarray(offset);
         // 여기서 클라이언트를 찾아서 보내는 작업 하면 될 것 같음.
+        console.log(packetType);
         const client = getSocketByClientKey(clients, clientKey);
         if (!client) {
-          throw new Error('클라이언트를 찾을 수 없음!!');
+          throw new CustomError(errorCodesMap.SOCKET_ERROR);
         }
         sendPacketToClient(packetType, client, payloadBuffer);
       } catch (e) {
-        console.error(e);
+        handleError(e);
       }
     }
   }

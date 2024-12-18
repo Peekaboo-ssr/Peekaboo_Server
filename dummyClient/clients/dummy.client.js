@@ -60,7 +60,7 @@ export class DummyClient {
   }
 
   // 특정 packetType 응답 대기
-  waitForResponse(packetType, timeout = 10000) {
+  waitForResponse(packetType, timeout = 30000) {
     return new Promise((resolve, reject) => {
       // 이미 기다리는 응답이 있다면 중복 등록 에러 처리 가능
       if (this.responseWaiters.has(packetType)) {

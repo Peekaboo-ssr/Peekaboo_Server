@@ -1,20 +1,26 @@
-# Node.js 공식 이미지 기반 (LTS 버전)
-FROM node:20-alpine
+# Node.js LTS 이미지 사용
+FROM node:18
 
-# 작업 디렉토리 생성
-WORKDIR /app
+# 작업 디렉토리 설정
+WORKDIR /usr/src/app
 
-# package.json과 package-lock.json 복사
-COPY package.json yarn.lock ./
+# 루트 package.json 및 yarn.lock 복사
+COPY ../../../package.json ../../../yarn.lock ./
+
+# Dedicated 전용 package.json 복사
+COPY ./package.json ./
 
 # 의존성 설치
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
-# 프로젝트 전체 소스 복사
+# Dedicated 디렉토리의 파일 복사
 COPY . .
 
-# 애플리케이션이 실행될 포트 노출
-# EXPOSE 6666
+# 런타임 환경 설정
+ENV NODE_ENV=production
 
-# 애플리케이션 실행 커맨드
-CMD ["yarn", "create:dedicate"]
+# 서버 실행 포트 노출
+EXPOSE 3000
+
+# Dedicated 서버 실행
+CMD ["node", "src/dedicate.server.js"]

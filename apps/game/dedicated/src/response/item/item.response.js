@@ -1,6 +1,5 @@
-import { PACKET_TYPE } from '../../constants/packet.js';
-import { GLOBAL_FAIL_CODE } from '../../constants/state.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
 export const itemGetResponse = (clientKey, socket, itemId, inventorySlot) => {
   const newPayload = {
@@ -8,7 +7,7 @@ export const itemGetResponse = (clientKey, socket, itemId, inventorySlot) => {
     inventorySlot,
   };
   const packet = createPacketS2G(
-    PACKET_TYPE.game.ItemGetResponse,
+    config.clientPacket.dedicated.ItemGetResponse,
     clientKey,
     newPayload,
   );
@@ -21,7 +20,7 @@ export const itemUseResponse = (clientKey, socket, itemId, inventorySlot) => {
     inventorySlot,
   };
   const packet = createPacketS2G(
-    PACKET_TYPE.game.ItemUseResponse,
+    config.clientPacket.dedicated.ItemUseResponse,
     clientKey,
     responsePayload,
   );
@@ -34,7 +33,7 @@ export const itemDiscardResponse = (clientKey, socket, inventorySlot) => {
     inventorySlot,
   };
   const packet = createPacketS2G(
-    PACKET_TYPE.game.ItemDiscardResponse,
+    config.clientPacket.dedicated.ItemDiscardResponse,
     clientKey,
     responsePayload,
   );
@@ -45,51 +44,14 @@ export const itemDiscardResponse = (clientKey, socket, inventorySlot) => {
 export const itemPurchaseResponse = (clientKey, socket, isPurchaseSuccess) => {
   const responsePayload = {
     globalFailCode: isPurchaseSuccess
-      ? GLOBAL_FAIL_CODE.NONE
-      : GLOBAL_FAIL_CODE.INVALID_REQUEST,
+      ? config.clientState.globalFailCode.NONE
+      : config.clientState.globalFailCode.INVALID_REQUEST,
   };
   const packet = createPacketS2G(
-    PACKET_TYPE.game.ItemPurchaseResponse,
+    config.clientPacket.dedicated.ItemPurchaseResponse,
     clientKey,
     responsePayload,
   );
 
   socket.write(packet);
 };
-
-// export const sendJoinRoomResponse = (server, clientKey, isSuccess) => {
-//   const players = isSuccess
-//     ? server.game.users.map((user) => {
-//         const userId = user.id;
-//         const moveInfo = {
-//           position: user.character.position.getPosition(),
-//           rotation: user.character.rotation.getRotation(),
-//         };
-//         const isHost = server.game.hostId === userId ? true : false;
-//         return {
-//           userId,
-//           moveInfo,
-//           isHost,
-//         };
-//       })
-//     : [];
-
-//   const data = {
-//     globalFailCode: isSuccess
-//       ? GLOBAL_FAIL_CODE.NONE
-//       : GLOBAL_FAIL_CODE.INVALID_REQUEST,
-//     message: isSuccess
-//       ? '방에 성공적으로 참가하였습니다.'
-//       : `방 참가에 실패하였습니다.`,
-//     gameSessionId: isSuccess ? server.game.id : '',
-//     playerInfos: players,
-//   };
-
-//   const packet = createPacketS2G(
-//     PACKET_TYPE.server.game.JoinRoomResponse,
-//     clientKey,
-//     data,
-//   );
-
-//   server.game.socket.write(packet);
-// };

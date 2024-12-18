@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/*",
     "apps/*/master",
+    "apps/*/dedicated",
     "packages/common/*",
     "packages/modules/*"
   ],

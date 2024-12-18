@@ -1,23 +1,22 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import Item from '../../../classes/models/item.class.js';
 import { itemCreateNotification } from '../../../notifications/item/item.notification.js';
-import { handleError } from '../../../Error/error.handler.js';
+import handleError from '@peekaboo-ssr/error/handleError';
 
-export const itemCreateHandler = ({ socket, clientKey, payload, server }) => {
+export const itemCreateHandler = (socket, clientKey, payload, server) => {
   try {
     const { itemTypeId } = payload;
-    //일단 이부분 빼달래요
+
     // 아이템타입 id 검증
     if (itemTypeId < 2014 || itemTypeId > 2106) {
-      console.log(`Item Create Error => ItemType : ${itemTypeId}`);
-      return;
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const newItemId = server.game.items[server.game.items.length - 1].id + 1;

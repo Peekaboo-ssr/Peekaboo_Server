@@ -1,19 +1,19 @@
-import { GAME_SESSION_STATE } from '../../../constants/state.js';
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { handleError } from '../../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { startStageNotification } from '../../../notifications/room/room.notification.js';
 import {
   blockInteractionNotification,
   submissionEndNotification,
 } from '../../../notifications/system/system.notification.js';
+import config from '@peekaboo-ssr/config/game';
 
-export const startStageRequestHandler = async ({
+export const startStageRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   const { gameSessionId, difficultyId } = payload;
   try {
     if (server.game.day === 0) {
@@ -28,9 +28,9 @@ export const startStageRequestHandler = async ({
     }
 
     // 게임이 이미 플레이 중이라면
-    if (server.game.state === GAME_SESSION_STATE.INPROGRESS) {
+    if (server.game.state === config.clientState.gameState.INPROGRESS) {
       console.log(`이미 게임 플레이 중입니다.`);
-      throw new CustomError(ErrorCodesMaps.INVALID_PACKET);
+      throw new CustomError(errorCodesMap.INVALID_PACKET);
     }
 
     // 클라에서 difficultyId를 인덱스로 전달해서 difficultyId에 100을 더해서 사용한다.

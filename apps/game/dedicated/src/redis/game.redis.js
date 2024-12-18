@@ -1,5 +1,5 @@
 import redisManager from '../classes/managers/redis.manager.js';
-import { config } from '../config/config.js';
+import config from '@peekaboo-ssr/config/game';
 
 /**
  * 방 생성 시 Redis에 게임 세션 정보를 저장하는 함수입니다.

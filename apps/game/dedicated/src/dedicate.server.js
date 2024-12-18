@@ -1,29 +1,29 @@
 import net from 'net';
-import { config } from './config/config.js';
-import { PACKET_TYPE } from './constants/packet.js';
-import { createPacketS2S } from './utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 import { setGameRedis } from './redis/game.redis.js';
-import G2SEventHandler from './events/onG2S.event.js';
-import D2SEventHandler from './events/onD2S.event.js';
+import G2SEventHandler from '@peekaboo-ssr/events/G2SEvent';
+import D2SEventHandler from '@peekaboo-ssr/events/D2SEvent';
 import { handlers } from './handlers/index.js';
 import Game from './classes/models/game.class.js';
 import User from './classes/models/user.class.js';
-import { loadProtos } from './init/load.protos.js';
 import { loadGameAssets } from './init/load.assets.js';
 import { sendCreateRoomResponse } from './response/room/room.response.js';
 import IntervalManager from './classes/managers/interval.manager.js';
+import TcpClient from '@peekaboo-ssr/classes/TcpClient';
 
 class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
     // 마이크로서비스 정보
     this.context = {
-      host: '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
+      host: 'host.docker.internal', // EC2: 172.17.0.1 or local: host.docker.internal
       port: port,
       name: 'dedicated',
     };
     this.event = new G2SEventHandler();
     this.onD2SEvent = new D2SEventHandler();
     this.isConnectedDistributor = false;
+    this.isCreatedToGateway = false;
     this.clientToDistributor = null;
     this.game = null;
     this.handlers = handlers;
@@ -32,43 +32,39 @@ class DedicateServer {
   }
 
   async initialize(id, inviteCode, userId, clientKey) {
-    await this.initServer();
+    await this.initServer(id, inviteCode);
     await this.connectToDistributor(
-      '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
-      config.server.distributor.port,
+      'host.docker.internal', // EC2: 172.17.0.1 or local: host.docker.internal
+      config.distributor.port,
       () => {
-        // 게임 인스턴스 생성
-        this.game = new Game(id, inviteCode);
-        // S2S로 호스트 유저를 맵에 등록하도록 요청
-        const dedicateKey = `${this.context.host}:${this.context.port}`;
-        const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
-        const packet = createPacketS2S(
-          PACKET_TYPE.service.CreateDedicatedRequest,
-          'host.docker.internal',
-          'gateway',
-          {
-            hostKey: clientKey,
-            dedicateKey,
-            distributorKey,
-            gameSessionId: id,
-            inviteCode: inviteCode,
-          },
-        );
-        this.clientToDistributor.write(packet);
+        setInterval(async () => {
+          // 게임 인스턴스 생성 이후 연결 시도하도록 함.
+          if (!this.game.isCreated && this.event.isConnected) {
+            console.log('게이트웨이 연결됨.');
+            // S2S로 호스트 유저를 맵에 등록하도록 요청
+            const dedicateKey = `${this.context.host}:${this.context.port}`;
+            const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
+            const packet = createPacketS2S(
+              config.servicePacket.CreateDedicatedRequest,
+              'dedicated',
+              'gateway',
+              {
+                hostKey: clientKey,
+                dedicateKey,
+                distributorKey,
+                gameSessionId: id,
+              },
+            );
+            this.clientToDistributor.write(packet);
+            this.game.isCreated = true;
+          }
+        }, 2000);
+        this.initializeGame(id, inviteCode, userId, clientKey);
       },
     );
-
-    setTimeout(() => {
-      setInterval(async () => {
-        // 게임이 초기화 되었고, 호스트아이디가 빈 값일 때, 호스트를 참가시키고 응답하도록 수행
-        if (this.game.isInit && this.game.hostId === null) {
-          await this.initializeGame(id, inviteCode, userId, clientKey);
-        }
-      }, 2000);
-    }, 5000);
   }
 
-  async initServer() {
+  async initServer(id, inviteCode) {
     this.server = net.createServer((socket) => {
       this.event.onConnection(socket, this);
       socket.on('data', (data) => this.event.onData(socket, data, this));
@@ -81,10 +77,12 @@ class DedicateServer {
         `${this.context.name} 서버가 대기 중: `,
         this.server.address(),
       );
+      this.context.port = this.server.address().port;
     });
 
-    await loadProtos();
     await loadGameAssets();
+    // 게임 인스턴스 생성
+    this.game = new Game(id, inviteCode);
   }
 
   async connectToDistributor(host, port, notification) {
@@ -121,7 +119,7 @@ class DedicateServer {
       this.game.id,
       () => {
         const packetForSession = createPacketS2S(
-          PACKET_TYPE.service.UpdateRoomInfoRequest,
+          config.servicePacket.UpdateRoomInfoRequest,
           'dedicated',
           'session',
           {
@@ -133,9 +131,8 @@ class DedicateServer {
         );
         this.clientToDistributor.write(packetForSession);
       },
-      5000,
+      3500,
     );
-
     // createRoomResponse를 보내준다.
     console.log(
       `----------- createRoom Complete : ${this.game.id} -----------`,
@@ -163,47 +160,12 @@ class DedicateServer {
   };
 }
 
-class TcpClient {
-  constructor(host, port, onCreate, onRead, onEnd, onError) {
-    this.options = {
-      host: host,
-      port: port,
-    };
-    this.onCreate = onCreate;
-    this.onRead = onRead;
-    this.onEnd = onEnd;
-    this.onError = onError;
-    this.client = null;
-    this.buffer = Buffer.alloc(0);
-  }
-
-  connect() {
-    this.client = net.connect(this.options, () => {
-      if (this.onCreate) this.onCreate(this.options);
-    });
-
-    this.client.on('data', (data) => {
-      this.onRead(this, data);
-    });
-
-    this.client.on('end', () => {
-      this.onEnd(this.client);
-    });
-
-    this.client.on('error', (err) => {
-      this.onError(this.client, err);
-    });
-  }
-
-  write(buffer) {
-    this.client.write(buffer);
-  }
-}
-
 const gameId = process.env.GAME_ID;
 const clientKey = process.env.CLIENT_KEY;
 const inviteCode = process.env.INVITE_CODE;
 const userId = process.env.USER_ID;
 const port = process.env.PORT;
 
+// new DedicateServer('clientKey', 'gameId', 'inviteCode', 'userId');
+// const [clientKey, gameId, inviteCode, userId] = process.argv.slice(2);
 new DedicateServer(clientKey, gameId, inviteCode, userId);

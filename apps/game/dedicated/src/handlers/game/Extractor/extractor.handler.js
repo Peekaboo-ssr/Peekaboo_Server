@@ -1,16 +1,16 @@
-import CustomError from '../../../Error/custom.error.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
 import { itemDeleteNotification } from '../../../notifications/item/item.notification.js';
 import { extractSoulNotification } from '../../../notifications/extractor/extractor.notification.js';
-import { handleError } from '../../../Error/error.handler.js';
 
-export const extractorSoulHandler = async ({
+export const extractorSoulHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { userId } = payload;
 
@@ -18,7 +18,7 @@ export const extractorSoulHandler = async ({
     // 유저 검증
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     // 유저 인벤토리
@@ -57,7 +57,7 @@ export const extractorSoulHandler = async ({
     // 아이템 검증
     // const item = server.game.getItem(itemId);
     // if (!item) {
-    //   throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+    //   throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     // }
 
     // // 인벤토리 검증
@@ -65,7 +65,7 @@ export const extractorSoulHandler = async ({
     // const serverItemId = user.character.inventory.slot[inventorySlot - 1];
 
     // if (!serverItemId) {
-    //   throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+    //   throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     // }
 
     // // ------------------------- 로직 ------------------------------

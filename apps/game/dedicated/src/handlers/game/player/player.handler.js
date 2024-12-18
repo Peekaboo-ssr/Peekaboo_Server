@@ -1,27 +1,26 @@
-import { GHOST_TYPE_ID } from '../../../constants/ghost.js';
-import { PACKET_TYPE } from '../../../constants/packet.js';
+import config from '@peekaboo-ssr/config/game';
 import { CHARACTER_STATE } from '../../../constants/state.js';
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { handleError } from '../../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { itemDiscardNotification } from '../../../notifications/item/item.notification.js';
 import { playerStateChangeNotification } from '../../../notifications/player/player.notification.js';
 import { itemDiscardResponse } from '../../../response/item/item.response.js';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { createPacketS2G } from '../../../utils/packet/create.packet.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
-export const playerStateChangeRequestHandler = async ({
+export const playerStateChangeRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { playerStateInfo } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     user.character.state = playerStateInfo.characterState;
@@ -43,23 +42,23 @@ export const playerStateChangeRequestHandler = async ({
   }
 };
 
-export const playerAttackedRequestHandler = async ({
+export const playerAttackedRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { userId, ghostId } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const ghost = server.game.getGhost(ghostId);
     if (!ghost) {
-      throw new CustomError(ErrorCodesMaps.GHOST_NOT_FOUND);
+      throw new CustomError(errorCodesMap.GHOST_NOT_FOUND);
     }
 
     //어택 타입에 따른 life 수치 조절, user.character.state 변경
@@ -76,7 +75,7 @@ export const playerAttackedRequestHandler = async ({
     };
 
     const packet = createPacketS2G(
-      PACKET_TYPE.game.PlayerLifeResponse,
+      config.clientPacket.dedicated.PlayerLifeResponse,
       clientKey,
       lifePayload,
     );

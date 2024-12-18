@@ -89,7 +89,7 @@ message ServicePacket {
     DisconnectedServiceNotification disconnectedServiceNotification = 4;
     CreateDedicatedRequest createDedicatedRequest = 5;
     ExitDedicatedRequest exitDedicatedRequest = 6;
-    ConnectDedicatedRequest connectDedicateRequest = 7;
+    ConnectDedicatedRequest ConnectDedicatedRequest = 7;
     JoinDedicatedRequest joinDedicatedRequest = 8;
     UpdateRoomInfoRequest updateRoomInfoRequest = 9;
   }

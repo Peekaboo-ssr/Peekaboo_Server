@@ -12,7 +12,6 @@ import {
   headerConfig,
   packetNames,
 } from './config/config.js';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const protoDir = path.join(__dirname, '../packages/common/protobufs');
@@ -31,7 +30,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   const clientsData = [
     {
       userData: {
-        id: 'test2123',
+        id: 'test2',
         password: '1234',
         token: 'tokenTest2',
         userId: 'b25ba876-3939-48cd-a1dd-ce16eacf935c',
@@ -75,7 +74,8 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     scenarioManagers.push(scenario);
   }
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
-  await waitRoomScenario(clients, scenarioManagers);
+  // await waitRoomScenario(clients, scenarioManagers);
+  await runScenario(clients, scenarioManagers);
 })();
 
 const waitRoomScenario = async (clients, scenarioManagers) => {

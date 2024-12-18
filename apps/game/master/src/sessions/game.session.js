@@ -18,11 +18,11 @@ const __dirname = path.dirname(__filename);
 //   );
 //   fork(scriptPath, [clientKey, gameId, inviteCode, userId]);
 
-//   // const child = spawn('node', [scriptPath, clientKey, gameId, userId], {
-//   //   detached: true,
-//   //   stdio: 'ignore', // 부모와의 I/O 연결을 끊기 위해 ignore 사용
-//   // });
-//   // child.unref();
+// const child = spawn('node', [scriptPath, clientKey, gameId, userId], {
+//   detached: true,
+//   stdio: 'ignore', // 부모와의 I/O 연결을 끊기 위해 ignore 사용
+// });
+// child.unref();
 // };
 
 async function findPort() {

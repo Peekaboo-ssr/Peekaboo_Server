@@ -1,26 +1,26 @@
 import Item from '../../../classes/models/item.class.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { extractSoulNotification } from '../../../notifications/extractor/extractor.notification.js';
 import { itemPurchaseNotification } from '../../../notifications/item/item.notification.js';
 import { itemPurchaseResponse } from '../../../response/item/item.response.js';
-import { handleError } from '../../../Error/error.handler.js';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import CustomError from '../../../Error/custom.error.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
 
-export const itemPurchaseHandler = ({ socket, clientKey, payload, server }) => {
+export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
   try {
     const { itemTypeId } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemData = server.game.gameAssets.item.data;
 
     const itemInfo = itemData.find((item) => item.Id === itemTypeId);
     if (!itemInfo) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     if (server.game.soulCredit < itemInfo.Value) {

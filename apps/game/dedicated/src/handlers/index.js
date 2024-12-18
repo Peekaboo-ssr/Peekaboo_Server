@@ -1,4 +1,4 @@
-import { PACKET_TYPE } from '../constants/packet.js';
+import config from '@peekaboo-ssr/config/game';
 import { movePlayerRequestHandler } from './game/player/movePlayer.handler.js';
 import { moveGhostRequestHandler } from './game/ghost/moveGhost.handler.js';
 import { pingHandler } from './game/system/ping.handler.js';
@@ -28,98 +28,98 @@ import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
 
 export const handlers = {
   client: {
-    [PACKET_TYPE.game.PlayerMoveRequest]: {
+    [config.clientPacket.dedicated.PlayerMoveRequest]: {
       handler: movePlayerRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostMoveRequest]: {
+    [config.clientPacket.dedicated.GhostMoveRequest]: {
       handler: moveGhostRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PingResponse]: {
+    [config.clientPacket.dedicated.PingResponse]: {
       handler: pingHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------장재영 작업--------------------------*/
-    [PACKET_TYPE.game.StartStageRequest]: {
+    [config.clientPacket.dedicated.StartStageRequest]: {
       handler: startStageRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.DoorToggleRequest]: {
+    [config.clientPacket.dedicated.DoorToggleRequest]: {
       handler: doorToggleRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PlayerStateChangeRequest]: {
+    [config.clientPacket.dedicated.PlayerStateChangeRequest]: {
       handler: playerStateChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PlayerAttackedRequest]: {
+    [config.clientPacket.dedicated.PlayerAttackedRequest]: {
       handler: playerAttackedRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemGetRequest]: {
+    [config.clientPacket.dedicated.ItemGetRequest]: {
       handler: itemGetRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemChangeRequest]: {
+    [config.clientPacket.dedicated.ItemChangeRequest]: {
       handler: itemChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemUseRequest]: {
+    [config.clientPacket.dedicated.ItemUseRequest]: {
       handler: itemUseRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemDiscardRequest]: {
+    [config.clientPacket.dedicated.ItemDiscardRequest]: {
       handler: itemDiscardRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemDisuseRequest]: {
+    [config.clientPacket.dedicated.ItemDisuseRequest]: {
       handler: itemDisuseRequestHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------장재영 작업--------------------------*/
     /*-------------------------권영현 작업--------------------------*/
-    [PACKET_TYPE.game.ExtractSoulRequest]: {
+    [config.clientPacket.dedicated.ExtractSoulRequest]: {
       handler: extractorSoulHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------권영현 작업--------------------------*/
     /*-------------------------문진수 작업--------------------------*/
-    [PACKET_TYPE.game.GhostStateChangeRequest]: {
+    [config.clientPacket.dedicated.GhostStateChangeRequest]: {
       handler: ghostStateChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostAttackedRequest]: {
+    [config.clientPacket.dedicated.GhostAttackedRequest]: {
       handler: ghostAttackedRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostSpecialStateRequest]: {
+    [config.clientPacket.dedicated.GhostSpecialStateRequest]: {
       handler: ghostSpecialStateRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostSpawnRequest]: {
+    [config.clientPacket.dedicated.GhostSpawnRequest]: {
       handler: ghostSpawnHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemCreateRequest]: {
+    [config.clientPacket.dedicated.ItemCreateRequest]: {
       handler: itemCreateHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------문진수 작업--------------------------*/
     /*-------------------------권영현 작업--------------------------*/
-    [PACKET_TYPE.game.ItemPurchaseRequest]: {
+    [config.clientPacket.dedicated.ItemPurchaseRequest]: {
       handler: itemPurchaseHandler,
       protoType: 'common.GamePacket',
     },
   },
   service: {
-    [PACKET_TYPE.service.ConnectedServiceNotification]: {
+    [config.servicePacket.ConnectedServiceNotification]: {
       handler: connectedServiceNotificationHandler,
     },
-    [PACKET_TYPE.service.ExitDedicatedRequest]: {
+    [config.servicePacket.ExitDedicatedRequest]: {
       handler: exitDedicatedHandler,
     },
-    [PACKET_TYPE.service.JoinDedicatedRequest]: {
+    [config.servicePacket.JoinDedicatedRequest]: {
       handler: joinDedicatedHandler,
     },
   },

@@ -1,6 +1,6 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
-import { handleError } from '../../../Error/error.handler.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import {
   itemChangeNotification,
   itemDiscardNotification,
@@ -14,18 +14,18 @@ import {
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 
 // 아마도 불큐 사용할 구간
-export const itemGetRequestHandler = async ({
+export const itemGetRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { itemId, inventorySlot } = payload;
     const user = getUserByClientKey(server.game.users, clientKey);
     console.log(user.id, '슬롯확인----------', inventorySlot);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     // 동시성 제어 1(불큐)
@@ -42,12 +42,12 @@ export const itemGetRequestHandler = async ({
   }
 };
 
-export const itemChangeRequestHandler = async ({
+export const itemChangeRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { inventorySlot } = payload;
 
@@ -55,7 +55,7 @@ export const itemChangeRequestHandler = async ({
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.slot[slot];
@@ -67,12 +67,12 @@ export const itemChangeRequestHandler = async ({
   }
 };
 
-export const itemUseRequestHandler = async ({
+export const itemUseRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { inventorySlot } = payload;
 
@@ -80,7 +80,7 @@ export const itemUseRequestHandler = async ({
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.slot[slot];
@@ -88,7 +88,7 @@ export const itemUseRequestHandler = async ({
     const item = server.game.getItem(itemId);
 
     if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     //아이템 타입에 따라 사용 가능 불가능 구분하여 적용
@@ -111,12 +111,12 @@ export const itemUseRequestHandler = async ({
   }
 };
 
-export const itemDiscardRequestHandler = async ({
+export const itemDiscardRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { itemInfo, inventorySlot } = payload;
 
@@ -128,18 +128,18 @@ export const itemDiscardRequestHandler = async ({
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.removeInventorySlot(slot);
     const item = server.game.getItem(itemId);
 
     if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     if (itemInfo.itemId !== itemId) {
-      throw new CustomError(ErrorCodesMaps.ITEM_DETERIORATION);
+      throw new CustomError(errorCodesMap.ITEM_DETERIORATION);
     }
 
     // item.position.updateClassPosition(itemInfo.position);
@@ -153,24 +153,24 @@ export const itemDiscardRequestHandler = async ({
   }
 };
 
-export const itemDisuseRequestHandler = async ({
+export const itemDisuseRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { itemId } = payload;
 
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const item = server.game.getItem(itemId);
 
     if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     item.on = false;

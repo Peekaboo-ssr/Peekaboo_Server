@@ -1,6 +1,7 @@
 import config from '@peekaboo-ssr/config/account';
 import { loginRequestHandler } from './client/login.handler.js';
 import { registAccountHandler } from './client/regist.handler.js';
+import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 
 export const handlers = {
   client: {
@@ -13,4 +14,9 @@ export const handlers = {
     [config.clientPacket.account.ChangeNicknameRequest]: {},
   },
   pubsub: {},
+  service: {
+    [config.servicePacket.ConnectedServiceNotification]: {
+      handler: connectedServiceNotificationHandler,
+    },
+  },
 };

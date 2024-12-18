@@ -8,6 +8,8 @@ import { findUserHandler } from './redis/findUser.handler.js';
 import { joinSessionHandler } from './redis/joinSession.handler.js';
 import config from '@peekaboo-ssr/config/session';
 import { waitingRoomResponse } from './redis/waitingRoom.handler.js';
+import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
+import { updateRoomInfoHandler } from './service/updateRoomInfo.handler.js';
 
 export const handlers = {
   client: {},
@@ -32,6 +34,14 @@ export const handlers = {
     },
     [config.pubAction.WaitingRoomInfosRequest]: {
       handler: waitingRoomResponse,
+    },
+  },
+  service: {
+    [config.servicePacket.ConnectedServiceNotification]: {
+      handler: connectedServiceNotificationHandler,
+    },
+    [config.servicePacket.UpdateRoomInfoRequest]: {
+      handler: updateRoomInfoHandler,
     },
   },
 };
