@@ -85,7 +85,7 @@ export const submissionEndNotification = (game, result) => {
   };
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      config.SubmissionEndNotification,
+      config.clientPacket.dedicated.SubmissionEndNotification,
       user.clientKey,
       payload,
     );
