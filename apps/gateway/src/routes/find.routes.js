@@ -5,11 +5,11 @@ export const findRoutingClients = (server, packetType, clientKey = null) => {
 
   switch (routingServiceName) {
     case 'dedicated':
-      const dedicateKey = getDedicateKeyByClientKey(
+      const gameSessionKey = getDedicateKeyByClientKey(
         server.connectClients,
         clientKey,
       );
-      return server.mapClients.dedicates[dedicateKey].client;
+      return server.mapClients.dedicates[gameSessionKey].client;
     default:
       for (const [key, value] of Object.entries(
         server.mapClients.microservices,
