@@ -4,9 +4,10 @@ import {
 } from '../../sessions/game.session.js';
 
 export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
-  try {
-    const { responseChannel, inviteCode } = data;
+  const { responseChannel, inviteCode } = data;
 
+  console.log('FindDedicateByInvite...');
+  try {
     const resMessage = {
       isSuccess: false,
       dedicateKey: null,
@@ -17,7 +18,7 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
       serverInstance.gameSessions,
       inviteCode,
     );
-    console.log(dedicateKey, distributorKey);
+    // console.log(dedicateKey, distributorKey);
 
     if (!dedicateKey || !distributorKey) {
       serverInstance.pubSubManager.publisher.publish(

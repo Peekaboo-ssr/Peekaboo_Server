@@ -8,7 +8,6 @@ const SERVICE_PACKET = {
   ConnectDedicatedRequest: 7,
   JoinDedicatedRequest: 8,
   UpdateRoomInfoRequest: 9,
-  SendRoomInfosRequest: 10,
 };
 
 export default SERVICE_PACKET;

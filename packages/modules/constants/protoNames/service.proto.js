@@ -11,7 +11,6 @@ const SERVICE_PACKET_MAPS = {
   [servicePacket.ConnectDedicatedRequest]: 'ConnectDedicatedRequest',
   [servicePacket.JoinDedicatedRequest]: 'joinDedicatedRequest',
   [servicePacket.UpdateRoomInfoRequest]: 'updateRoomInfoRequest',
-  [servicePacket.SendRoomInfosRequest]: 'sendRoomInfosRequest',
 };
 
 export default SERVICE_PACKET_MAPS;

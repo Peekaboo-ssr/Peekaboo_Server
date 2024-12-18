@@ -5,6 +5,7 @@ import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 
 export const joinDedicatedHandler = (server, payload) => {
+  console.log('joinDedicated.....');
   const { clientKey, userId } = payload;
 
   try {

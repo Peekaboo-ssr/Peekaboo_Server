@@ -25,5 +25,6 @@ export const getGameByInviteCode = (gameSessions, inviteCode) => {
       return value;
     }
   }
+  console.log('getGameByInviteCode 데디케이티드 찾지 못함.');
   return null;
 };
