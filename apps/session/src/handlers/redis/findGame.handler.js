@@ -26,6 +26,7 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
         JSON.stringify(resMessage),
       );
     } else {
+      console.log('@@@ 데디 찾음');
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
       resMessage.distributorKey = distributorKey;

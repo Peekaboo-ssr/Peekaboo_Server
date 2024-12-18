@@ -3,8 +3,10 @@ import handleError from '@peekaboo-ssr/error/handleError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 
 export const createDedicatedHandler = async (serverInstance, data) => {
+  console.log('Session >> createDedicate.....');
   try {
     const { dedicateKey, distributorKey, gameSessionId } = data;
+    console.log(data);
 
     if (!serverInstance.gameSessions[gameSessionId]) {
       throw new CustomError(errorCodesMap.GAME_NOT_FOUND);

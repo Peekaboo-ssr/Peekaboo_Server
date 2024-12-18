@@ -11,6 +11,7 @@ export const connectServiceHandler = async (socket, payload) => {
 
   try {
     if (name === 'dedicated') {
+      console.log('데디케이트 키: ', key);
       serviceMap.dedicates[key] = {
         socket: socket,
         info: payload,
