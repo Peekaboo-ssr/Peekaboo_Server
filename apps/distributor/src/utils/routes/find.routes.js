@@ -12,13 +12,13 @@ export const findServiceByReceiver = (receiver) => {
   console.log('findService...............');
   console.log('receiver: ', receiver);
   if (receiver.includes(':')) {
-    return serviceMap.dedicates[receiver].socket;
-    // for (const [key, value] of Object.entries(serviceMap.dedicates)) {
-    //   console.log('!dedicate: ', key);
-    //   if (key === receiver) {
-    //     return value.socket;
-    //   }
-    // }
+    // return serviceMap.dedicates[receiver].socket;
+    for (const [key, value] of Object.entries(serviceMap.dedicates)) {
+      console.log('!dedicate: ', key);
+      if (key === receiver) {
+        return value.socket;
+      }
+    }
   } else {
     for (const [key, value] of Object.entries(serviceMap.microservices)) {
       if (value.info.name == receiver) {

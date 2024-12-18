@@ -14,7 +14,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "clean": "turbo run clean",
-    "docker-compose:build": "docker-compose up --build",
+    "docker-compose:build": "docker-compose up --build -d",
     "docker-compose:down": "docker-compose down"
   },
   "dependencies": {
