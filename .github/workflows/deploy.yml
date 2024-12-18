@@ -20,11 +20,6 @@ jobs:
             cd /home/ubuntu/Peekaboo_TestServer
             git pull origin dev # 최신 코드 가져오기
 
-            # Dedicated 서버 빌드
-            cd apps/game/dedicated
-            yarn docker:build
-            cd ../../..  # 프로젝트 루트로 돌아가기
-
             # Docker Compose 재시작
             docker-compose down || true  # 에러 무시
             docker-compose up --build -d
