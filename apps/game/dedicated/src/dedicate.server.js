@@ -16,7 +16,7 @@ class DedicateServer {
   constructor(clientKey, id, inviteCode, userId) {
     // 마이크로서비스 정보
     this.context = {
-      host: 'host.docker.internal', // EC2: 172.17.0.1 or local: host.docker.internal
+      host: '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
       port: port,
       name: 'dedicated',
     };
@@ -34,7 +34,7 @@ class DedicateServer {
   async initialize(id, inviteCode, userId, clientKey) {
     await this.initServer(id, inviteCode);
     await this.connectToDistributor(
-      'host.docker.internal', // EC2: 172.17.0.1 or local: host.docker.internal
+      '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
       config.distributor.port,
       () => {
         setInterval(async () => {
