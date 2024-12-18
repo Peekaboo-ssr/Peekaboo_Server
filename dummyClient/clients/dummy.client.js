@@ -35,7 +35,12 @@ export class DummyClient {
   onData(data) {
     const { packetType, version, sequence, payload } =
       this.packetHelper.parsePacket(data);
-    console.log('Received Packet:', { packetType, payload });
+    if (
+      packetType !== this.CLIENT_PACKET.dedicated.PlayerMoveNotification ||
+      packetType !== this.CLIENT_PACKET.dedicated.PingRequest
+    ) {
+      console.log('Received Packet:', { packetType, payload });
+    }
     // 만약 해당 packetType을 기다리는 Promise가 있다면 resolve
     const waiter = this.responseWaiters.get(packetType);
     if (waiter) {

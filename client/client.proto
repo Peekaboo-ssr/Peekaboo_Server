@@ -342,6 +342,7 @@ message C2S_RegistAccountRequest {
 
 message S2C_RegistAccountResponse {
   GlobalFailCode globalFailCode = 1;
+  string message = 2;
 }
 
 message C2S_LoginRequest {
@@ -417,11 +418,9 @@ message S2C_JoinRoomNotification {
   string userId = 1;
 }
 
-
-
 message GamePacket {
   oneof payload {
-    C2S_PlayerMoveRequest playerMoveRequest = 1;
+   C2S_PlayerMoveRequest playerMoveRequest = 1;
     S2C_PlayerMoveNotification playerMoveNotification = 2;
     C2S_GhostMoveRequest ghostMoveRequest = 3;
     S2C_GhostMoveNotification ghostMoveNotification = 4;

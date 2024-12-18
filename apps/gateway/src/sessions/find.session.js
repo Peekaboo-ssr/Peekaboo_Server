@@ -17,8 +17,7 @@ export const getDedicateKeyByClientKey = (connection, clientKey) => {
     const dedicateKey = connection[clientKey].gameSessionKey;
 
     if (!dedicateKey) {
-      console.error('해당 유저는 참여한 게임이 없습니다!');
-      return null;
+      throw new Error('해당 유저는 참여한 게임이 없습니다!');
     }
     return dedicateKey;
   } catch (e) {

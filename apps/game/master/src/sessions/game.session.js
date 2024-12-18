@@ -49,7 +49,7 @@ export const createDedicatedServer = async (
   try {
     const runProcess = spawn('docker', [
       'run',
-      // '--rm',
+      '--rm',
       '-d',
       '--name',
       containerName,
