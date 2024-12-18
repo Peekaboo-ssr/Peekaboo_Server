@@ -5,17 +5,17 @@ import clientPacket from '@peekaboo-ssr/modules-constants/clientPacket';
 import { joinSessionByType } from '../../sessions/user.sessions.js';
 
 export const joinSessionHandler = async (serverInstance, data) => {
-  const { responseChannel, type, clientKey, uuid } = data;
-  const userData = {
-    uuid,
-    clientKey,
-  };
-
   const resMessage = {
     isSuccess: false,
   };
 
   try {
+    const { responseChannel, type, clientKey, uuid } = data;
+    const userData = {
+      uuid,
+      clientKey,
+    };
+
     joinSessionByType(serverInstance.userSessions, type, userData);
 
     // 만약 게임 세션에 참가할 예정이라면 gameSessionId, inviteCode만 추가

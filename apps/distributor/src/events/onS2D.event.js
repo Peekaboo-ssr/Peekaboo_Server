@@ -64,23 +64,14 @@ class S2DEventHandler {
             console.error('No handler found for packet type:', packetType);
             continue;
           }
-
           const payload = parsePacketS2S(packetType, payloadBuffer);
           await handler(socket, payload);
         } else {
           // 보내야 할 서비스 라우팅하기
-          const receiverSocket = findServiceByReceiver(receiver);
-
-          if (receiverSocket === null) {
-            console.error('라우팅할 곳 찾지 못함!!');
-            return;
-          } else {
-            receiverSocket.write(buffer);
-          }
+          receiverSocket.write(buffer);
         }
       } catch (e) {
         console.error('Error processing packet:', e);
-        console.error(e.stack); // 새로운 코드: 스택 트레이스 추가
       }
     }
   }
