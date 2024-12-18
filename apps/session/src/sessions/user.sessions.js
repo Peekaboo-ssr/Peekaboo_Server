@@ -23,6 +23,7 @@ export const joinSessionByType = (userSessions, type, userData) => {
       };
     } else {
       // 만약 타입이 user가 아닌 다른 경우 비정상 접속 요청
+      console.log('비정상 접속 확인');
       throw new CustomError(errorCodesMap.INVALID_PACKET);
     }
   }
@@ -30,9 +31,10 @@ export const joinSessionByType = (userSessions, type, userData) => {
   else {
     // 만약 게임으로 이동한다면 로비 세션이었는지 확인
     if (type === 'game') {
-      if (userSessions[userData.clientKey].type !== 'lobby') {
-        throw new CustomError(errorCodesMap.INVALID_PACKET);
-      }
+      // if (userSessions[userData.clientKey].type !== 'lobby') {
+      //   console.log('로비>게임 비정상 접속 확인');
+      //   throw new CustomError(errorCodesMap.INVALID_PACKET);
+      // }
     }
     userSessions[userData.clientKey].type = type;
   }

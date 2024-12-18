@@ -9,6 +9,7 @@ export const createDedicatedHandler = async (serverInstance, data) => {
     if (!serverInstance.gameSessions[gameSessionId]) {
       throw new CustomError(errorCodesMap.GAME_NOT_FOUND);
     }
+
     // 게임 세션에 등록
     serverInstance.gameSessions[gameSessionId].dedicateKey = dedicateKey;
     serverInstance.gameSessions[gameSessionId].distributorKey = distributorKey;
