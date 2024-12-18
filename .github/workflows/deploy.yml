@@ -20,6 +20,9 @@ jobs:
             cd /home/ubuntu/Peekaboo_TestServer
             git pull origin dev # 최신 코드 가져오기
 
+            # 도커 빌드 캐시 삭제
+            docker builder prune
+
             # Docker Compose 재시작
             docker-compose down || true  # 에러 무시
             yarn docker-compose:build
