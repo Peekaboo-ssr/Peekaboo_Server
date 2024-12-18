@@ -89,7 +89,7 @@ class Game {
   }
 
   async initStage() {
-    // 맨 처음 스테이지를 초기화할 때에는 day와 submissionId를 직접 지정해준다.
+    // 서브미션 첫 시작할 때에는 day와 submissionId를 직접 지정해준다.
     if (!this.isInit) {
       this.day = SUBMISSION_DURATION;
       const initSubMissionData = this.gameAssets.submission.data[0];
@@ -97,7 +97,7 @@ class Game {
       this.submissionDay = initSubMissionData.Day;
       this.goalSoulAmount = initSubMissionData.SubmissionValue;
       this.soulCredit = 1000;
-      this.isRemainingTimeOver = false;
+      this.isInit = true;
     }
 
     // 문, 아이템, 귀신 초기화
@@ -109,7 +109,7 @@ class Game {
     if (this.state !== config.clientState.gameState.PREPARE) {
       this.state = config.clientState.gameState.PREPARE;
     }
-    this.isInit = true;
+    this.isRemainingTimeOver = false;
   }
 
   // stage 시작
@@ -262,16 +262,22 @@ class Game {
 
   initItems() {
     if (this.items.length === 0) return;
-
-    // 클라이언트에게 인벤토리에 포함되지 아이템들을 삭제하라고 알려주기 위해
-    // ItemDeleteNotification을 보내준다.
-    const deleteItems = this.items
-      .filter((item) => item.mapOn === true)
-      .map((item) => item.id);
-    itemDeleteNotification(this, deleteItems);
-
-    // 인벤토리에 들어간 아이템이 아닌 맵에 존재하는 아이템들을 삭제한다.
-    this.items = this.items.filter((item) => item.mapOn === false);
+    if (isRemainingTimeOver) {
+      // 전부 죽거나, 타임아웃 상태
+      const deleteItems = this.items.map((item) => item.id);
+      itemDeleteNotification(this, deleteItems);
+      // 아이템 빈 배열로 만듦
+      this.items = [];
+    } else {
+      // 클라이언트에게 인벤토리에 포함되지 아이템들을 삭제하라고 알려주기 위해
+      // ItemDeleteNotification을 보내준다.
+      const deleteItems = this.items
+        .filter((item) => item.mapOn === true)
+        .map((item) => item.id);
+      itemDeleteNotification(this, deleteItems);
+      // 인벤토리에 들어간 아이템이 아닌 맵에 존재하는 아이템들을 삭제한다.
+      this.items = this.items.filter((item) => item.mapOn === false);
+    }
   }
 
   initGhosts() {
