@@ -80,9 +80,9 @@ export const PACKET_TYPE = {
     // 방 : 600번대
     CreateRoomRequest: 601,
     CreateRoomResponse: 602,
-    JoinRoomRequest: 603,
-    JoinRoomResponse: 604,
-    JoinRoomNotification: 605,
+    JoinRoomRequest: 604,
+    JoinRoomResponse: 605,
+    JoinRoomNotification: 606,
   },
   service: {
     ConnectServiceRequest: 1,

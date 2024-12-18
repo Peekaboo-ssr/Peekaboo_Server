@@ -9,10 +9,10 @@ export const createDedicatedHandler = async (serverInstance, data) => {
       inviteCode,
     };
 
-    console.log(
-      `세션 서비스에 등록된 dedicate: `,
-      serverInstance.gameSessions[gameSessionId],
-    );
+    // console.log(
+    //   `세션 서비스에 등록된 dedicate: `,
+    //   serverInstance.gameSessions[gameSessionId],
+    // );
   } catch (e) {
     console.log('에러 발생: ', e);
   }

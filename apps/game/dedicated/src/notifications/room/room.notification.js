@@ -11,12 +11,14 @@ export const joinRoomNotification = async (game, userId) => {
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.JoinRoomNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (user.id !== userId) {
+      const packet = createPacketS2G(
+        PACKET_TYPE.game.JoinRoomNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 

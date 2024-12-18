@@ -38,16 +38,17 @@ export class ScenarioManager {
     );
 
     // 응답 대기 (예: client가 특정 packetType에 대한 응답을 Promise로 반환하도록 구현)
-    const response = await this.client.waitForResponse(
-      this.CLIENT_PACKET.game.CreateRoomResponse,
-    );
+    // const response = await this.client.waitForResponse(
+    //   this.CLIENT_PACKET.game.CreateRoomResponse,
+    // );
 
     // response 내 inviteCode 추출
-    const inviteCode = response.inviteCode;
-    return inviteCode;
+    // const inviteCode = response.inviteCode;
+    // return inviteCode;
   }
 
   async joinRoomScenario(userData, inviteCode) {
+    console.log('방 참가 요청 보냄');
     const joinRoomData = {
       userId: userData.id,
       inviteCode,
