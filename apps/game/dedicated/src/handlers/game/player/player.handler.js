@@ -86,11 +86,11 @@ export const playerAttackedRequestHandler = async (
       characterState: user.character.state,
     };
 
-    const payload = {
+    const playerStatePayload = {
       playerStateInfo,
     };
 
-    playerStateChangeNotification(server.game, payload);
+    playerStateChangeNotification(server.game, playerStatePayload);
 
     // 만약 player가 죽었다면
     // 아이템을 바닥에 뿌린다.
