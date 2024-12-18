@@ -30,9 +30,6 @@ class TcpClient {
     this.client = net.connect(this.options, () => {
       // distributor에 해당 서비스 클라이언트를 생성 및 등록 요청
       if (this.onCreate) this.onCreate(this.options);
-      console.log(
-        '----------------------------깃 테스트여ㅁㅁㄴㅇㄹㄴㅇㄹㄴㅁㄹㄴㅁㅇㄹㄴㅁㅇㄹ---------------------------',
-      );
     });
 
     // 데이터 수신 처리
