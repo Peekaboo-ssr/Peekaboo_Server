@@ -136,13 +136,13 @@ class Game {
   // 스테이지 종료 로직
   async endStage() {
     if (this.state === config.clientState.gameState.INPROGRESS) {
-      // 게임 상태를 END로 변경한다.
-      await this.setState(config.clientState.gameState.END);
       // 귀신 및 게임 타이머 인터벌 삭제
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
-      // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
+      // 게임 상태를 END로 변경한다.
+      await this.setState(config.clientState.gameState.END);
+
       this.day -= 1;
       await stageEndNotification(this);
 
@@ -400,13 +400,13 @@ class Game {
     }
     this.remainingTime -= 1;
 
+    // 게임 남은 시간 동기화를 위해 remainingTimeNotification 패킷을 보낸다.
+    remainingTimeNotification(this);
+
     if (this.remainingTime <= 0) {
       console.log('게임 오버!!!!!!!!!');
       this.isRemainingTimeOver = true;
       this.endStage();
-    } else {
-      // 게임 남은 시간 동기화를 위해 remainingTimeNotification 패킷을 보낸다.
-      remainingTimeNotification(this);
     }
   }
 

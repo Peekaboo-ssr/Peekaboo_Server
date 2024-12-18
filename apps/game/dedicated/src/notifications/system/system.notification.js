@@ -59,7 +59,6 @@ export const stageEndNotification = async (game) => {
     y: 1,
     z: 22.5,
   };
-  console.log('이거 보내기 전 isRemainingTimeOver :', game.isRemainingTimeOver);
 
   const payload = {
     remainingDay: game.day,

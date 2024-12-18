@@ -22,7 +22,7 @@ jobs:
 
             # Docker Compose 재시작
             docker-compose down || true  # 에러 무시
-            docker-compose up --build -d
+            yarn docker-compose:build
 
             # 컨테이너 상태 확인
             docker ps
