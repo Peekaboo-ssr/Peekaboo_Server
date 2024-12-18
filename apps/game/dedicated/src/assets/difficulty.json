@@ -8,7 +8,7 @@
       "SpawnGhost": [1005],
       "MinGhostNumber": 1,
       "MaxGhostNumber": 1,
-      "TimeLimit": 60,
+      "TimeLimit": 300,
       "MinSoulItemNumber": 10,
       "MaxSoulItemNumber": 16
     },

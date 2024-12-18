@@ -1,7 +1,7 @@
 // 방 정보를 갱신하는 핸들러
 export const updateRoomInfoHandler = (server, payload) => {
   try {
-    console.log('payload: ', payload);
+    // console.log('payload: ', payload);
     const { gameSessionId, numberOfPlayer, latency, gameSessionState } =
       payload;
 
