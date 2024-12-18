@@ -1,0 +1,32 @@
+name: Simple Deploy to EC2
+
+on:
+  push:
+    branches: ['gitActionTest'] # 또는 원하는 브랜치
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 프로젝트 디렉토리로 이동
+            cd /home/ubuntu/Peekaboo_TestServer
+            git pull  # 최신 코드 가져오기
+
+            # Dedicated 서버 빌드
+            cd apps/game/dedicated
+            yarn docker:build
+            cd ../../..  # 프로젝트 루트로 돌아가기
+
+            # Docker Compose 재시작
+            docker-compose down || true  # 에러 무시
+            docker-compose up --build -d
+
+            # 컨테이너 상태 확인
+            docker ps
