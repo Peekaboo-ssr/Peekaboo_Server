@@ -2,7 +2,7 @@ name: Simple Deploy to EC2
 
 on:
   push:
-    branches: ['gitActionTest'] # 또는 원하는 브랜치
+    branches: ['dev'] # 또는 원하는 브랜치
 
 jobs:
   deploy:
@@ -18,7 +18,7 @@ jobs:
           script: |
             # 프로젝트 디렉토리로 이동
             cd /home/ubuntu/Peekaboo_TestServer
-            git pull origin gitActionTest # 최신 코드 가져오기
+            git pull origin dev # 최신 코드 가져오기
 
             # Dedicated 서버 빌드
             cd apps/game/dedicated
