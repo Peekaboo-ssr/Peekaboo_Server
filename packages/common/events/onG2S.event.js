@@ -86,10 +86,16 @@ class G2SEventHandler extends BaseEvent {
   }
 
   onEnd(socket, server) {
+    if (server.context.name === 'dedicated') {
+      server.event.isConnected === false;
+    }
     console.log('onClose', socket.remoteAddress, socket.remotePort);
   }
 
   onError(socket, err, server) {
+    if (server.context.name === 'dedicated') {
+      server.event.isConnected === false;
+    }
     console.log('onClose', socket.remoteAddress, socket.remotePort);
   }
 }

@@ -1,6 +1,13 @@
 version: '3.8'
 
 services:
+  dedicated:
+    build:
+      context: .
+      dockerfile: apps/game/dedicated/dockerfile
+    image: dedicated_server:latest
+    command: echo "Image build complete, no container execution."
+
   distributor:
     build:
       context: .

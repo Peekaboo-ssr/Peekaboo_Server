@@ -1,5 +1,5 @@
 // asset
-import { getGameAssets } from '../../init/load.assets.js';
+import { getGameAssets } from '../../load.assets.js';
 // managers
 import IntervalManager from '../managers/interval.manager.js';
 import GameQueueManager from '../managers/gameQueue.manager.js';

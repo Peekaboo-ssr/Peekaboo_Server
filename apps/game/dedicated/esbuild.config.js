@@ -1,5 +1,6 @@
 import { glob } from 'glob';
 import * as esbuild from 'esbuild';
+import { copy } from 'esbuild-plugin-copy'; // copy 함수 import 추가
 
 try {
   const entryPoints = await glob('src/**/*.js');
@@ -12,8 +13,15 @@ try {
     target: 'node18',
     format: 'esm',
     sourcemap: true,
+    plugins: [
+      copy({
+        assets: {
+          from: ['./src/**/*.json'],
+          to: ['./'],
+        },
+      }),
+    ],
     external: [
-      // 실제 사용하는 의존성
       '@peekaboo-ssr/classes',
       '@peekaboo-ssr/config',
       '@peekaboo-ssr/events',
@@ -25,7 +33,6 @@ try {
       'ioredis',
       'lodash',
       'long',
-      // protobuf 관련 (공통 의존성)
       'protobufjs',
       'protobufjs/minimal',
     ],

@@ -7,7 +7,7 @@ import D2SEventHandler from '@peekaboo-ssr/events/D2SEvent';
 import { handlers } from './handlers/index.js';
 import Game from './classes/models/game.class.js';
 import User from './classes/models/user.class.js';
-import { loadGameAssets } from './init/load.assets.js';
+import { loadGameAssets } from './load.assets.js';
 import { sendCreateRoomResponse } from './response/room/room.response.js';
 import IntervalManager from './classes/managers/interval.manager.js';
 import TcpClient from '@peekaboo-ssr/classes/TcpClient';
@@ -56,10 +56,12 @@ class DedicateServer {
               },
             );
             this.clientToDistributor.write(packet);
-            this.game.isCreated = true;
+            if (!this.game.isCreated) {
+              this.game.isCreated = true;
+              this.initializeGame(id, inviteCode, userId, clientKey);
+            }
           }
         }, 2000);
-        this.initializeGame(id, inviteCode, userId, clientKey);
       },
     );
   }

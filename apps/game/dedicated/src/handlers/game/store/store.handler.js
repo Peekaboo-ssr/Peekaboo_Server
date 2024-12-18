@@ -1,6 +1,5 @@
 import Item from '../../../classes/models/item.class.js';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
-import { extractSoulNotification } from '../../../notifications/extractor/extractor.notification.js';
 import { itemPurchaseNotification } from '../../../notifications/item/item.notification.js';
 import { itemPurchaseResponse } from '../../../response/item/item.response.js';
 import handleError from '@peekaboo-ssr/error/handleError';
@@ -39,16 +38,14 @@ export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
       // TODO : HP 증가했다고 알려주는 Response 필요 =>
     } else {
       // 아이템의 SpaceValue가 1이상이면 랜턴
-      let newItemId;
-      if (server.game.items.length === 0) {
-        newItemId = 1;
-      } else {
-        newItemId = server.game.items[server.game.items.length - 1].id + 1;
-      }
+      const newItemId = server.game.getUniqueItemId();
 
       // 상점 근처에 있는 고정된 포지션 상점에서 구입시 바닥에 떨구는 형식으로 하기로 함
-      // 임시로 유저 캐릭터 포지션
-      const storePosition = user.character.position.getPosition();
+      const storePosition = {
+        x: -14.0,
+        y: 0.3,
+        z: 23.0,
+      };
 
       const item = new Item(newItemId, itemTypeId, storePosition);
 
