@@ -41,7 +41,7 @@ export const extractorSoulHandler = async (
         return;
       }
       const soulItemData = server.game.gameAssets.item.data.find(
-        (data) => data.id === item.typeId,
+        (data) => data.Id === item.typeId,
       );
       soulValue += soulItemData.Value;
       // inventory에서 제거
