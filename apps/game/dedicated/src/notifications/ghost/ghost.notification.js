@@ -17,7 +17,7 @@ export const ghostsLocationNotification = (game) => {
     const ghostMoveInfo = {
       ghostId: ghost.id,
       position: ghost.position.getPosition(),
-      // rotation: ghost.rotation.getRotation(),
+      rotation: ghost.rotation.getRotation(),
     };
 
     return ghostMoveInfo;
@@ -26,6 +26,7 @@ export const ghostsLocationNotification = (game) => {
   const payload = {
     ghostMoveInfos,
   };
+  console.log('@@@@ ghost positions: ', payload);
 
   // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
   game.users.forEach((user) => {

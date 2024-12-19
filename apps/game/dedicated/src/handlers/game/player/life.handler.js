@@ -17,6 +17,7 @@ export const lifeUpdateHandler = (socket, clientKey, payload, server) => {
 
     if (user.character.state === CHARACTER_STATE.DIED) {
       user.character.life = 1;
+      user.character.state = CHARACTER_STATE.IDLE;
     }
 
     const lifePayload = {

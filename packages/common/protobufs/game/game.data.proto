@@ -45,6 +45,7 @@ message GhostInfo {
 message GhostMoveInfo {
   uint32 ghostId = 1;
   Position position = 2;
+  Rotation rotation = 3;
 }
 
 message GhostStateInfo {
