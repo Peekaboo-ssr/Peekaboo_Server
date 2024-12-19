@@ -295,12 +295,6 @@ class Game {
     // 위치 및 상태초기화
     this.users.forEach((user) => {
       user.character.position.updateClassPosition(startPosition);
-
-      // Q. 사망하고 다시 스폰된 플레이어 생명력을 통지할지??
-      // => lifeResponse() 모두 보내주도록 설정
-      if (user.character.state === CHARACTER_STATE.DIED) {
-        user.character.life = 1;
-      }
       user.character.state = CHARACTER_STATE.IDLE;
     });
   }

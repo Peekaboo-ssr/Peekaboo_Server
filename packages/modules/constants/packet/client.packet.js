@@ -39,6 +39,7 @@ const CLIENT_PACKET = {
     // 플레이어 : 100번대
     PlayerAttackedRequest: 101,
     PlayerLifeResponse: 102,
+    LifeUpdateRequest: 103,
 
     // 귀신 : 200번대
     GhostSpecialStateRequest: 201,
