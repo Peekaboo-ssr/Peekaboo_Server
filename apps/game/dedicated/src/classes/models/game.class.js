@@ -296,8 +296,8 @@ class Game {
     // 위치 및 상태초기화
     this.users.forEach((user) => {
       user.character.position.updateClassPosition(startPosition);
-      user.character.state = CHARACTER_STATE.IDLE;
       if (user.character.state === CHARACTER_STATE.DIED) {
+        user.character.state = CHARACTER_STATE.IDLE;
         user.character.life = 1;
       }
     });
