@@ -23,6 +23,8 @@ try {
       'protobufjs/minimal',
       'express',
       'prom-client',
+      'fs',
+      'pidusage',
     ],
     define: {
       'global.XMLHttpRequest': 'undefined',

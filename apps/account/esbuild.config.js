@@ -23,6 +23,8 @@ try {
       'bcrypt',
       'jsonwebtoken',
       'uuid',
+      'fs',
+      'pidusage',
       // protobuf 관련 (공통 의존성)
       'protobufjs',
       'protobufjs/minimal',
