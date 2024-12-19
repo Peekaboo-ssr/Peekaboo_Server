@@ -265,7 +265,7 @@ class Game {
 
   initItems() {
     if (this.items.length === 0) return;
-    if (isRemainingTimeOver) {
+    if (this.isRemainingTimeOver) {
       // 전부 죽거나, 타임아웃 상태
       const deleteItems = this.items.map((item) => item.id);
       itemDeleteNotification(this, deleteItems);
@@ -297,6 +297,7 @@ class Game {
       user.character.position.updateClassPosition(startPosition);
 
       // Q. 사망하고 다시 스폰된 플레이어 생명력을 통지할지??
+      // => lifeResponse() 모두 보내주도록 설정
       if (user.character.state === CHARACTER_STATE.DIED) {
         user.character.life = 1;
       }

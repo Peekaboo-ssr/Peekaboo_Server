@@ -22,7 +22,7 @@ class Ghost {
    * 귀신 타입에 따른 공격 함수입니다.
    * @param {*} user 공격 당할 플레이어(유저)
    */
-  attack(user) {
+  async attack(user) {
     switch (this.ghostTypeId) {
       case GHOST_TYPE_ID.SMILING_GENTLE_MAN:
         {

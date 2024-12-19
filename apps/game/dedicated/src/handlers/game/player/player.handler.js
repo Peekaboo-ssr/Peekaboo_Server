@@ -96,22 +96,23 @@ export const playerAttackedRequestHandler = async (
       playerStateInfo,
     };
 
+    console.log('플레이어 상태 변경: ', playerStatePayload);
     playerStateChangeNotification(server.game, playerStatePayload);
 
     // 만약 player가 죽었다면
     // 아이템을 바닥에 뿌린다.
     // 스테이지 종료를 검사한다.
     if (user.character.state === CHARACTER_STATE.DIED) {
-      const length = user.character.inventory.slot.length;
+      // const length = user.character.inventory.slot.length;
 
-      for (let i = 0; i < length; i++) {
-        const itemId = user.character.inventory.removeInventorySlot(i);
-        if (!itemId) {
-          // 여기 나중에 합쳐줘도 괜찮을 것 같음.
-          itemDiscardResponse(socket, i + 1);
-          itemDiscardNotification(user.id, itemId);
-        }
-      }
+      // for (let i = 0; i < length; i++) {
+      //   const itemId = user.character.inventory.removeInventorySlot(i);
+      //   if (!itemId) {
+      //     // 여기 나중에 합쳐줘도 괜찮을 것 같음.
+      //     itemDiscardResponse(socket, i + 1);
+      //     itemDiscardNotification(user.id, itemId);
+      //   }
+      // }
 
       if (server.game.checkStageEnd()) {
         // 스테이지 종료 조건이 만족했다면, 스테이지를 종료시킨다.
