@@ -8,6 +8,7 @@ import { playerStateChangeNotification } from '../../../notifications/player/pla
 import { itemDiscardResponse } from '../../../response/item/item.response.js';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import { lifeResponse } from '../../../response/player/life.response.js';
 
 export const playerStateChangeRequestHandler = async (
   socket,
@@ -79,12 +80,7 @@ export const playerAttackedRequestHandler = async (
       isAttacked: true,
     };
 
-    const packet = createPacketS2G(
-      config.clientPacket.dedicated.PlayerLifeResponse,
-      clientKey,
-      lifePayload,
-    );
-    socket.write(packet);
+    lifeResponse(socket, clientKey, lifePayload);
 
     const playerStateInfo = {
       userId: userId,

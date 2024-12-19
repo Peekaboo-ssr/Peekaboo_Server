@@ -332,7 +332,6 @@ message S2C_StartStageNotification {
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
-  bool isRemainingTimeOver = 3;
 }
 
 message S2C_SubmissionEndNotification {

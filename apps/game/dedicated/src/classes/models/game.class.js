@@ -32,6 +32,7 @@ import {
   MAX_DOOR_NUM,
 } from '../../constants/game.js';
 import { CHARACTER_STATE } from '../../constants/state.js';
+import { lifeResponse } from '../../response/player/life.response.js';
 
 class Game {
   constructor(id, inviteCode) {
@@ -423,9 +424,13 @@ class Game {
 
     if (this.remainingTime <= 0) {
       console.log('게임 오버!!!!!!!!!');
-      // Q. 클라에 죽은 상태 변경을 안보내도 되는지??
       this.users.forEach((user) => {
         user.character.state = CHARACTER_STATE.DIED;
+        const lifePayload = {
+          life: user.character.life,
+          isAttacked: false,
+        };
+        lifeResponse(this.socket, user.clientKey, lifePayload);
       });
       this.isRemainingTimeOver = true;
       this.endStage();
