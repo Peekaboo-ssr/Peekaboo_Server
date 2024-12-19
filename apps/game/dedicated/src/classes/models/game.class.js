@@ -350,6 +350,11 @@ class Game {
       const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
       const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
       copyGhostSpawnPositions.splice(randomPosIdx, 1);
+      const ghostSpeed = this.gameAssets.ghost.data.find((ghost) => {
+        if (ghost.Id === ghostTypeId) {
+          return ghost.Speed;
+        }
+      });
       const rotation = { x: 0, y: 0, z: 0 };
       const moveInfo = {
         position: ghostPosition.getPosition(),
@@ -360,7 +365,9 @@ class Game {
         ghostTypeId,
         moveInfo,
       };
-      this.ghosts.push(new Ghost(ghostId, ghostTypeId, ghostPosition));
+      this.ghosts.push(
+        new Ghost(ghostId, ghostTypeId, ghostPosition, 0, ghostSpeed),
+      );
       ghostInfos.push(ghostInfo);
     }
 

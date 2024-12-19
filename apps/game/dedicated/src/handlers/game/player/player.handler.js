@@ -29,6 +29,17 @@ export const playerStateChangeRequestHandler = async (
     ) {
       user.character.state = playerStateInfo.characterState;
 
+      switch (playerStateInfo.characterState) {
+        case CHARACTER_STATE.RUN:
+          user.character.speed = server.game.gameAssets.player.data[0].RunSpeed;
+          break;
+        case CHARACTER_STATE.JUMP:
+          break;
+        default:
+          user.character.speed =
+            server.game.gameAssets.player.data[0].WalkSpeed;
+      }
+
       playerStateChangeNotification(server.game, payload);
 
       // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
