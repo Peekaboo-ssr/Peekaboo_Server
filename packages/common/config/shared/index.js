@@ -16,6 +16,7 @@ import {
   REDIS_HOST,
   REDIS_PORT,
   REDIS_PASSWORD,
+  MONITOR_HOST,
   EC1_HOST,
   DISTRIBUTOR_PORT,
   CLIENT_VERSION,
@@ -24,6 +25,9 @@ import {
 
 const SHARED_CONFIG = {
   version: CLIENT_VERSION,
+  monitor: {
+    host: MONITOR_HOST,
+  },
   distributor: {
     host: EC1_HOST,
     port: DISTRIBUTOR_PORT,
