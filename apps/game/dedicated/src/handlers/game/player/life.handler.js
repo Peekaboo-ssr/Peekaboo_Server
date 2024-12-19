@@ -15,11 +15,6 @@ export const lifeUpdateHandler = (socket, clientKey, payload, server) => {
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
-    if (user.character.state === CHARACTER_STATE.DIED) {
-      user.character.life = 1;
-      user.character.state = CHARACTER_STATE.IDLE;
-    }
-
     const lifePayload = {
       life: user.character.life,
       isAttacked: false,
