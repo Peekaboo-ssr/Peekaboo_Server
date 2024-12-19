@@ -406,7 +406,7 @@ class Game {
     this.ghosts.forEach((ghost, index) => {
       // user.printUserInfo()
       // - pos, rot, latency를 출력해준다.
-      console.log(`[${index + 1}}] Ghost : ${ghost.printInfo()}`);
+      console.log(`[${index + 1}] Ghost : ${ghost.printInfo()}`);
     });
     console.log(
       `---------------------------------------------------------------------------------------------------------`,
@@ -427,7 +427,7 @@ class Game {
       this.users.forEach((user) => {
         user.character.state = CHARACTER_STATE.DIED;
         const lifePayload = {
-          life: user.character.life,
+          life: 0,
           isAttacked: false,
         };
         lifeResponse(this.socket, user.clientKey, lifePayload);
