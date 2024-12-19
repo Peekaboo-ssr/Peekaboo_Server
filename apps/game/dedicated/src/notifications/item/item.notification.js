@@ -23,12 +23,14 @@ export const itemUseNotification = (game, userId, itemId) => {
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      config.clientPacket.dedicated.ItemUseNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (user.id !== userId) {
+      const packet = createPacketS2G(
+        config.clientPacket.dedicated.ItemUseNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 
