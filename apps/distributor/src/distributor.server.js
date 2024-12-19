@@ -26,7 +26,7 @@ class Distributor extends TcpServer {
 
       for (const [key, value] of Object.entries(serviceMap.microservices)) {
         const serviceKey =
-          '127.0.0.1:' + (Number(value.info.port) + 2000).toString();
+          config.monitor.host + (Number(value.info.port) + 2000).toString();
         targets.push({
           targets: [serviceKey],
           labels: { job: value.info.name },
