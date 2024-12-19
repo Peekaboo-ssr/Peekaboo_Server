@@ -297,6 +297,9 @@ class Game {
     this.users.forEach((user) => {
       user.character.position.updateClassPosition(startPosition);
       user.character.state = CHARACTER_STATE.IDLE;
+      if (user.character.state === CHARACTER_STATE.DIED) {
+        user.character.life = 1;
+      }
     });
   }
 
