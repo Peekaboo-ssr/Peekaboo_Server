@@ -19,7 +19,6 @@ import { ghostStateChangeRequestHandler } from './game/ghost/ghostStateChange.ha
 import { extractorSoulHandler } from './game/Extractor/extractor.handler.js';
 import { startStageRequestHandler } from './game/system/startStage.handler.js';
 import { ghostSpecialStateRequestHandler } from './game/ghost/ghostSpecialState.handler.js';
-import { ghostSpawnHandler } from './game/ghost/ghostSpawn.handler.js';
 import { itemCreateHandler } from './game/item/itemCreate.handler.js';
 import { itemPurchaseHandler } from './game/store/store.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
@@ -96,10 +95,6 @@ export const handlers = {
     },
     [config.clientPacket.dedicated.GhostSpecialStateRequest]: {
       handler: ghostSpecialStateRequestHandler,
-      protoType: 'common.GamePacket',
-    },
-    [config.clientPacket.dedicated.GhostSpawnRequest]: {
-      handler: ghostSpawnHandler,
       protoType: 'common.GamePacket',
     },
     [config.clientPacket.dedicated.ItemCreateRequest]: {
