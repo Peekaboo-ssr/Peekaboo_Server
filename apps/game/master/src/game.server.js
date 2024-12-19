@@ -42,7 +42,7 @@ async function initializeMetrics() {
 
   // 서비스 설정
   const serviceName = 'account'; // 현재 서비스 이름
-  const PORT = Number(config.account.port) + 2000; // Prometheus HTTP 포트
+  const PORT = Number(config.game.port) + 2000; // Prometheus HTTP 포트
 
   // 디폴트 레이블 등록
   register.setDefaultLabels({
