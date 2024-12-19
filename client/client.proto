@@ -118,6 +118,7 @@ message RoomInfo {
   uint32 latency = 4;
 }
 
+
 message C2S_PlayerMoveRequest {
   PlayerMoveInfo playerMoveInfo = 1;
 }
@@ -172,8 +173,13 @@ message C2S_PlayerAttackedRequest {
   uint32 ghostId = 2;
 } 
 
+message C2S_LifeUpdateRequest {
+
+}
+
 message S2C_PlayerLifeResponse {
   uint32 life= 1;
+  bool isAttacked = 2;
 }
 
 message C2S_GhostSpecialStateRequest {
@@ -253,7 +259,7 @@ message C2S_ItemDisuseRequest {
 }
 
 message S2C_ItemDisuseNotification {
-  uint32 userId = 1;
+  string userId = 1;
   uint32 itemId  = 2;
 }
 
@@ -420,7 +426,7 @@ message S2C_JoinRoomNotification {
 
 message GamePacket {
   oneof payload {
-   C2S_PlayerMoveRequest playerMoveRequest = 1;
+    C2S_PlayerMoveRequest playerMoveRequest = 1;
     S2C_PlayerMoveNotification playerMoveNotification = 2;
     C2S_GhostMoveRequest ghostMoveRequest = 3;
     S2C_GhostMoveNotification ghostMoveNotification = 4;
@@ -435,6 +441,7 @@ message GamePacket {
 
     C2S_PlayerAttackedRequest playerAttackedRequest = 101;
     S2C_PlayerLifeResponse playerLifeResponse = 102;
+    C2S_LifeUpdateRequest lifeUpdateRequest = 103;
 
     C2S_GhostSpecialStateRequest ghostSpecialStateRequest = 201;
     S2C_GhostSpecialStateNotification ghostSpecialStateNotification = 202;

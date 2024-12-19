@@ -31,8 +31,6 @@ export const playerStateChangeRequestHandler = async (
 
       playerStateChangeNotification(server.game, payload);
 
-      // console.log(`player State : ${playerStateInfo.characterState}`);
-
       // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
       if (user.character.state === CHARACTER_STATE.EXIT) {
         await server.game.endStage();
@@ -78,6 +76,7 @@ export const playerAttackedRequestHandler = async (
 
     const lifePayload = {
       life: user.character.life,
+      isAttacked: true,
     };
 
     const packet = createPacketS2G(
@@ -99,10 +98,9 @@ export const playerAttackedRequestHandler = async (
     console.log('플레이어 상태 변경: ', playerStatePayload);
     playerStateChangeNotification(server.game, playerStatePayload);
 
-    // 만약 player가 죽었다면
-    // 아이템을 바닥에 뿌린다.
-    // 스테이지 종료를 검사한다.
+    // 만약 player가 죽었다면 아이템을 바닥에 뿌리고, 스테이지 종료를 검사한다.
     if (user.character.state === CHARACTER_STATE.DIED) {
+      // TODO: 테스트 필요
       // const length = user.character.inventory.slot.length;
 
       // for (let i = 0; i < length; i++) {

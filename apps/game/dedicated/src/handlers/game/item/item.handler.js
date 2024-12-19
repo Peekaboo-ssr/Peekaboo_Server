@@ -111,6 +111,34 @@ export const itemUseRequestHandler = async (
   }
 };
 
+export const itemDisuseRequestHandler = async (
+  socket,
+  clientKey,
+  payload,
+  server,
+) => {
+  try {
+    const { itemId } = payload;
+
+    const user = getUserByClientKey(server.game.users, clientKey);
+    if (!user) {
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
+    }
+
+    const item = server.game.getItem(itemId);
+
+    if (!item) {
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
+    }
+
+    item.on = false;
+
+    itemDisuseNotification(server.game, user.id, itemId);
+  } catch (e) {
+    handleError(e);
+  }
+};
+
 export const itemDiscardRequestHandler = async (
   socket,
   clientKey,
@@ -148,34 +176,6 @@ export const itemDiscardRequestHandler = async (
     itemDiscardResponse(user.clientKey, server.game.socket, inventorySlot);
 
     itemDiscardNotification(server.game, user.id, itemId);
-  } catch (e) {
-    handleError(e);
-  }
-};
-
-export const itemDisuseRequestHandler = async (
-  socket,
-  clientKey,
-  payload,
-  server,
-) => {
-  try {
-    const { itemId } = payload;
-
-    const user = getUserByClientKey(server.game.users, clientKey);
-    if (!user) {
-      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
-    }
-
-    const item = server.game.getItem(itemId);
-
-    if (!item) {
-      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
-    }
-
-    item.on = false;
-
-    itemDisuseNotification(server.game, user.id, itemId);
   } catch (e) {
     handleError(e);
   }

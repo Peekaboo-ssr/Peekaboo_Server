@@ -41,6 +41,7 @@ const CLIENT_PACKET_MAPS = {
   // 플레이어 : 100번대
   [clientPacket.dedicated.PlayerAttackedRequest]: 'playerAttackedRequest',
   [clientPacket.dedicated.PlayerLifeResponse]: 'playerLifeResponse',
+  [clientPacket.dedicated.LifeUpdateRequest]: 'lifeUpdateRequest',
 
   // 귀신 : 200번대
   [clientPacket.dedicated.GhostSpecialStateRequest]: 'ghostSpecialStateRequest',

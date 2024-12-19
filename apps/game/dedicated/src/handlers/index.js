@@ -25,6 +25,7 @@ import { itemPurchaseHandler } from './game/store/store.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 import { exitDedicatedHandler } from './service/exitDedicate.handler.js';
 import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
+import { lifeUpdateHandler } from './game/player/life.handler.js';
 
 export const handlers = {
   client: {
@@ -109,6 +110,10 @@ export const handlers = {
     /*-------------------------권영현 작업--------------------------*/
     [config.clientPacket.dedicated.ItemPurchaseRequest]: {
       handler: itemPurchaseHandler,
+      protoType: 'common.GamePacket',
+    },
+    [config.clientPacket.dedicated.LifeUpdateRequest]: {
+      handler: lifeUpdateHandler,
       protoType: 'common.GamePacket',
     },
   },

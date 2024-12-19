@@ -21,6 +21,7 @@ message GamePacket {
 
     C2S_PlayerAttackedRequest playerAttackedRequest = 101;
     S2C_PlayerLifeResponse playerLifeResponse = 102;
+    C2S_LifeUpdateRequest lifeUpdateRequest = 103;
 
     C2S_GhostSpecialStateRequest ghostSpecialStateRequest = 201;
     S2C_GhostSpecialStateNotification ghostSpecialStateNotification = 202;
