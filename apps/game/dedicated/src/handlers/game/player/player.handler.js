@@ -1,13 +1,12 @@
-import config from '@peekaboo-ssr/config/game';
 import { CHARACTER_STATE } from '../../../constants/state.js';
 import CustomError from '@peekaboo-ssr/error/CustomError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import handleError from '@peekaboo-ssr/error/handleError';
-import { itemDiscardNotification } from '../../../notifications/item/item.notification.js';
 import { playerStateChangeNotification } from '../../../notifications/player/player.notification.js';
-import { itemDiscardResponse } from '../../../response/item/item.response.js';
-import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import {
+  getUserByClientKey,
+  getUserByUserID,
+} from '../../../sessions/user.sessions.js';
 import { lifeResponse } from '../../../response/player/life.response.js';
 
 export const playerStateChangeRequestHandler = async (
@@ -46,6 +45,7 @@ export const playerStateChangeRequestHandler = async (
   }
 };
 
+// !! 호스트가 맞은 유저의 아이디를 보내준다.
 export const playerAttackedRequestHandler = async (
   socket,
   clientKey,
@@ -55,7 +55,7 @@ export const playerAttackedRequestHandler = async (
   try {
     const { userId, ghostId } = payload;
 
-    const user = getUserByClientKey(server.game.users, clientKey);
+    const user = getUserByUserID(server.game.users, userId);
     if (!user) {
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
@@ -80,10 +80,10 @@ export const playerAttackedRequestHandler = async (
       isAttacked: true,
     };
 
-    lifeResponse(socket, clientKey, lifePayload);
+    lifeResponse(socket, user.clientKey, lifePayload);
 
     const playerStateInfo = {
-      userId: userId,
+      userId,
       characterState: user.character.state,
     };
 
