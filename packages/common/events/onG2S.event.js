@@ -67,8 +67,7 @@ class G2SEventHandler extends BaseEvent {
           if (
             packetType !== clientPacket.dedicated.PlayerMoveRequest &&
             packetType !== clientPacket.dedicated.GhostMoveRequest &&
-            packetType !== clientPacket.dedicated.PingResponse &&
-            packetType !== clientPacket.dedicated.PlayerStateChangeRequest
+            packetType !== clientPacket.dedicated.PingResponse
           )
             console.log(
               `#@!RECV!@# PacketType : ${
