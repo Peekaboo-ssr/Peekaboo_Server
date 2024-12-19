@@ -13,14 +13,73 @@ export const ghostsLocationNotification = (game) => {
   }
 
   // 보내줄 데이터 추출하여 정리
-  const ghostMoveInfos = game.ghosts.map((ghost) => {
-    const ghostMoveInfo = {
-      ghostId: ghost.id,
-      position: ghost.position.getPosition(),
-      rotation: ghost.rotation.getRotation(),
-    };
+  // const ghostMoveInfos = game.ghosts.map((ghost) => {
+  //   const ghostMoveInfo = {
+  //     ghostId: ghost.id,
+  //     position: ghost.position.getPosition(),
+  //     rotation: ghost.rotation.getRotation(),
+  //   };
 
-    return ghostMoveInfo;
+  //   return ghostMoveInfo;
+  // });
+
+  const avgLatency = game.getAvgLatency();
+
+  const ghostMoveInfos = game.ghosts.map((ghost) => {
+    if (ghost.state !== _STATE.DIED || ghost.state !== _STATE.EXIT) {
+      const lastPosition = ghost.lastPosition; // 움직이기 전 좌표
+      const position = ghost.position; //현 좌표
+      const rotation = ghost.rotation;
+
+      if (
+        position.x === lastPosition.x &&
+        position.y === lastPosition.y &&
+        position.z === lastPosition.z
+      ) {
+        return {
+          ghostId: ghost.id,
+          position: position.getPosition(),
+          rotation: rotation.getRotation(),
+        };
+      }
+
+      // 레이턴시를 어떻게 하지
+      const timeDiff = Math.floor(
+        (Date.now() - ghost.lastUpdateTime + avgLatency) / 1000,
+      );
+
+      const distance = ghost.speed * timeDiff;
+      const directionX = position.x - lastPosition.x;
+      const directionZ = position.z - lastPosition.z;
+      const vectorSize = Math.sqrt(
+        Math.pow(directionX, 2) + Math.pow(directionZ, 2),
+      );
+      if (vectorSize < 1) {
+        return {
+          ghostId: ghost.id,
+          position: position.getPosition(),
+          rotation: rotation.getRotation(),
+        };
+      }
+
+      const unitVectorX = directionX / vectorSize;
+      const unitVectorZ = directionZ / vectorSize;
+
+      // 데드레커닝으로 구한 미래의 좌표
+      const predictionPosition = {
+        x: position.x + unitVectorX * distance,
+        y: position.y,
+        z: position.z + unitVectorZ * distance,
+      };
+
+      const ghostMoveInfo = {
+        ghostId: ghost.id,
+        position: predictionPosition,
+        rotation: rotation.getRotation(),
+      };
+
+      return ghostMoveInfo;
+    }
   });
 
   const payload = {
@@ -28,7 +87,7 @@ export const ghostsLocationNotification = (game) => {
   };
   console.log('@@@@ ghost positions: ', payload);
 
-  // 해당 게임 세션에 참여한 유저들에게 notification 보내주기
+  // 호스트를 제외한 유저들에게 notification 보내주기
   game.users.forEach((user) => {
     if (user.id === game.hostId) {
       return;

@@ -28,7 +28,7 @@ export const usersLocationNotification = (game) => {
       }
 
       const timeDiff = Math.floor(
-        (Date.now() - user.character.lastUpdateTime + game.getAvgLatency()) /
+        (Date.now() - user.character.lastUpdateTime + user.character.latency) /
           1000,
       );
 
