@@ -7,6 +7,7 @@ class Ghost {
     this.ghostTypeId = ghostTypeId;
     this.position = new Position(position.x, position.y, position.z);
     this.rotation = new Rotation(0, 0, 0);
+    this.lastPosition = new Position(position.x, position.y, position.z);
     this.state = state;
     this.speed = speed;
   }
