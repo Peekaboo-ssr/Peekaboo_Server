@@ -350,12 +350,10 @@ class Game {
       const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
       const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
       copyGhostSpawnPositions.splice(randomPosIdx, 1);
-      const ghostSpeed = this.gameAssets.ghost.data.find((ghost) => {
-        if (ghost.Id === ghostTypeId) {
-          return ghost.Speed;
-        }
+      const ghost = this.gameAssets.ghost.data.find((ghost) => {
+        ghost.id === ghostTypeId;
       });
-      console.log('생성된 귀신의 속도: ', ghostSpeed);
+      console.log('생성된 귀신의 속도: ', ghost.Speed);
       const rotation = { x: 0, y: 0, z: 0 };
       const moveInfo = {
         position: ghostPosition.getPosition(),
@@ -367,7 +365,7 @@ class Game {
         moveInfo,
       };
       this.ghosts.push(
-        new Ghost(ghostId, ghostTypeId, ghostPosition, 0, ghostSpeed),
+        new Ghost(ghostId, ghostTypeId, ghostPosition, 0, ghost.Speed),
       );
       ghostInfos.push(ghostInfo);
     }
