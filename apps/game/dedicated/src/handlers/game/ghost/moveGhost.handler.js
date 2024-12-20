@@ -17,17 +17,18 @@ export const moveGhostRequestHandler = (socket, clientKey, payload, server) => {
     // 해당 게임 세션에 고스트들의 정보 저장
     ghostMoveInfos.forEach((ghostMoveInfo) => {
       const { ghostId, position, rotation } = ghostMoveInfo;
+      if (position.x !== null && position.z !== null) {
+        const ghost = server.game.getGhost(ghostId);
+        if (!ghost) {
+          console.error('해당 귀신 정보가 존재하지 않습니다.');
+        } else {
+          ghost.lastPosition.updateClassPosition(ghost.position);
 
-      const ghost = server.game.getGhost(ghostId);
-      if (!ghost) {
-        console.error('해당 귀신 정보가 존재하지 않습니다.');
-      } else {
-        ghost.lastPosition.updateClassPosition(ghost.position);
+          ghost.position.updatePosition(position.x, position.y, position.z);
+          ghost.rotation.updateRotation(rotation.x, rotation.y, rotation.z);
 
-        ghost.position.updatePosition(position.x, position.y, position.z);
-        ghost.rotation.updateRotation(rotation.x, rotation.y, rotation.z);
-
-        ghost.lastUpdateTime = Date.now();
+          ghost.lastUpdateTime = Date.now();
+        }
       }
     });
   } catch (e) {
