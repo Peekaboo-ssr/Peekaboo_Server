@@ -83,8 +83,6 @@ export const ghostsLocationNotification = (game) => {
   const payload = {
     ghostMoveInfos,
   };
-  console.log('@@@@ ghost positions: ', JSON.stringify(payload));
-
   // 호스트를 제외한 유저들에게 notification 보내주기
   game.users.forEach((user) => {
     if (user.id === game.hostId) {

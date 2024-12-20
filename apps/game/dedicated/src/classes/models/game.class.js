@@ -97,7 +97,7 @@ class Game {
       const initSubMissionData = this.gameAssets.submission.data[0];
       this.submissionId = initSubMissionData.Id;
       this.submissionDay = initSubMissionData.Day;
-      this.goalSoulAmount = initSubMissionData.SubmissionValue;
+      this.goalSoulCredit = initSubMissionData.SubmissionValue;
       this.soulCredit = 1000;
       this.isInit = true;
     }
@@ -471,7 +471,9 @@ class Game {
   async endSubmission() {
     // submission 목표치 검증
     if (this.soulCredit >= this.goalSoulCredit) {
-      console.log(this.soulCredit, ' => submission 성공');
+      console.log(
+        `${this.soulCredit}/${this.goalSoulCredit} => submission 성공`,
+      );
       // 목표치를 모았다면 성공
       this.day += SUBMISSION_DURATION;
       const nextSubMissionData = this.gameAssets.submission.data.find(
@@ -480,7 +482,7 @@ class Game {
       if (!nextSubMissionData) {
         console.log(`다음 서브미션이 존재하지 않습니다.`);
       }
-      // 영혼 수집량을 0으로 초기화 or goalSoulAmount만큼 빼주기
+      // 영혼 수집량을 0으로 초기화 or goalSoulCredit만큼 빼주기
       this.soulCredit -= this.goalSoulCredit;
       // 영혼 할당량 뺀 다음 Notification 날리기
       extractSoulNotification(this);
@@ -490,7 +492,7 @@ class Game {
       return true;
     } else {
       console.log(
-        `${this.soulCredit}/${this.goalSoulAmount} => submission 실패`,
+        `${this.soulCredit}/${this.goalSoulCredit} => submission 실패`,
       );
       console.log('현재 게임 상태: ', this.state);
       this.state = config.clientState.gameState.FAIL;
