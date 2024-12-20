@@ -138,6 +138,7 @@ class Game {
 
   // 스테이지 종료 로직
   async endStage() {
+    console.log('endStage 호출 당시 game state: ', this.state);
     if (this.state === config.clientState.gameState.INPROGRESS) {
       // 귀신 및 게임 타이머 인터벌 삭제 (이미 전 endStage 삭제됐음) - 에러 발생 가능성 있음
       IntervalManager.getInstance().removeGhostsInterval(this.id);
@@ -156,6 +157,7 @@ class Game {
     }
     // 서브미션 실패로 인한 endStage()로 판단
     else if (this.state === config.clientState.gameState.FAIL) {
+      console.log('submission 실패로 인해 들어온 endStage...');
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
       await stageEndNotification(this);
@@ -469,6 +471,7 @@ class Game {
   async endSubmission() {
     // submission 목표치 검증
     if (this.soulCredit >= this.goalSoulCredit) {
+      console.log(this.soulCredit, ' => submission 성공');
       // 목표치를 모았다면 성공
       this.day += SUBMISSION_DURATION;
       const nextSubMissionData = this.gameAssets.submission.data.find(
@@ -486,6 +489,10 @@ class Game {
       this.goalSoulCredit = nextSubMissionData.SubmissionValue;
       return true;
     } else {
+      console.log(
+        `${this.soulCredit}/${this.goalSoulAmount} => submission 실패`,
+      );
+      console.log('현재 게임 상태: ', this.state);
       this.state = config.clientState.gameState.FAIL;
       // initStage()가 이후에 호출될 때 완전 초기로 세팅
       this.isInit = false;

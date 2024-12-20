@@ -111,19 +111,12 @@ export const createPacketS2G = (packetType, clientKey, payloadData = {}) => {
 
   // Send Logging Test
   // PingRequest, PlayerMoveNotification, GhostMoveNotification는 제외
-  // if (
-  //   packetType !== clientPacket.dedicated.PlayerMoveNotification &&
-  //   packetType !== clientPacket.dedicated.GhostMoveNotification &&
-  //   packetType !== clientPacket.dedicated.PingRequest &&
-  //   packetType !== clientPacket.dedicated.PlayerStateChangeNotification
-  // ) {
-  //   console.log(
-  //     `#@!SEND!@# PacketType : ${
-  //       clientProtoNames[packetType]
-  //     } => Payload ${JSON.stringify(oneOfPayloadData)}`,
-  //   );
-  // }
-  if (packetType === clientPacket.dedicated.PlayerMoveNotification) {
+  if (
+    packetType !== clientPacket.dedicated.PlayerMoveNotification &&
+    packetType !== clientPacket.dedicated.GhostMoveNotification &&
+    packetType !== clientPacket.dedicated.PingRequest &&
+    packetType !== clientPacket.dedicated.PlayerStateChangeNotification
+  ) {
     console.log(
       `#@!SEND!@# PacketType : ${
         clientProtoNames[packetType]
