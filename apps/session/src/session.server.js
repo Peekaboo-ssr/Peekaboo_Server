@@ -8,7 +8,7 @@ import { handlers } from './handlers/index.js';
 import cluster from 'cluster';
 import express from 'express';
 import client from 'prom-client';
-import os from 'os';
+import pidusage from 'pidusage';
 
 class SessionServer extends TcpServer {
   constructor() {
