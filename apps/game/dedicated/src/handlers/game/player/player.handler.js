@@ -111,6 +111,7 @@ export const playerAttackedRequestHandler = async (
 
       for (let i = 0; i < length; i++) {
         const itemId = user.character.inventory.removeInventorySlot(i);
+        
         if (itemId) {
           // 여기 나중에 합쳐줘도 괜찮을 것 같음.
           itemDiscardResponse(user.clientKey, server.game.socket, i + 1);
