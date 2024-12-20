@@ -44,6 +44,7 @@ export const selectDifficultyHandler = async (
           ghostSpawnPositions[i],
           ghostData.Speed,
         );
+        server.game.ghosts.push(ghost);
         const moveInfo = {
           position: ghost.position.getPosition(),
           rotation: ghost.rotation.getRotation(),
@@ -53,7 +54,6 @@ export const selectDifficultyHandler = async (
           ghostTypeId: ghost.ghostTypeId,
           moveInfo,
         };
-
         console.log(ghostInfo);
 
         ghostSpawnNotification(server.game, ghostInfo);
