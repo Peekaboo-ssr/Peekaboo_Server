@@ -355,6 +355,7 @@ class Game {
           return ghost.Speed;
         }
       });
+      console.log('생성된 귀신의 속도: ', ghostSpeed);
       const rotation = { x: 0, y: 0, z: 0 };
       const moveInfo = {
         position: ghostPosition.getPosition(),
