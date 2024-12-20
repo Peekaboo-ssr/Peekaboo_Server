@@ -450,8 +450,13 @@ class Game {
   // 모든 플레이어가 죽었거나 탈출했는지 검사하는 함수
   checkStageEnd() {
     console.log('checkStageEnd.....');
+    console.log('this.users', this.users);
     const isEndStage = this.users.every((user) => {
-      console.log(user.character.state);
+      console.log(
+        'CHARACTER_STATE.DIED;',
+        user.character.state,
+        CHARACTER_STATE.DIED,
+      );
       return user.character.state === CHARACTER_STATE.DIED;
     });
     console.log(isEndStage);
