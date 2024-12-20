@@ -220,7 +220,7 @@ class Game {
   }
 
   setDifficulty(difficultyId) {
-    this.difficultyId = difficultyId + 100;
+    this.difficultyId = difficultyId;
     console.log(`difficultyId : ${difficultyId}`);
 
     const difficultyData = this.gameAssets.difficulty.data.find(
