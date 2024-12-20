@@ -25,6 +25,7 @@ import { connectedServiceNotificationHandler } from './service/connectService.ha
 import { exitDedicatedHandler } from './service/exitDedicate.handler.js';
 import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
 import { lifeUpdateHandler } from './game/player/life.handler.js';
+import { selectDifficultyHandler } from './game/system/difficulty.handler.js';
 
 export const handlers = {
   client: {
@@ -109,6 +110,10 @@ export const handlers = {
     },
     [config.clientPacket.dedicated.LifeUpdateRequest]: {
       handler: lifeUpdateHandler,
+      protoType: 'common.GamePacket',
+    },
+    [config.clientPacket.dedicated.DifficultySelectRequest]: {
+      handler: selectDifficultyHandler,
       protoType: 'common.GamePacket',
     },
   },
