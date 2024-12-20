@@ -63,12 +63,20 @@ class G2SEventHandler extends BaseEvent {
         const payload = parsePacketG2S(packetType, payloadBuffer);
         socket.buffer = socket.buffer.subarray(offset);
 
+        // if (server.context.name === 'dedicated') {
+        //   if (
+        //     packetType !== clientPacket.dedicated.PlayerMoveRequest &&
+        //     packetType !== clientPacket.dedicated.GhostMoveRequest &&
+        //     packetType !== clientPacket.dedicated.PingResponse
+        //   )
+        //     console.log(
+        //       `#@!RECV!@# PacketType : ${
+        //         clientProtoNames[packetType]
+        //       } => Payload ${JSON.stringify(payload)}`,
+        //     );
+        // }
         if (server.context.name === 'dedicated') {
-          if (
-            packetType !== clientPacket.dedicated.PlayerMoveRequest &&
-            packetType !== clientPacket.dedicated.GhostMoveRequest &&
-            packetType !== clientPacket.dedicated.PingResponse
-          )
+          if (packetType === clientPacket.dedicated.PlayerMoveRequest)
             console.log(
               `#@!RECV!@# PacketType : ${
                 clientProtoNames[packetType]

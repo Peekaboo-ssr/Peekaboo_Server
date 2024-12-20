@@ -59,5 +59,4 @@ export const selectDifficultyHandler = async (
     server.game.setDifficulty(difficultyId);
     selectDifficultyNotification(server.game, difficultyId);
   }
-  // 클라에서 difficultyId를 인덱스로 전달해서 difficultyId에 100을 더해서 사용한다.
 };

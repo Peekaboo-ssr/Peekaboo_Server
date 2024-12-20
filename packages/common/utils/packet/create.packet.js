@@ -123,6 +123,13 @@ export const createPacketS2G = (packetType, clientKey, payloadData = {}) => {
   //     } => Payload ${JSON.stringify(oneOfPayloadData)}`,
   //   );
   // }
+  if (packetType === clientPacket.dedicated.PlayerMoveNotification) {
+    console.log(
+      `#@!SEND!@# PacketType : ${
+        clientProtoNames[packetType]
+      } => Payload ${JSON.stringify(oneOfPayloadData)}`,
+    );
+  }
 
   payloadLengthBuffer.writeUInt32BE(payloadBuffer.length);
 
