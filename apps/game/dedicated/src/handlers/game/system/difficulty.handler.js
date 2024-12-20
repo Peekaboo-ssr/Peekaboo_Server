@@ -27,13 +27,12 @@ export const selectDifficultyHandler = async (
       // 귀신 여럿 소환
       const ghostSpawnPositions = server.game.gameAssets.endGhostPos.data.map(
         (data) => {
-          const [x, y, z] = data.POS.split(',').map(Number);
+          const [x, y, z] = data.GhostSpawnPos.split(',').map(Number);
           return new Position(x, y, z);
         },
       );
-      // 하드코딩해서 미안해요 : 윤수빈
-      const ghostTypes = server.game.gameAssets.difficulty.data[2].SpawnGhost;
-      // 같은 귀신 종류 X2 하기위함 => 이것도 나중에 귀신 종류 추가되면 변경되어야 함.
+      // 같은 귀신 종류 X2 소환, 하드코딩해서 미안해요 : 윤수빈
+      const ghostTypes = [1001, 1003, 1005];
       const ghostSpawnArr = [...ghostTypes, ...ghostTypes];
       for (let i = 0; i < ghostSpawnPositions.length; i++) {
         const ghostData = server.game.gameAssets.ghost.data.find((ghost) => {

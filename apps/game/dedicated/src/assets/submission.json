@@ -5,127 +5,127 @@
     {
       "Id": 5001,
       "Day": "첫번째 악몽",
-      "SubmissionValue": 150
+      "SubmissionValue": 200
     },
     {
       "Id": 5002,
       "Day": "두번째 악몽",
-      "SubmissionValue": 160
+      "SubmissionValue": 250
     },
     {
       "Id": 5003,
       "Day": "세번째 악몽",
-      "SubmissionValue": 170
+      "SubmissionValue": 300
     },
     {
       "Id": 5004,
       "Day": "네번째 악몽",
-      "SubmissionValue": 180
+      "SubmissionValue": 350
     },
     {
       "Id": 5005,
       "Day": "다섯번째 악몽",
-      "SubmissionValue": 190
+      "SubmissionValue": 400
     },
     {
       "Id": 5006,
       "Day": "여섯번째 악몽",
-      "SubmissionValue": 210
+      "SubmissionValue": 450
     },
     {
       "Id": 5007,
       "Day": "일곱번째 악몽",
-      "SubmissionValue": 230
+      "SubmissionValue": 500
     },
     {
       "Id": 5008,
       "Day": "여덟번째 악몽",
-      "SubmissionValue": 250
+      "SubmissionValue": 550
     },
     {
       "Id": 5009,
       "Day": "아홉번째 악몽",
-      "SubmissionValue": 270
+      "SubmissionValue": 600
     },
     {
       "Id": 5010,
       "Day": "열 번째 악몽",
-      "SubmissionValue": 290
+      "SubmissionValue": 750
     },
     {
       "Id": 5011,
       "Day": "열한 번째 악몽",
-      "SubmissionValue": 320
+      "SubmissionValue": 800
     },
     {
       "Id": 5012,
       "Day": "열두 번째 악몽",
-      "SubmissionValue": 350
+      "SubmissionValue": 850
     },
     {
       "Id": 5013,
       "Day": "열세 번째 악몽",
-      "SubmissionValue": 380
+      "SubmissionValue": 900
     },
     {
       "Id": 5014,
       "Day": "열네 번째 악몽",
-      "SubmissionValue": 410
+      "SubmissionValue": 950
     },
     {
       "Id": 5015,
       "Day": "열다섯 번째 악몽",
-      "SubmissionValue": 440
+      "SubmissionValue": 1000
     },
     {
       "Id": 5016,
       "Day": "열여섯 번째 악몽",
-      "SubmissionValue": 480
+      "SubmissionValue": 1100
     },
     {
       "Id": 5017,
       "Day": "열일곱 번째 악몽",
-      "SubmissionValue": 520
+      "SubmissionValue": 1200
     },
     {
       "Id": 5018,
       "Day": "열여덟 번째 악몽",
-      "SubmissionValue": 560
+      "SubmissionValue": 1300
     },
     {
       "Id": 5019,
       "Day": "열아홉 번째 악몽",
-      "SubmissionValue": 600
+      "SubmissionValue": 1400
     },
     {
       "Id": 5020,
       "Day": "스무 번째 악몽",
-      "SubmissionValue": 640
+      "SubmissionValue": 1500
     },
     {
       "Id": 5021,
-      "Day": "스물하나 번째 악몽",
-      "SubmissionValue": 690
+      "Day": "스물 한번째 악몽",
+      "SubmissionValue": 1600
     },
     {
       "Id": 5022,
-      "Day": "V",
-      "SubmissionValue": 740
+      "Day": "스물 두번째 악몽",
+      "SubmissionValue": 1700
     },
     {
       "Id": 5023,
-      "Day": "W",
-      "SubmissionValue": 790
+      "Day": "스물 세번째 악몽",
+      "SubmissionValue": 1800
     },
     {
       "Id": 5024,
-      "Day": "X",
-      "SubmissionValue": 840
+      "Day": "스물 네번째 악몽",
+      "SubmissionValue": 1900
     },
     {
       "Id": 5025,
-      "Day": "Y",
-      "SubmissionValue": 890
+      "Day": "스물 다섯번째 악몽",
+      "SubmissionValue": 2000
     }
   ]
 }
