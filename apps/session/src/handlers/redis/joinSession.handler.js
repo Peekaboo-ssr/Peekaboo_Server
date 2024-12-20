@@ -5,13 +5,13 @@ import clientPacket from '@peekaboo-ssr/modules-constants/clientPacket';
 import { joinSessionByType } from '../../sessions/user.sessions.js';
 
 export const joinSessionHandler = async (serverInstance, data) => {
+  const { responseChannel, type, clientKey, uuid } = data;
   const resMessage = {
     isSuccess: false,
     message: null,
   };
 
   try {
-    const { responseChannel, type, clientKey, uuid } = data;
     const userData = {
       uuid,
       clientKey,
