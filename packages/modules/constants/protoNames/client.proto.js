@@ -89,6 +89,9 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.StageEndNotification]: 'stageEndNotification',
   [clientPacket.dedicated.SubmissionEndNotification]:
     'submissionEndNotification',
+  [clientPacket.dedicated.DifficultySelectRequest]: 'difficultySelectRequest',
+  [clientPacket.dedicated.DifficultySelectNotification]:
+    'difficultySelectNotification',
 };
 
 export default CLIENT_PACKET_MAPS;

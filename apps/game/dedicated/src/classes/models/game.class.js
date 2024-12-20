@@ -139,7 +139,7 @@ class Game {
   // 스테이지 종료 로직
   async endStage() {
     if (this.state === config.clientState.gameState.INPROGRESS) {
-      // 귀신 및 게임 타이머 인터벌 삭제
+      // 귀신 및 게임 타이머 인터벌 삭제 (이미 전 endStage 삭제됐음) - 에러 발생 가능성 있음
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
@@ -152,6 +152,13 @@ class Game {
       if (this.isInit === true) {
         this.isInit === false;
       }
+      await this.initStage();
+    }
+    // 서브미션 실패로 인한 endStage()로 판단
+    else if (this.state === config.clientState.gameState.FAIL) {
+      // 게임 상태를 END로 변경한다.
+      await this.setState(config.clientState.gameState.END);
+      await stageEndNotification(this);
       await this.initStage();
     }
   }
@@ -296,7 +303,8 @@ class Game {
     // 위치 및 상태초기화
     this.users.forEach((user) => {
       user.character.position.updateClassPosition(startPosition);
-      if (user.character.state === CHARACTER_STATE.DIED) {
+
+      if (user.character.life <= 0) {
         user.character.state = CHARACTER_STATE.IDLE;
         user.character.life = 1;
       }
@@ -436,6 +444,7 @@ class Game {
       console.log('게임 오버!!!!!!!!!');
       this.users.forEach((user) => {
         user.character.state = CHARACTER_STATE.DIED;
+        user.character.life = 0;
         const lifePayload = {
           life: 0,
           isAttacked: false,
@@ -457,13 +466,12 @@ class Game {
     return isEndStage;
   }
 
-  endSubmission() {
+  async endSubmission() {
     // submission 목표치 검증
-    const gameAssets = getGameAssets();
     if (this.soulCredit >= this.goalSoulCredit) {
       // 목표치를 모았다면 성공
       this.day += SUBMISSION_DURATION;
-      const nextSubMissionData = gameAssets.submission.data.find(
+      const nextSubMissionData = this.gameAssets.submission.data.find(
         (submission) => submission.Id === this.submissionId + 1,
       );
       if (!nextSubMissionData) {
@@ -476,13 +484,11 @@ class Game {
       this.submissionId = nextSubMissionData.Id;
       this.submissionDay = nextSubMissionData.Day;
       this.goalSoulCredit = nextSubMissionData.SubmissionValue;
-
       return true;
     } else {
-      // 목표치를 모으지 못했다면 실패
-      // 1. 현재 submission => Day 2 부터 시작할지
-      // 2. 첫 submission => Day 2 부터 시작할지
-      // 실패시, 특별히 처리할 로직이 없다...
+      this.state = config.clientState.gameState.FAIL;
+      // initStage()가 이후에 호출될 때 완전 초기로 세팅
+      this.isInit = false;
       return false;
     }
   }

@@ -91,3 +91,18 @@ export const submissionEndNotification = (game, result) => {
     game.socket.write(packet);
   });
 };
+
+export const selectDifficultyNotification = (game, difficultyId) => {
+  const payload = {
+    difficultyId,
+  };
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      config.clientPacket.dedicated.DifficultySelectNotification,
+      user.clientKey,
+      payload,
+    );
+
+    game.socket.write(packet);
+  });
+};

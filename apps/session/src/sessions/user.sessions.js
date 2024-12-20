@@ -13,6 +13,15 @@ import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 
 // 특정 타입 세션에 참가 처리하는 함수
 export const joinSessionByType = (userSessions, type, userData) => {
+  const [key, value] = getUserByUUID(userSessions, userData);
+
+  // 이미 세션에 있는 유저가 존재
+  if (key || value) {
+    // 만약 클라이언트키가 다르다면 중복 로그인 처리
+    if (key !== userData.clientKey)
+      throw new CustomError(errorCodesMap.DUPLICATED_USER_CONNECT);
+  }
+
   // 만약 해당 유저의 세션이 없다면 등록해줌.
   if (!userSessions[userData.clientKey]) {
     // 유저 세션에 참여하는 경우 등록
@@ -55,7 +64,13 @@ export const getSessionByType = (userSessions, type) => {
 };
 
 export const getUserByUUID = (userSessions, uuid) => {
-  return userSessions.find((user) => user.uuid === uuid);
+  // 하.. 반복을 돌 수 밖에 없을까..
+  for (const [key, value] of Object.entries(userSessions)) {
+    if (value.userId === uuid) {
+      return [key, value];
+    }
+  }
+  return null;
 };
 
 export const getUserByClientKey = (userSessions, clientKey) => {
