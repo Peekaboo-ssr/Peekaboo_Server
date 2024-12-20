@@ -451,6 +451,7 @@ class Game {
   checkStageEnd() {
     console.log('checkStageEnd.....');
     const isEndStage = this.users.every((user) => {
+      console.log(user.character.state);
       return user.character.state === CHARACTER_STATE.DIED;
     });
     console.log(isEndStage);
