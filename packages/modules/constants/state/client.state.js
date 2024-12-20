@@ -16,6 +16,7 @@ const clientState = {
     PREPARE: 1, // 준비단계
     INPROGRESS: 2, // 진행중
     END: 3, // 종료
+    FAIL: 4, // 서브미션 실패
   },
 };
 

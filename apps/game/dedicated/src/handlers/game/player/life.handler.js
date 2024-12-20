@@ -1,8 +1,8 @@
 import handleError from '@peekaboo-ssr/error/handleError';
-import { getUserByClientKey } from '../../../sessions/user.sessions';
 import CustomError from '@peekaboo-ssr/error/CustomError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { lifeResponse } from '../../../response/player/life.response.js';
+import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import { CHARACTER_STATE } from '../../../constants/state.js';
 
 // 클라이언트에서 캐릭터가 생성될 때마다 보내는 패킷

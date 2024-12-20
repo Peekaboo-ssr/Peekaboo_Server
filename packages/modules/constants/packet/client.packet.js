@@ -82,6 +82,9 @@ const CLIENT_PACKET = {
     StartStageNotification: 407,
     StageEndNotification: 408,
     SubmissionEndNotification: 409,
+    DifficultySelectRequest: 410,
+    DifficultySelectNotification: 411,
+
     CreateRoomResponse: 602,
     JoinRoomResponse: 605,
     JoinRoomNotification: 606,

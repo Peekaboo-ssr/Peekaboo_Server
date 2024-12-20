@@ -28,6 +28,7 @@ export const loginRequestHandler = async (
         socket,
       );
     }
+
     // 나중에는 bcrypt 검증으로 강화 - 회원가입 기능 추가시 TODO
     // const isPasswordValid = await bcrypt.compare(password, user.password);
     // if(!isPasswordValid){
@@ -73,12 +74,21 @@ export const loginRequestHandler = async (
       );
       socket.write(packetForClient);
     } else {
-      throw new CustomError(
-        errorCodesMap.AUTHENTICATION_ERROR,
-        config.clientPacket.account.LoginResponse,
-        clientKey,
-        socket,
-      );
+      if (response.message === 'duplicated') {
+        throw new CustomError(
+          errorCodesMap.DUPLICATED_USER_CONNECT,
+          config.clientPacket.account.LoginResponse,
+          clientKey,
+          socket,
+        );
+      } else {
+        throw new CustomError(
+          errorCodesMap.AUTHENTICATION_ERROR,
+          config.clientPacket.account.LoginResponse,
+          clientKey,
+          socket,
+        );
+      }
     }
   } catch (e) {
     handleError(e);

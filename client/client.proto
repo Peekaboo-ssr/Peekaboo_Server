@@ -318,9 +318,16 @@ message S2C_RemainingTimeNotification {
   uint32 remainingTime = 1;
 }
 
+message C2S_DifficultySelectRequest {
+  uint32 difficultyId = 1;
+}
+
+message S2C_DifficultySelectNotification {
+  uint32 difficultyId = 1;
+}
+
 message C2S_StartStageRequest	{
   string gameSessionId = 1;
-  uint32 difficultyId = 2;
 }
 
 message S2C_StartStageNotification {
@@ -480,6 +487,8 @@ message GamePacket {
     S2C_StartStageNotification startStageNotification = 407;
     S2C_StageEndNotification stageEndNotification = 408;
     S2C_SubmissionEndNotification submissionEndNotification = 409;
+    C2S_DifficultySelectRequest difficultySelectRequest = 410; 
+    S2C_DifficultySelectNotification difficultySelectNotification = 411;
 
     C2S_RegistAccountRequest registAccountRequest = 500;
     S2C_RegistAccountResponse registAccountResponse = 501;

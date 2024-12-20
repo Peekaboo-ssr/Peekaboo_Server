@@ -7,6 +7,7 @@ import { joinSessionByType } from '../../sessions/user.sessions.js';
 export const joinSessionHandler = async (serverInstance, data) => {
   const resMessage = {
     isSuccess: false,
+    message: null,
   };
 
   try {
@@ -33,9 +34,12 @@ export const joinSessionHandler = async (serverInstance, data) => {
       );
     }
   } catch (e) {
-    const resMessage = {
-      isSuccess: false,
-    };
+    if (e.code === errorCodesMap.DUPLICATED_USER_CONNECT.code) {
+      resMessage.message = 'duplicated';
+    } else {
+      resMessage.message = 'ERROR';
+    }
+
     serverInstance.pubSubManager.publisher.publish(
       responseChannel,
       JSON.stringify(resMessage),

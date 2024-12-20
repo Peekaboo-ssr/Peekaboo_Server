@@ -30,6 +30,7 @@ const fileNames = [
   'difficulty.json',
   'exitPos.json',
   'ghost.json',
+  'endGhostPos.json',
   'ghostSpawnPos.json',
   'item.json',
   'level.json',
