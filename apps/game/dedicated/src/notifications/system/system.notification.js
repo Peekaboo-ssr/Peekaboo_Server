@@ -63,6 +63,7 @@ export const stageEndNotification = async (game) => {
   const payload = {
     remainingDay: game.day,
     startPosition,
+    soulCredit: game.soulCredit,
   };
 
   game.users.forEach((user) => {

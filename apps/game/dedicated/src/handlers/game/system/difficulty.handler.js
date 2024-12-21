@@ -5,6 +5,8 @@ import {
 } from '../../../notifications/system/system.notification.js';
 import Ghost from '../../../classes/models/ghost.class.js';
 import { ghostSpawnNotification } from '../../../notifications/ghost/ghost.notification.js';
+import IntervalManager from '../../../classes/managers/interval.manager.js';
+import { ghostsLocationNotification } from '../../../notifications/ghost/ghost.notification.js';
 
 export const selectDifficultyHandler = async (
   socket,
@@ -55,9 +57,14 @@ export const selectDifficultyHandler = async (
           moveInfo,
         };
         console.log(ghostInfo);
-
         ghostSpawnNotification(server.game, ghostInfo);
       }
+
+      IntervalManager.getInstance().addGhostsInterval(
+        server.game.id,
+        () => ghostsLocationNotification(server.game),
+        200,
+      );
     }
   } else {
     server.game.setDifficulty(difficultyId);

@@ -225,6 +225,7 @@ message S2C_StartStageNotification {
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
+  uint32 soulCredit = 3;  // 현재 소울 크레딧(플레이어 사망 수 체크후 깎아주기 때문)
 }
 
 message S2C_SubmissionEndNotification {

@@ -7,7 +7,11 @@ const handleError = (error) => {
   if (error.code) {
     responseCode = error.code;
     message = error.message;
-    console.error(`에러코드: ${responseCode}, 메세지: ${message}`);
+    console.error(
+      `${Date.now()} 에러코드: ${responseCode}, 메세지: ${
+        error.message
+      }: ${error}`,
+    );
   } else {
     responseCode = errorCodesMap.SOCKET_ERROR.code;
     message = error.message;

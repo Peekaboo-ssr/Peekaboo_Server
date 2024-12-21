@@ -98,7 +98,12 @@ class Game {
       this.submissionId = initSubMissionData.Id;
       this.submissionDay = initSubMissionData.Day;
       this.goalSoulCredit = initSubMissionData.SubmissionValue;
-      this.soulCredit = 1000;
+      this.soulCredit = 200;
+      // 플레이어 생명력도 다 초기로 돌림
+      this.users.forEach((user) => {
+        const maxHp = user.character.maxLife;
+        user.character.life = maxHp;
+      });
       this.isInit = true;
     }
 
@@ -150,6 +155,8 @@ class Game {
       this.day -= 1;
       await stageEndNotification(this);
 
+      // TODO: 사망한 플레이어만큼 soulCredit 깎기
+
       if (this.isInit === true) {
         this.isInit === false;
       }
@@ -160,8 +167,8 @@ class Game {
       console.log('submission 실패로 인해 들어온 endStage...');
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
-      await stageEndNotification(this);
       await this.initStage();
+      await stageEndNotification(this);
     }
   }
 
