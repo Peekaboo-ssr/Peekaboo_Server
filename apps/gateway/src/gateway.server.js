@@ -54,6 +54,8 @@ class GatewayServer extends TcpServer {
         console.log('Distributor Notification: ', data);
       },
     );
+
+    this.initializeMetrics();
   }
 
   // 각 서비스간 연결이 필요
@@ -121,59 +123,116 @@ class GatewayServer extends TcpServer {
 
     await Promise.all([...connectServices, ...connectDedicates]);
   }
-}
 
-async function initializeMetrics() {
-  const app = express();
-  const register = new client.Registry();
+  initializeMetrics() {
+    const app = express();
+    const register = new client.Registry();
 
-  // 서비스 설정
-  const serviceName = 'account'; // 현재 서비스 이름
-  const PORT = Number(config.gateway.port) + 2000; // Prometheus HTTP 포트
+    // 서비스 설정
+    const serviceName = 'account'; // 현재 서비스 이름
+    const PORT = Number(config.gateway.port) + 2000; // Prometheus HTTP 포트
 
-  // 디폴트 레이블 등록
-  register.setDefaultLabels({
-    service: serviceName, // 서비스 이름 레이블
-  });
+    // 디폴트 레이블 등록
+    register.setDefaultLabels({
+      service: serviceName, // 서비스 이름 레이블
+    });
 
-  // 기본 메트릭 수집
-  client.collectDefaultMetrics({ register });
+    // 기본 메트릭 수집
+    client.collectDefaultMetrics({ register });
 
-  // CPU 사용률 계산
-  const cpuUsageGauge = new client.Gauge({
-    name: 'server_cpu_usage_percent',
-    help: 'Current CPU usage percentage',
-    async collect() {
-      const stats = await pidusage(process.pid);
-      cpuUsageGauge.set(Number(stats.cpu.toFixed(2)));
-    },
-  });
-  register.registerMetric(cpuUsageGauge);
+    // CPU 사용률 계산
+    const cpuUsageGauge = new client.Gauge({
+      name: 'server_cpu_usage_percent',
+      help: 'Current CPU usage percentage',
+      async collect() {
+        const stats = await pidusage(process.pid);
+        cpuUsageGauge.set(Number(stats.cpu.toFixed(2)));
+      },
+    });
+    register.registerMetric(cpuUsageGauge);
 
-  // 메모리 사용량 계산
-  const memoryUsageGauge = new client.Gauge({
-    name: 'server_memory_usage_mb',
-    help: 'Current memory usage in MB',
-    async collect() {
-      const stats = await pidusage(process.pid);
-      memoryUsageGauge.set(Math.round(stats.memory / 1024 / 1024)); // MB 단위
-    },
-  });
-  register.registerMetric(memoryUsageGauge);
+    // 메모리 사용량 계산
+    const memoryUsageGauge = new client.Gauge({
+      name: 'server_memory_usage_mb',
+      help: 'Current memory usage in MB',
+      async collect() {
+        const stats = await pidusage(process.pid);
+        memoryUsageGauge.set(Math.round(stats.memory / 1024 / 1024)); // MB 단위
+      },
+    });
+    register.registerMetric(memoryUsageGauge);
 
-  // /metrics 엔드포인트
-  app.get('/metrics', async (req, res) => {
-    console.log(`[Account] Metric Request`);
-    res.setHeader('Content-Type', register.contentType);
-    res.end(await register.metrics());
-  });
+    // 총 네트워크 트래픽 메트릭
+    this.networkInCounter = new client.Counter({
+      name: 'server_network_in_bytes',
+      help: 'Total number of bytes received by the server',
+    });
+    register.registerMetric(networkOutCounter);
 
-  // HTTP 서버 실행
-  app.listen(PORT, () => {
-    console.log(
-      `[Account] prometheus metrics server for ${serviceName} running on port ${PORT}`,
-    );
-  });
+    // 초당 네트워크 트래픽 메트릭
+    const networkInRateGauge = new client.Gauge({
+      name: 'server_network_in_bytes_per_second',
+      help: 'Incoming network traffic in bytes per second',
+    });
+    register.registerMetric(networkInRateGauge);
+
+    this.lastInCount = 0;
+    setInterval(() => {
+      const currentInCount = this.networkInCounter.hashMap?.['']?.value || 0;
+      const inRate = (currentInCount - lastCount) / 5;
+      networkInRateGauge.set(inRate >= 0 ? inRate : 0);
+      lastInCount = currentInCount;
+    }, 5000);
+
+    // /metrics 엔드포인트
+    app.get('/metrics', async (req, res) => {
+      console.log(`[Account] Metric Request`);
+      res.setHeader('Content-Type', register.contentType);
+      res.end(await register.metrics());
+    });
+
+    app.get('/network-traffic', (req, res) => {
+      try {
+        const networkIn = networkInCounter.hashMap?.['']?.value || 0;
+        const networkInRate = networkInRateGauge.hashMap?.['']?.value || 0;
+
+        res.json({
+          network_in_bytes: networkIn,
+          network_in_bytes_per_second: networkInRate,
+        });
+      } catch (error) {
+        console.error(
+          `[Gateway] Failed to fetch network traffic data: ${error}`,
+        );
+        res.status(500).json({ error: 'Failed to fetch network traffic data' });
+      }
+    });
+
+    // HTTP 서버 실행
+    app.listen(PORT, () => {
+      console.log(
+        `[Account] prometheus metrics server for ${serviceName} running on port ${PORT}`,
+      );
+    });
+
+    // 초당 트래픽 계산
+    let lastInCount = 0;
+    let lastOutCount = 0;
+
+    setInterval(() => {
+      const currentInCount = networkInCounter.hashMap?.['']?.value || 0;
+      const currentOutCount = networkOutCounter.hashMap?.['']?.value || 0;
+
+      const inRate = (currentInCount - lastInCount) / 5; // 초당 값 (5초마다 계산)
+      const outRate = (currentOutCount - lastOutCount) / 5;
+
+      networkInRateGauge.set(inRate >= 0 ? inRate : 0);
+      networkOutRateGauge.set(outRate >= 0 ? outRate : 0);
+
+      lastInCount = currentInCount;
+      lastOutCount = currentOutCount;
+    }, 5000); // 5초마다 계산
+  }
 }
 
 if (cluster.isPrimary) {
@@ -183,8 +242,6 @@ if (cluster.isPrimary) {
     console.log(`worker ${worker.process.pid} died`);
     cluster.fork();
   });
-
-  await initializeMetrics();
 } else {
   new GatewayServer();
 }
