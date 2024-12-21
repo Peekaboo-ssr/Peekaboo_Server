@@ -50,15 +50,6 @@ export const joinSessionByType = (userSessions, type, userData) => {
   console.log(`${userData.clientKey} 유저가 ${type} 세션에 참여하였습니다.`);
 };
 
-// 세션에 나가기 처리하는 함수
-export const exitUserFromSession = (userSessions, clientKey) => {
-  // 만약 해당 유저의 세션이 없다면 return
-  if (!userSessions[clientKey]) {
-    throw new CustomError(errorCodesMap.INVALID_PACKET);
-  }
-  delete userSessions[clientKey];
-};
-
 export const getSessionByType = (userSessions, type) => {
   return userSessions[type];
 };

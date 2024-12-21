@@ -16,13 +16,19 @@ export const startStageRequestHandler = async (
 ) => {
   const { gameSessionId } = payload;
   try {
-    // 게임이 이미 플레이 중이라면 1차 방어
+    // 난이도 선택이 되지 않았다면 1차 방어
+    if (server.game.difficultId === null) {
+      console.log('난이도 선택이 되지않았습니다.');
+      throw new CustomError(errorCodesMap.INVALID_REQUEST);
+    }
+
+    // 게임이 이미 플레이 중이라면 2차 방어
     if (server.game.state === config.clientState.gameState.INPROGRESS) {
       console.log(`이미 게임 플레이 중입니다.`);
       throw new CustomError(errorCodesMap.INVALID_PACKET);
     }
 
-    // 서브미션 실패라면 반환하도록 2차 방어
+    // 서브미션 실패라면 반환하도록 3차 방어
     if (server.game.state === config.clientState.gameState.FAIL) {
       console.log(`서브미션 실패로 시작할 수 없습니다.`);
       throw new CustomError(errorCodesMap.INVALID_PACKET);

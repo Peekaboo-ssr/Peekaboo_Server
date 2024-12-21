@@ -84,6 +84,10 @@ const errorCodesMap = {
     code: 10020,
     message: '문 검증 오류',
   },
+  INVALID_REQUEST: {
+    code: 10021,
+    message: '유효하지 않은 요청',
+  },
 };
 
 export default errorCodesMap;

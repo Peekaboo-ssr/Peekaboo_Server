@@ -25,7 +25,11 @@ export const exitDedicatedHandler = async (server, payload) => {
     // 연결을 종료한 사실을 다른 유저들에게 disconnectPlayerNotification로 알려준다.
     await disconnectPlayerNotification(server.game, user[0].id);
 
-    // 레디스에 유저 정보 저장
+    // 레디스에 유저 정보 저장 (세션 재접속을 위해 저장)
+    // 자의로 나간 것인지 타의로 나간 것인지 확인하여 저장이 필요
+    // 게임 세션이 사라지면 아래 레디스 정보에 세션 상태 업데이트 필요
+    // 재접속을 시도했을 때 세션이 사라졌으면 레디스에서 삭제+접속불가
+    // 재접속을 시도했을 때 세션이 남아있으면 재접속 수행
     await setUserRedis(user[0].id, user[0].gameId);
 
     // 호스트인 경우 남아있는 유저를 로비로 내쫓도록 수정 => 이건 disconnectPlayerNotification으로 하도록 함.

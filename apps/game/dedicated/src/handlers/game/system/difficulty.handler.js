@@ -64,7 +64,7 @@ export const selectDifficultyHandler = async (
       IntervalManager.getInstance().addGhostsInterval(
         server.game.id,
         () => ghostsLocationNotification(server.game),
-        50,
+        100,
       );
     }
   } else {

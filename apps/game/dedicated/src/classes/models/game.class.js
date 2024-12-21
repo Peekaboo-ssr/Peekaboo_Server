@@ -131,7 +131,7 @@ class Game {
     IntervalManager.getInstance().addGhostsInterval(
       this.id,
       () => ghostsLocationNotification(this),
-      50,
+      100,
     );
 
     IntervalManager.getInstance().addGameTimerInterval(
@@ -170,6 +170,8 @@ class Game {
       await this.initStage();
       await stageEndNotification(this);
     }
+    // 스테이지 종료 후 난이도 초기화
+    this.difficultyId = null;
   }
 
   async addUser(user, isHost = false) {
