@@ -5,7 +5,7 @@ import { CHARACTER_STATE } from '../../constants/state.js';
 /**
  * 유저의 움직임 값을 보내주는 함수
  */
-export const usersLocationNotification = (game, latency) => {
+export const usersLocationNotification = (game, requestUser) => {
   const userLocations = game.users.map((user) => {
     if (
       user.state !== CHARACTER_STATE.DIED ||
@@ -28,7 +28,10 @@ export const usersLocationNotification = (game, latency) => {
       }
 
       const timeDiff = Math.floor(
-        (Date.now() - user.character.lastUpdateTime + latency) / 1000,
+        (Date.now() -
+          user.character.lastUpdateTime +
+          requestUser.character.latency) /
+          1000,
       );
 
       const distance = user.character.speed * timeDiff;
@@ -69,14 +72,22 @@ export const usersLocationNotification = (game, latency) => {
     playerMoveInfos: userLocations,
   };
 
-  game.users.forEach((user) => {
-    const userLocationPayload = createPacketS2G(
-      config.clientPacket.dedicated.PlayerMoveNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(userLocationPayload);
-  });
+  // game.users.forEach((user) => {
+  //   const userLocationPayload = createPacketS2G(
+  //     config.clientPacket.dedicated.PlayerMoveNotification,
+  //     user.clientKey,
+  //     payload,
+  //   );
+  //   game.socket.write(userLocationPayload);
+  // });
+
+  const userLocationPayload = createPacketS2G(
+    config.clientPacket.dedicated.PlayerMoveNotification,
+    requestUser.clientKey,
+    payload,
+  );
+
+  game.socket.write(userLocationPayload);
 };
 
 export const playerStateChangeNotification = (game, payload) => {

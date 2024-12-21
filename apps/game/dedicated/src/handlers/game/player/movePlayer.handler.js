@@ -33,7 +33,7 @@ export const movePlayerRequestHandler = (
     //시간 저장
     user.character.lastUpdateTime = Date.now();
 
-    usersLocationNotification(server.game, user.character.latency);
+    usersLocationNotification(server.game, user);
   } catch (e) {
     handleError(e);
   }
