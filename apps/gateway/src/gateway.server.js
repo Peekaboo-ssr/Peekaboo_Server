@@ -179,9 +179,10 @@ class GatewayServer extends TcpServer {
     this.lastInCount = 0;
     setInterval(() => {
       const currentInCount = this.networkInCounter.hashMap?.['']?.value || 0;
-      const inRate = (currentInCount - lastCount) / 5;
+      const inRate = (currentInCount - this.lastCount) / 5;
+
       networkInRateGauge.set(inRate >= 0 ? inRate : 0);
-      lastInCount = currentInCount;
+      this.lastInCount = currentInCount;
     }, 5000);
 
     // /metrics 엔드포인트
@@ -193,7 +194,7 @@ class GatewayServer extends TcpServer {
 
     app.get('/network-traffic', (req, res) => {
       try {
-        const networkIn = networkInCounter.hashMap?.['']?.value || 0;
+        const networkIn = this.networkInCounter.hashMap?.['']?.value || 0;
         const networkInRate = networkInRateGauge.hashMap?.['']?.value || 0;
 
         res.json({
@@ -214,24 +215,6 @@ class GatewayServer extends TcpServer {
         `[Account] prometheus metrics server for ${serviceName} running on port ${PORT}`,
       );
     });
-
-    // 초당 트래픽 계산
-    let lastInCount = 0;
-    let lastOutCount = 0;
-
-    setInterval(() => {
-      const currentInCount = networkInCounter.hashMap?.['']?.value || 0;
-      const currentOutCount = networkOutCounter.hashMap?.['']?.value || 0;
-
-      const inRate = (currentInCount - lastInCount) / 5; // 초당 값 (5초마다 계산)
-      const outRate = (currentOutCount - lastOutCount) / 5;
-
-      networkInRateGauge.set(inRate >= 0 ? inRate : 0);
-      networkOutRateGauge.set(outRate >= 0 ? outRate : 0);
-
-      lastInCount = currentInCount;
-      lastOutCount = currentOutCount;
-    }, 5000); // 5초마다 계산
   }
 }
 
