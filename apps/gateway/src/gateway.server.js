@@ -167,7 +167,7 @@ class GatewayServer extends TcpServer {
       name: 'server_network_in_bytes',
       help: 'Total number of bytes received by the server',
     });
-    register.registerMetric(networkOutCounter);
+    register.registerMetric(this.networkInCounter);
 
     // 초당 네트워크 트래픽 메트릭
     const networkInRateGauge = new client.Gauge({
