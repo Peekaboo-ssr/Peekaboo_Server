@@ -14,6 +14,7 @@ import {
   ghostDeleteNotification,
   ghostsLocationNotification,
 } from '../../notifications/ghost/ghost.notification.js';
+import { usersLocationNotification } from '../../notifications/player/player.notification.js';
 import {
   remainingTimeNotification,
   stageEndNotification,
@@ -23,6 +24,7 @@ import { extractSoulNotification } from '../../notifications/extractor/extractor
 // utils
 import { setGameStateRedis } from '../../redis/game.redis.js';
 import { getRandomInt } from '../../utils/math/getRandomInt.js';
+import { removeGameRedis } from '../../redis/game.redis.js';
 // config
 import config from '@peekaboo-ssr/config/game';
 import { DOOR_STATE } from '../../constants/state.js';
@@ -33,7 +35,6 @@ import {
 } from '../../constants/game.js';
 import { CHARACTER_STATE } from '../../constants/state.js';
 import { lifeResponse } from '../../response/player/life.response.js';
-import { usersLocationNotification } from '../../notifications/player/player.notification.js';
 
 class Game {
   constructor(id, inviteCode) {
@@ -92,7 +93,7 @@ class Game {
 
     IntervalManager.getInstance().addPlayersInterval(
       this.id,
-      usersLocationNotification(this),
+      () => usersLocationNotification(this),
       100,
     );
   }
@@ -524,6 +525,15 @@ class Game {
 
   getUniqueGhostId() {
     return this.ghostIdCount++;
+  }
+
+  async checkRemainUsers(game) {
+    if (game.users.length <= 0) {
+      IntervalManager.getInstance().clearAll();
+      await removeGameRedis(game.id);
+      console.log('-------남은 유저가 없어 종료합니다-------');
+      process.exit(1);
+    }
   }
 }
 
