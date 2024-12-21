@@ -1,7 +1,6 @@
 import handleError from '@peekaboo-ssr/error/handleError';
 import CustomError from '@peekaboo-ssr/error/CustomError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
-import handleError from '@peekaboo-ssr/error/handleError';
 
 export const exitSessionHandler = async (serverInstance, data) => {
   try {
