@@ -20,13 +20,15 @@ export const exitDedicatedHandler = async (server, payload) => {
 
     const user = server.game.users.splice(removeUserIndex, 1);
 
-    IntervalManager.getInstance().removeUserInterval(user.id);
+    IntervalManager.getInstance().removeUserInterval(user[0].id);
 
     // 연결을 종료한 사실을 다른 유저들에게 disconnectPlayerNotification로 알려준다.
-    await disconnectPlayerNotification(server.game, user.id);
+    await disconnectPlayerNotification(server.game, user[0].id);
 
     // 레디스에 유저 정보 저장
-    await setUserRedis(user.id, user.gameId);
+    await setUserRedis(user[0].id, user[0].gameId);
+
+    // 호스트인 경우 남아있는 유저를 로비로 내쫓도록 수정 => 이건 disconnectPlayerNotification으로 하도록 함.
 
     // 인원이 없는 경우 모든 인터벌 삭제
     if (server.game.users.length <= 0) {
