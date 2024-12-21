@@ -23,6 +23,8 @@ class C2GEventHandler extends BaseEvent {
   // 게이트웨이에서는 헤더 검증 및 라우팅까지만 수행.
   // 라우팅 시 어떤 유저가 보낸건지 저장하여 수행하도록 함.
   async onData(socket, data, server = null) {
+    server.networkInCounter.inc(data.length);
+
     socket.buffer = Buffer.concat([socket.buffer, data]);
 
     while (
