@@ -4,7 +4,7 @@
   "data": [
     {
       "Id": 501,
-      "WalkSpeed": 1,
+      "WalkSpeed": 1.5,
       "RunSpeed": 3,
       "MaxHeart": 3,
       "JumpCoolTime": 2,

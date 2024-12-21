@@ -9,8 +9,6 @@ export const findServiceByReceiver = (receiver) => {
 
   // ip:port 형식은 : 가 있음. (dedicated 로 판단)
   // : 가 없으면 일반 서비스로 판단
-  console.log('findService...............');
-  console.log('receiver: ', receiver);
   if (receiver.includes(':')) {
     // return serviceMap.dedicates[receiver].socket;
     for (const [key, value] of Object.entries(serviceMap.dedicates)) {

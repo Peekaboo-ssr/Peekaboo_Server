@@ -29,6 +29,8 @@ class SessionServer extends TcpServer {
     this.pubSubManager = new PubSubManager(this.redisManager); // PubSubManager 프로퍼티로 추가
     this.initializeSubscriber();
 
+    this.initializeSession();
+
     this.connectToDistributor(
       config.distributor.host,
       config.distributor.port,
@@ -37,6 +39,14 @@ class SessionServer extends TcpServer {
         console.log('Distributor Notification: ', data);
       },
     );
+  }
+
+  initializeSession() {
+    setInterval(() => {
+      if (Object.keys(userSessions).length > 0) {
+        console.log('현재 접속한 유저 정보: ', userSessions);
+      }
+    }, 5000);
   }
 }
 

@@ -73,53 +73,55 @@ export const playerAttackedRequestHandler = async (
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
-    const ghost = server.game.getGhost(ghostId);
-    if (!ghost) {
-      throw new CustomError(errorCodesMap.GHOST_NOT_FOUND);
-    }
-
-    //어택 타입에 따른 life 수치 조절, user.character.state 변경
-    await ghost.attack(user);
-
-    // 만약 player가 죽었다면 아이템을 바닥에 뿌린다
-    if (user.character.life <= 0) {
-      console.log('주금');
-      user.character.state = CHARACTER_STATE.DIED;
-      const length = user.character.inventory.slot.length;
-      for (let i = 0; i < length; i++) {
-        const itemId = user.character.inventory.removeInventorySlot(i);
-        if (itemId) {
-          // 여기 나중에 합쳐줘도 괜찮을 것 같음.
-          itemDiscardResponse(user.clientKey, server.game.socket, i + 1);
-          itemDiscardNotification(server.game, user.id, itemId);
-        }
+    if (user.character.life > 0) {
+      const ghost = server.game.getGhost(ghostId);
+      if (!ghost) {
+        throw new CustomError(errorCodesMap.GHOST_NOT_FOUND);
       }
-    } else {
-      user.character.state = CHARACTER_STATE.ATTACKED;
-    }
 
-    const lifePayload = {
-      life: user.character.life,
-      isAttacked: true,
-    };
-    lifeResponse(socket, user.clientKey, lifePayload);
+      //어택 타입에 따른 life 수치 조절, user.character.state 변경
+      await ghost.attack(user);
 
-    const playerStateInfo = {
-      userId,
-      characterState: user.character.state,
-    };
-    const playerStatePayload = {
-      playerStateInfo,
-    };
-    console.log('플레이어 상태 변경: ', playerStatePayload);
-    playerStateChangeNotification(server.game, playerStatePayload);
+      // 만약 player가 죽었다면 아이템을 바닥에 뿌린다
+      if (user.character.life <= 0) {
+        console.log('주금');
+        user.character.state = CHARACTER_STATE.DIED;
+        const length = user.character.inventory.slot.length;
+        for (let i = 0; i < length; i++) {
+          const itemId = user.character.inventory.removeInventorySlot(i);
+          if (itemId) {
+            // 여기 나중에 합쳐줘도 괜찮을 것 같음.
+            itemDiscardResponse(user.clientKey, server.game.socket, i + 1);
+            itemDiscardNotification(server.game, user.id, itemId);
+          }
+        }
+      } else {
+        user.character.state = CHARACTER_STATE.ATTACKED;
+      }
 
-    // 플레이어가 죽은 경우 스테이지 종료를 검사한다.
-    // 위 플레이어 사망 조건문에서 바로 확인할 수 있지만 캐릭터 사망이 원활하게 이루어진 후
-    // 스테이지 종료 조건을 확인하기 2중으로 체크하도록 함 : 윤수빈
-    if (user.character.state === CHARACTER_STATE.DIED) {
-      if (server.game.checkStageEnd()) {
-        await server.game.endStage();
+      const lifePayload = {
+        life: user.character.life,
+        isAttacked: true,
+      };
+      lifeResponse(socket, user.clientKey, lifePayload);
+
+      const playerStateInfo = {
+        userId,
+        characterState: user.character.state,
+      };
+      const playerStatePayload = {
+        playerStateInfo,
+      };
+      console.log('플레이어 상태 변경: ', playerStatePayload);
+      playerStateChangeNotification(server.game, playerStatePayload);
+
+      // 플레이어가 죽은 경우 스테이지 종료를 검사한다.
+      // 위 플레이어 사망 조건문에서 바로 확인할 수 있지만 캐릭터 사망이 원활하게 이루어진 후
+      // 스테이지 종료 조건을 확인하기 2중으로 체크하도록 함 : 윤수빈
+      if (user.character.state === CHARACTER_STATE.DIED) {
+        if (server.game.checkStageEnd()) {
+          await server.game.endStage();
+        }
       }
     }
   } catch (e) {

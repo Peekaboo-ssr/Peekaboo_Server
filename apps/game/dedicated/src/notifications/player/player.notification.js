@@ -5,7 +5,7 @@ import { CHARACTER_STATE } from '../../constants/state.js';
 /**
  * 유저의 움직임 값을 보내주는 함수
  */
-export const usersLocationNotification = (game) => {
+export const usersLocationNotification = (game, latency) => {
   const userLocations = game.users.map((user) => {
     if (
       user.state !== CHARACTER_STATE.DIED ||
@@ -28,8 +28,7 @@ export const usersLocationNotification = (game) => {
       }
 
       const timeDiff = Math.floor(
-        (Date.now() - user.character.lastUpdateTime + user.character.latency) /
-          1000,
+        (Date.now() - user.character.lastUpdateTime + latency) / 1000,
       );
 
       const distance = user.character.speed * timeDiff;
