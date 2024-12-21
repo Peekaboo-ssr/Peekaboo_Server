@@ -43,8 +43,8 @@ class SessionServer extends TcpServer {
 
   initializeSession() {
     setInterval(() => {
-      if (Object.keys(userSessions).length > 0) {
-        console.log('현재 접속한 유저 정보: ', userSessions);
+      if (Object.keys(this.userSessions).length > 0) {
+        console.log('현재 접속한 유저 정보: ', this.userSessions);
       }
     }, 5000);
   }
