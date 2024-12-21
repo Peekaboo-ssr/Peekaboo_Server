@@ -23,6 +23,7 @@ export const selectDifficultyHandler = async (
     submissionEndNotification(server.game, submissionResult);
     if (submissionResult) {
       server.game.setDifficulty(difficultyId);
+      selectDifficultyNotification(server.game, difficultyId);
     }
     if (!submissionResult) {
       console.log('submissionEnd 연출을 위한 귀신 소환 요청...');
