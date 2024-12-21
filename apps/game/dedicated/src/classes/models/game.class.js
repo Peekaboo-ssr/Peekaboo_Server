@@ -131,7 +131,7 @@ class Game {
     IntervalManager.getInstance().addGhostsInterval(
       this.id,
       () => ghostsLocationNotification(this),
-      200,
+      50,
     );
 
     IntervalManager.getInstance().addGameTimerInterval(
