@@ -194,7 +194,7 @@ class GatewayServer extends TcpServer {
 
     app.get('/network-traffic', (req, res) => {
       try {
-        const networkIn = networkInCounter.hashMap?.['']?.value || 0;
+        const networkIn = this.networkInCounter.hashMap?.['']?.value || 0;
         const networkInRate = networkInRateGauge.hashMap?.['']?.value || 0;
 
         res.json({
