@@ -1,6 +1,5 @@
 import CustomError from '@peekaboo-ssr/error/CustomError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { usersLocationNotification } from '../../../notifications/player/player.notification.js';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import handleError from '@peekaboo-ssr/error/handleError';
 
@@ -32,8 +31,6 @@ export const movePlayerRequestHandler = (
 
     //시간 저장
     user.character.lastUpdateTime = Date.now();
-
-    usersLocationNotification(server.game, user);
   } catch (e) {
     handleError(e);
   }

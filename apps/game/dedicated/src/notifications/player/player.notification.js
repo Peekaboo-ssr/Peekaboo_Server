@@ -5,16 +5,15 @@ import { CHARACTER_STATE } from '../../constants/state.js';
 /**
  * 유저의 움직임 값을 보내주는 함수
  */
-export const usersLocationNotification = (game, requestUser) => {
+export const usersLocationNotification = (game) => {
   const userLocations = game.users.map((user) => {
     if (
-      user.state !== CHARACTER_STATE.DIED ||
-      user.state !== CHARACTER_STATE.EXIT
+      user.character.state !== CHARACTER_STATE.DIED ||
+      user.character.state !== CHARACTER_STATE.EXIT
     ) {
       const lastPosition = user.character.lastPosition; // 움직이기 전 좌표
       const position = user.character.position; //현 좌표
       const rotation = user.character.rotation;
-
       if (
         position.x === lastPosition.x &&
         position.y === lastPosition.y &&
@@ -30,7 +29,7 @@ export const usersLocationNotification = (game, requestUser) => {
       const timeDiff = Math.floor(
         (Date.now() -
           user.character.lastUpdateTime +
-          requestUser.character.latency) /
+          server.game.getAvgLatency()) /
           1000,
       );
 
@@ -72,22 +71,14 @@ export const usersLocationNotification = (game, requestUser) => {
     playerMoveInfos: userLocations,
   };
 
-  // game.users.forEach((user) => {
-  //   const userLocationPayload = createPacketS2G(
-  //     config.clientPacket.dedicated.PlayerMoveNotification,
-  //     user.clientKey,
-  //     payload,
-  //   );
-  //   game.socket.write(userLocationPayload);
-  // });
-
-  const userLocationPayload = createPacketS2G(
-    config.clientPacket.dedicated.PlayerMoveNotification,
-    requestUser.clientKey,
-    payload,
-  );
-
-  game.socket.write(userLocationPayload);
+  game.users.forEach((user) => {
+    const userLocationPayload = createPacketS2G(
+      config.clientPacket.dedicated.PlayerMoveNotification,
+      user.clientKey,
+      payload,
+    );
+    game.socket.write(userLocationPayload);
+  });
 };
 
 export const playerStateChangeNotification = (game, payload) => {

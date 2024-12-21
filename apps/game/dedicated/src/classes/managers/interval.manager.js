@@ -22,6 +22,12 @@ class IntervalManager extends BaseManager {
     this.intervals.get(playerId).set(type, setInterval(callback, interval));
   }
 
+  addPlayersInterval(gameId, callback, interval, type = 'players') {
+    if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());
+
+    this.intervals.get(gameId).set(type, setInterval(callback, interval));
+  }
+
   // 게임 귀신들 전용 Interval
   addGhostsInterval(gameId, callback, interval, type = 'ghosts') {
     if (!this.intervals.has(gameId)) this.intervals.set(gameId, new Map());

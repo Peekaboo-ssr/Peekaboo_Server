@@ -33,6 +33,7 @@ import {
 } from '../../constants/game.js';
 import { CHARACTER_STATE } from '../../constants/state.js';
 import { lifeResponse } from '../../response/player/life.response.js';
+import { usersLocationNotification } from '../../notifications/player/player.notification.js';
 
 class Game {
   constructor(id, inviteCode) {
@@ -87,6 +88,12 @@ class Game {
       this.id,
       this.printGameInfo.bind(this),
       3000,
+    );
+
+    IntervalManager.getInstance().addPlayersInterval(
+      this.id,
+      usersLocationNotification(this),
+      100,
     );
   }
 
