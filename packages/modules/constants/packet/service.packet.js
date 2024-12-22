@@ -4,7 +4,7 @@ const SERVICE_PACKET = {
   DisconnectServiceRequest: 3,
   DisconnectedServiceNotification: 4,
   CreateDedicatedRequest: 5,
-  ExitDedicatedRequestBySocket: 6,
+  ExitDedicatedRequestFromSocket: 6,
   ExitDedicatedRequestBySelf: 7,
   ConnectDedicatedRequest: 8,
   JoinDedicatedRequest: 9,

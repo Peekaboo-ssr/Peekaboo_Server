@@ -22,7 +22,7 @@ import { ghostSpecialStateRequestHandler } from './game/ghost/ghostSpecialState.
 import { itemCreateHandler } from './game/item/itemCreate.handler.js';
 import { itemPurchaseHandler } from './game/store/store.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
-import { exitDedicatedHandler } from './service/exitDedicate.handler.js';
+import { ExitDedicatedBySocketHandler } from './service/exitDedicate.handler.js';
 import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
 import { lifeUpdateHandler } from './game/player/life.handler.js';
 import { selectDifficultyHandler } from './game/system/difficulty.handler.js';
@@ -126,8 +126,8 @@ export const handlers = {
     [config.servicePacket.ConnectedServiceNotification]: {
       handler: connectedServiceNotificationHandler,
     },
-    [config.servicePacket.ExitDedicatedRequestBySocket]: {
-      handler: exitDedicatedHandler,
+    [config.servicePacket.ExitDedicatedRequestFromSocket]: {
+      handler: ExitDedicatedBySocketHandler,
     },
     [config.servicePacket.JoinDedicatedRequest]: {
       handler: joinDedicatedHandler,

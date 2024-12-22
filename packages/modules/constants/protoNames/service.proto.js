@@ -7,7 +7,8 @@ const SERVICE_PACKET_MAPS = {
   [servicePacket.DisconnectedServiceNotification]:
     'disconnectedServiceNotification',
   [servicePacket.CreateDedicatedRequest]: 'createDedicatedRequest',
-  [servicePacket.ExitDedicatedRequestBySocket]: 'exitDedicatedRequestBySocket',
+  [servicePacket.ExitDedicatedRequestFromSocket]:
+    'exitDedicatedRequestFromSocket',
   [servicePacket.ExitDedicatedRequestBySelf]: 'exitDedicatedRequestBySelf',
   [servicePacket.ConnectDedicatedRequest]: 'ConnectDedicatedRequest',
   [servicePacket.JoinDedicatedRequest]: 'joinDedicatedRequest',

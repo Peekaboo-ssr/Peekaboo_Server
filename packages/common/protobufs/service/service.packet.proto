@@ -46,7 +46,7 @@ message JoinDedicatedRequest {
   string userId = 2;
 }
 
-message ExitDedicatedRequestBySocket {
+message ExitDedicatedRequestFromSocket {
   string clientKey = 1;
 }
 

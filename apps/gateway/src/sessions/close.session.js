@@ -77,7 +77,7 @@ export const exitUserNotificationToDedicated = (
   gameSessionKey,
 ) => {
   const packet = createPacketS2S(
-    config.servicePacket.ExitDedicatedRequestBySocket,
+    config.servicePacket.ExitDedicatedRequestFromSocket,
     'gateway',
     gameSessionKey,
     { clientKey },
