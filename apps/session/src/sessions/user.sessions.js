@@ -28,7 +28,7 @@ export const joinSessionByType = (userSessions, userData) => {
     // 유저 세션에 참여하는 경우 등록
     if (type === 'user') {
       userSessions[userData.clientKey] = {
-        type,
+        type: userData.type,
         userId: userData.uuid,
       };
     } else {
@@ -46,8 +46,8 @@ export const joinSessionByType = (userSessions, userData) => {
   );
 };
 
-export const getSessionByType = (userSessions, type) => {
-  return userSessions[type];
+export const getSessionByType = (userSessions, clientKey, type) => {
+  return userSessions[clientKey][type];
 };
 
 export const getUserByUUID = (userSessions, uuid) => {
