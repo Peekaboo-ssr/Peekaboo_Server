@@ -26,7 +26,7 @@ export const joinSessionByType = (userSessions, userData) => {
   // 만약 해당 유저의 세션이 없다면 등록해줌.
   if (!userSessions[userData.clientKey]) {
     // 유저 세션에 참여하는 경우 등록
-    if (type === 'user') {
+    if (userData.type === 'user') {
       userSessions[userData.clientKey] = {
         type: userData.type,
         userId: userData.uuid,
