@@ -1,5 +1,6 @@
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 import config from '@peekaboo-ssr/config/game';
+import { CHARACTER_STATE } from '../../constants/state.js';
 
 export const blockInteractionNotification = (game) => {
   const payload = {};
@@ -38,10 +39,22 @@ export const stageEndNotification = async (game) => {
     z: 22.5,
   };
 
+  const [aliveCount, diedCount] = game.users.reduce(
+    ([alive, died], user) => {
+      if (user.character.state === CHARACTER_STATE.DIED) {
+        return [alive, died + 1];
+      }
+      return [alive + 1, died];
+    },
+    [0, 0],
+  );
+
   const payload = {
     remainingDay: game.day,
     startPosition,
     soulCredit: game.soulCredit,
+    aliveCount,
+    diedCount,
   };
 
   game.users.forEach((user) => {

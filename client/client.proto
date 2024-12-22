@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-
 enum GlobalFailCode {
   NONE = 0;
   UNKNOWN = 1;
@@ -118,7 +117,6 @@ message RoomInfo {
   uint32 numberOfPlayer = 3;
   uint32 latency = 4;
 }
-
 
 message C2S_PlayerMoveRequest {
   PlayerMoveInfo playerMoveInfo = 1;
@@ -307,8 +305,14 @@ message S2C_ExtractSoulNotification {
   uint32 soulCredit = 1; 
 }
 
+message C2S_DisconnectRoomRequest {
+}
+
 message S2C_DisconnectPlayerNotification {
   string userId = 1;
+}
+
+message S2C_KickRoomNotification {
 }
 
 message S2C_BlockInteractionNotification {
@@ -341,6 +345,8 @@ message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
   uint32 soulCredit = 3;  // 현재 소울 크레딧(플레이어 사망 수 체크후 깎아주기 때문)
+  uint32 aliveCount = 4;  // 생존한 수 
+  uint32 diedCount = 5;   // 사망한 수
 }
 
 message S2C_SubmissionEndNotification {
@@ -490,6 +496,8 @@ message GamePacket {
     S2C_SubmissionEndNotification submissionEndNotification = 409;
     C2S_DifficultySelectRequest difficultySelectRequest = 410; 
     S2C_DifficultySelectNotification difficultySelectNotification = 411;
+    C2S_DisconnectRoomRequest disconnectRoomRequest = 412;
+    S2C_KickRoomNotification kickRoomNotification = 413;
 
     C2S_RegistAccountRequest registAccountRequest = 500;
     S2C_RegistAccountResponse registAccountResponse = 501;
