@@ -1,0 +1,30 @@
+{
+  "name": "endGhostPos",
+  "version": "1.0.0",
+  "data": [
+    {
+      "Id": 12001,
+      "GhostSpawnPos": "-22.5,1,23.5"
+    },
+    {
+      "Id": 12002,
+      "GhostSpawnPos": "-22.5,1,21.5"
+    },
+    {
+      "Id": 12003,
+      "GhostSpawnPos": "-22.5,1,19.5"
+    },
+    {
+      "Id": 12004,
+      "GhostSpawnPos": "-19,1,19.5"
+    },
+    {
+      "Id": 12005,
+      "GhostSpawnPos": "-19,1,21.5"
+    },
+    {
+      "Id": 12006,
+      "GhostSpawnPos": "-19,1,23.5"
+    }
+  ]
+}

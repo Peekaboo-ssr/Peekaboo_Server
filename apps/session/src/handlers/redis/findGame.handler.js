@@ -4,17 +4,21 @@ import {
 } from '../../sessions/game.session.js';
 
 export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
-  try {
-    const { responseChannel, inviteCode } = data;
+  const { responseChannel, inviteCode } = data;
 
+  console.log('FindDedicateByInvite...');
+  try {
     const resMessage = {
       isSuccess: false,
       dedicateKey: null,
       distributorKey: null,
     };
 
-    const { dedicateKey, distributorKey } = getGameByInviteCode(inviteCode);
-    console.log(dedicateKey, distributorKey);
+    const { dedicateKey, distributorKey } = getGameByInviteCode(
+      serverInstance.gameSessions,
+      inviteCode,
+    );
+    // console.log(dedicateKey, distributorKey);
 
     if (!dedicateKey || !distributorKey) {
       serverInstance.pubSubManager.publisher.publish(
@@ -22,6 +26,7 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
         JSON.stringify(resMessage),
       );
     } else {
+      console.log('@@@ 데디 찾음');
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
       resMessage.distributorKey = distributorKey;
@@ -44,8 +49,10 @@ export const FindDedicateByIdHandler = async (serverInstance, data) => {
       distributorKey: null,
     };
 
-    const { dedicateKey, distributorKey } =
-      getGameByGameSessionId(gameSessionId);
+    const { dedicateKey, distributorKey } = getGameByGameSessionId(
+      serverInstance.gameSessions,
+      gameSessionId,
+    );
 
     if (!dedicateKey || !distributorKey) {
       serverInstance.pubSubManager.publisher.publish(

@@ -1,4 +1,4 @@
-import { PACKET_TYPE } from '../constants/packet.js';
+import config from '@peekaboo-ssr/config/game';
 import { movePlayerRequestHandler } from './game/player/movePlayer.handler.js';
 import { moveGhostRequestHandler } from './game/ghost/moveGhost.handler.js';
 import { pingHandler } from './game/system/ping.handler.js';
@@ -17,116 +17,119 @@ import {
 import { ghostAttackedRequestHandler } from './game/ghost/ghostAttacked.handler.js';
 import { ghostStateChangeRequestHandler } from './game/ghost/ghostStateChange.handler.js';
 import { extractorSoulHandler } from './game/Extractor/extractor.handler.js';
-import {
-  spawnInitialDataResponseHandler,
-  startStageRequestHandler,
-} from './game/room/waitingRoom.handler.js';
+import { startStageRequestHandler } from './game/system/startStage.handler.js';
 import { ghostSpecialStateRequestHandler } from './game/ghost/ghostSpecialState.handler.js';
-import { ghostSpawnHandler } from './game/ghost/ghostSpawn.handler.js';
 import { itemCreateHandler } from './game/item/itemCreate.handler.js';
 import { itemPurchaseHandler } from './game/store/store.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
-import { exitDedicatedHandler } from './service/exitDedicate.handler.js';
+import { ExitDedicatedBySocketHandler } from './service/exitDedicate.handler.js';
 import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
+import { lifeUpdateHandler } from './game/player/life.handler.js';
+import { selectDifficultyHandler } from './game/system/difficulty.handler.js';
+import { disconnectRoomHandler } from './game/system/disconnectRoom.handler.js';
 
 export const handlers = {
   client: {
-    [PACKET_TYPE.game.PlayerMoveRequest]: {
+    [config.clientPacket.dedicated.PlayerMoveRequest]: {
       handler: movePlayerRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostMoveRequest]: {
+    [config.clientPacket.dedicated.GhostMoveRequest]: {
       handler: moveGhostRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PingResponse]: {
+    [config.clientPacket.dedicated.PingResponse]: {
       handler: pingHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------장재영 작업--------------------------*/
-    [PACKET_TYPE.game.StartStageRequest]: {
+    [config.clientPacket.dedicated.StartStageRequest]: {
       handler: startStageRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.SpawnInitialDataResponse]: {
-      handler: spawnInitialDataResponseHandler,
-      protoType: 'common.GamePacket',
-    },
-    [PACKET_TYPE.game.DoorToggleRequest]: {
+    [config.clientPacket.dedicated.DoorToggleRequest]: {
       handler: doorToggleRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PlayerStateChangeRequest]: {
+    [config.clientPacket.dedicated.PlayerStateChangeRequest]: {
       handler: playerStateChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.PlayerAttackedRequest]: {
+    [config.clientPacket.dedicated.PlayerAttackedRequest]: {
       handler: playerAttackedRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemGetRequest]: {
+    [config.clientPacket.dedicated.ItemGetRequest]: {
       handler: itemGetRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemChangeRequest]: {
+    [config.clientPacket.dedicated.ItemChangeRequest]: {
       handler: itemChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemUseRequest]: {
+    [config.clientPacket.dedicated.ItemUseRequest]: {
       handler: itemUseRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemDiscardRequest]: {
+    [config.clientPacket.dedicated.ItemDiscardRequest]: {
       handler: itemDiscardRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.ItemDisuseRequest]: {
+    [config.clientPacket.dedicated.ItemDisuseRequest]: {
       handler: itemDisuseRequestHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------장재영 작업--------------------------*/
     /*-------------------------권영현 작업--------------------------*/
-    [PACKET_TYPE.game.ExtractSoulRequest]: {
+    [config.clientPacket.dedicated.ExtractSoulRequest]: {
       handler: extractorSoulHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------권영현 작업--------------------------*/
     /*-------------------------문진수 작업--------------------------*/
-    [PACKET_TYPE.game.GhostStateChangeRequest]: {
+    [config.clientPacket.dedicated.GhostStateChangeRequest]: {
       handler: ghostStateChangeRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostAttackedRequest]: {
+    [config.clientPacket.dedicated.GhostAttackedRequest]: {
       handler: ghostAttackedRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostSpecialStateRequest]: {
+    [config.clientPacket.dedicated.GhostSpecialStateRequest]: {
       handler: ghostSpecialStateRequestHandler,
       protoType: 'common.GamePacket',
     },
-    [PACKET_TYPE.game.GhostSpawnRequest]: {
-      handler: ghostSpawnHandler,
-      protoType: 'common.GamePacket',
-    },
-    [PACKET_TYPE.game.ItemCreateRequest]: {
+    [config.clientPacket.dedicated.ItemCreateRequest]: {
       handler: itemCreateHandler,
       protoType: 'common.GamePacket',
     },
     /*-------------------------문진수 작업--------------------------*/
     /*-------------------------권영현 작업--------------------------*/
-    [PACKET_TYPE.game.ItemPurchaseRequest]: {
+    [config.clientPacket.dedicated.ItemPurchaseRequest]: {
       handler: itemPurchaseHandler,
+      protoType: 'common.GamePacket',
+    },
+    [config.clientPacket.dedicated.LifeUpdateRequest]: {
+      handler: lifeUpdateHandler,
+      protoType: 'common.GamePacket',
+    },
+    [config.clientPacket.dedicated.DifficultySelectRequest]: {
+      handler: selectDifficultyHandler,
+      protoType: 'common.GamePacket',
+    },
+    [config.clientPacket.dedicated.DisconnectRoomRequest]: {
+      handler: disconnectRoomHandler,
       protoType: 'common.GamePacket',
     },
   },
   service: {
-    [PACKET_TYPE.service.ConnectedServiceNotification]: {
+    [config.servicePacket.ConnectedServiceNotification]: {
       handler: connectedServiceNotificationHandler,
     },
-    [PACKET_TYPE.service.ExitDedicatedRequest]: {
-      handler: exitDedicatedHandler,
+    [config.servicePacket.ExitDedicatedRequestFromSocket]: {
+      handler: ExitDedicatedBySocketHandler,
     },
-    [PACKET_TYPE.service.JoinDedicatedRequest]: {
+    [config.servicePacket.JoinDedicatedRequest]: {
       handler: joinDedicatedHandler,
     },
   },

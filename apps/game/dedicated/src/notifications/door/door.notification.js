@@ -1,10 +1,10 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
 
 export const doorToggleNotification = (game, payload) => {
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.DoorToggleNotification,
+      config.clientPacket.dedicated.DoorToggleNotification,
       user.clientKey,
       payload,
     );

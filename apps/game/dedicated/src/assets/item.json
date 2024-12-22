@@ -13,7 +13,8 @@
       "MaxItemSpawnNumber": 99,
       "ExpValue": 5,
       "Usable": "FALSE",
-      "Duration": 0
+      "Duration": 0,
+      "Extraction": "TRUE"
     },
     {
       "Id": 2102,
@@ -26,7 +27,8 @@
       "MaxItemSpawnNumber": 2,
       "ExpValue": 15,
       "Usable": "FALSE",
-      "Duration": 0
+      "Duration": 0,
+      "Extraction": "TRUE"
     },
     {
       "Id": 2103,
@@ -39,7 +41,8 @@
       "MaxItemSpawnNumber": 4,
       "ExpValue": 10,
       "Usable": "FALSE",
-      "Duration": 0
+      "Duration": 0,
+      "Extraction": "TRUE"
     },
     {
       "Id": 2104,
@@ -52,7 +55,8 @@
       "MaxItemSpawnNumber": 0,
       "ExpValue": 0,
       "Usable": "TRUE",
-      "Duration": 480
+      "Duration": 480,
+      "Extraction": "FALSE"
     },
     {
       "Id": 2105,
@@ -65,7 +69,8 @@
       "MaxItemSpawnNumber": 0,
       "ExpValue": 0,
       "Usable": "FALSE",
-      "Duration": 0
+      "Duration": 0,
+      "Extraction": "FALSE"
     },
     {
       "Id": 2106,
@@ -78,7 +83,8 @@
       "MaxItemSpawnNumber": 0,
       "ExpValue": 0,
       "Usable": "FALSE",
-      "Duration": 0
+      "Duration": 0,
+      "Extraction": "FALSE"
     }
   ]
 }

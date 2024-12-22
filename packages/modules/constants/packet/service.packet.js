@@ -4,9 +4,11 @@ const SERVICE_PACKET = {
   DisconnectServiceRequest: 3,
   DisconnectedServiceNotification: 4,
   CreateDedicatedRequest: 5,
-  ExitDedicatedRequest: 6,
-  ConnectDedicateRequest: 7,
-  JoinDedicatedRequest: 8,
+  ExitDedicatedRequestFromSocket: 6,
+  ExitDedicatedRequestBySelf: 7,
+  ConnectDedicatedRequest: 8,
+  JoinDedicatedRequest: 9,
+  UpdateRoomInfoRequest: 10,
 };
 
 export default SERVICE_PACKET;

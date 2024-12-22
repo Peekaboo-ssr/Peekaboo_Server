@@ -1,5 +1,6 @@
-import CustomError from '../../../Error/custom.error.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 import {
   itemChangeNotification,
   itemDiscardNotification,
@@ -13,27 +14,26 @@ import {
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 
 // 아마도 불큐 사용할 구간
-export const itemGetRequestHandler = async ({
+export const itemGetRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { itemId, inventorySlot } = payload;
+    const user = getUserByClientKey(server.game.users, clientKey);
     console.log(user.id, '슬롯확인----------', inventorySlot);
-    const user = getUserByClientKey(clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     // 동시성 제어 1(불큐)
     // 실질적인 아이템 저장
-    await server.game.itemQueue.queue.add(
+    await server.game.gameQueue.queue.add(
       {
-        userId: user.id,
-        itemId,
-        inventorySlot,
+        type: 'item',
+        data: { clientKey, itemId, inventorySlot },
       },
       { jobId: `getItem:${itemId}`, removeOnComplete: true },
     );
@@ -42,20 +42,20 @@ export const itemGetRequestHandler = async ({
   }
 };
 
-export const itemChangeRequestHandler = async ({
+export const itemChangeRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { inventorySlot } = payload;
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.slot[slot];
@@ -67,20 +67,20 @@ export const itemChangeRequestHandler = async ({
   }
 };
 
-export const itemUseRequestHandler = async ({
+export const itemUseRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { inventorySlot } = payload;
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.slot[slot];
@@ -88,7 +88,7 @@ export const itemUseRequestHandler = async ({
     const item = server.game.getItem(itemId);
 
     if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     //아이템 타입에 따라 사용 가능 불가능 구분하여 적용
@@ -111,12 +111,40 @@ export const itemUseRequestHandler = async ({
   }
 };
 
-export const itemDiscardRequestHandler = async ({
+export const itemDisuseRequestHandler = async (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
+  try {
+    const { itemId } = payload;
+
+    const user = getUserByClientKey(server.game.users, clientKey);
+    if (!user) {
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
+    }
+
+    const item = server.game.getItem(itemId);
+
+    if (!item) {
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
+    }
+
+    item.on = false;
+
+    itemDisuseNotification(server.game, user.id, itemId);
+  } catch (e) {
+    handleError(e);
+  }
+};
+
+export const itemDiscardRequestHandler = async (
+  socket,
+  clientKey,
+  payload,
+  server,
+) => {
   try {
     const { itemInfo, inventorySlot } = payload;
 
@@ -126,23 +154,21 @@ export const itemDiscardRequestHandler = async ({
 
     const slot = inventorySlot - 1;
 
-    const user = getUserByClientKey(clientKey);
+    const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     const itemId = user.character.inventory.removeInventorySlot(slot);
     const item = server.game.getItem(itemId);
 
     if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
+      throw new CustomError(errorCodesMap.ITEM_NOT_FOUND);
     }
 
     if (itemInfo.itemId !== itemId) {
-      throw new CustomError(ErrorCodesMaps.ITEM_DETERIORATION);
+      throw new CustomError(errorCodesMap.ITEM_DETERIORATION);
     }
-
-    item.mapOn = true;
 
     // item.position.updateClassPosition(itemInfo.position);
     item.position.updateClassPosition(user.character.position);
@@ -150,34 +176,6 @@ export const itemDiscardRequestHandler = async ({
     itemDiscardResponse(user.clientKey, server.game.socket, inventorySlot);
 
     itemDiscardNotification(server.game, user.id, itemId);
-  } catch (e) {
-    handleError(e);
-  }
-};
-
-export const itemDisuseRequestHandler = async ({
-  socket,
-  clientKey,
-  payload,
-  server,
-}) => {
-  try {
-    const { itemId } = payload;
-
-    const user = getUserByClientKey(clientKey);
-    if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
-    }
-
-    const item = server.game.getItem(itemId);
-
-    if (!item) {
-      throw new CustomError(ErrorCodesMaps.ITEM_NOT_FOUND);
-    }
-
-    item.on = false;
-
-    itemDisuseNotification(server.game, user.id, itemId);
   } catch (e) {
     handleError(e);
   }

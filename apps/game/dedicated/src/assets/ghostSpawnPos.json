@@ -1,5 +1,5 @@
 {
-  "name": "ghost",
+  "name": "ghostSpawnPos",
   "version": "1.0.0",
   "data": [
     {
@@ -36,7 +36,7 @@
     },
     {
       "Id": 11209,
-      "GhostSpawnPos": "-13.8,0.17.8"
+      "GhostSpawnPos": "-13.8,0,17.8"
     },
     {
       "Id": 11210,

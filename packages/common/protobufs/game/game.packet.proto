@@ -59,19 +59,24 @@ message C2S_PlayerAttackedRequest {
   uint32 ghostId = 2;
 } 
 
+message C2S_LifeUpdateRequest {
+
+}
+
 message S2C_PlayerLifeResponse {
   uint32 life= 1;
+  bool isAttacked = 2;
 }
 
 message C2S_GhostSpecialStateRequest {
   uint32 ghostId = 1;
-  uint32 specialState = 2;
+  GhostSpecialState specialState = 2;
   bool isOn = 3;
 }
 
 message S2C_GhostSpecialStateNotification {
   uint32 ghostId = 1;
-  uint32 specialState = 2;
+  GhostSpecialState specialState = 2;
   bool isOn = 3;
 }
 
@@ -140,7 +145,7 @@ message C2S_ItemDisuseRequest {
 }
 
 message S2C_ItemDisuseNotification {
-  uint32 userId = 1;
+  string userId = 1;
   uint32 itemId  = 2;
 }
 
@@ -154,6 +159,7 @@ message C2S_ItemPurchaseRequest {
 
 message S2C_ItemPurchaseNotification {
   ItemInfo itemInfo = 1;
+  uint32 soulCredit = 2;
 }
 
 message S2C_ItemPurchaseResponse {
@@ -183,11 +189,17 @@ message C2S_ExtractSoulRequest {
 }
 
 message S2C_ExtractSoulNotification {
-  uint32 soulAccumulatedAmount = 1; 
+  uint32 soulCredit = 1; 
+}
+
+message C2S_DisconnectRoomRequest {
 }
 
 message S2C_DisconnectPlayerNotification {
   string userId = 1;
+}
+
+message S2C_KickRoomNotification {
 }
 
 message S2C_BlockInteractionNotification {
@@ -197,29 +209,37 @@ message S2C_RemainingTimeNotification {
   uint32 remainingTime = 1;
 }
 
+message C2S_DifficultySelectRequest {
+  uint32 difficultyId = 1;
+}
+
+message S2C_DifficultySelectNotification {
+  uint32 difficultyId = 1;
+}
+
 message C2S_StartStageRequest	{
   string gameSessionId = 1;
-  uint32 difficultyId = 2;
-}
-
-message S2C_SpawnInitialDataRequest	{
-  GlobalFailCode globalFailCode  = 1;
-  uint32 difficultyId = 2;
-  string message = 3;
-}
-
-message C2S_SpawnInitialDataResponse {
-  repeated ItemInfo itemInfos = 1;
 }
 
 message S2C_StartStageNotification {
   GlobalFailCode globalFailCode  = 1;
   string message = 2;
   repeated ItemInfo itemInfos = 3;
+  repeated GhostInfo ghostInfos = 4;
 }
 
 message S2C_StageEndNotification {
   uint32 remainingDay = 1;
+  Position startPosition = 2;
+  uint32 soulCredit = 3;  // 현재 소울 크레딧(플레이어 사망 수 체크후 깎아주기 때문)
+  uint32 aliveCount = 4;  // 생존한 수 
+  uint32 diedCount = 5;   // 사망한 수
+}
+
+message S2C_SubmissionEndNotification {
+  bool result = 1;
+  string day = 2;
+  uint32 submissionValue = 3;
 }
 
 message C2S_RegistAccountRequest {
@@ -246,7 +266,6 @@ message S2C_LoginResponse {
 message C2S_ChangeNicknameRequest {
   string userId = 1;
   string nickname = 2; 
-  string token = 3;
 }
 
 message S2C_ChangeNicknameResponse {
@@ -259,24 +278,16 @@ message C2S_EnterLobbyRequest {
 }
 
 message S2C_EnterLobbyResponse {
-  repeated RoomInfo roomInfos = 1;
+  GlobalFailCode globalFailCode = 1;
 }
 
-message C2S_RefreshLobbyRequest {
+message C2S_WaitingRoomListRequest {
   string userId = 1;
 }
 
-message S2C_RefreshLobbyResponse {
+message S2C_WaitingRoomListResponse {
   repeated RoomInfo roomInfos = 1;
   GlobalFailCode globalFailCode = 2;
-}
-
-message C2S_SearchRoomRequest {
- string searchText = 1;
-}
-
-message S2C_SearchRoomResponse {
- repeated RoomInfo roomInfos = 1;
 }
 
 message C2S_CreateRoomRequest {
@@ -292,6 +303,12 @@ message S2C_CreateRoomResponse {
 }
 
 message C2S_JoinRoomRequest {
+  string userId = 1;
+  string inviteCode = 2;
+  string token = 3;
+}
+
+message C2S_JoinRoomByGameSessionIdRequest {
   string userId = 1;
   string inviteCode = 2;
   string token = 3;

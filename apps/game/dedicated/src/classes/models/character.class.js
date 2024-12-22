@@ -12,8 +12,8 @@ export class Character {
     this.maxLife = 3;
     this.life = 3;
     this.state = CHARACTER_STATE.IDLE;
-    this.speed = 1;
-    this.latency = null;
+    this.speed = 1.5;
+    this.latency = 0;
     this.lastUpdateTime = Date.now();
     this.inventory = new Inventory();
   }

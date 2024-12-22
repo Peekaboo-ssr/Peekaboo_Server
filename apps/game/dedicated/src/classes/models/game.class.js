@@ -1,25 +1,47 @@
+// asset
+import { getGameAssets } from '../../load.assets.js';
+// managers
 import IntervalManager from '../managers/interval.manager.js';
-import { CHARACTER_STATE, GAME_SESSION_STATE } from '../../constants/state.js';
+import GameQueueManager from '../managers/gameQueue.manager.js';
+// class
+import Item from './item.class.js';
+import Ghost from './ghost.class.js';
+import { Position } from './moveInfo.class.js';
 import { Character } from './character.class.js';
-import { ghostsLocationNotification } from '../../notifications/ghost/ghost.notification.js';
+import { Door } from './door.class.js';
+// notification
 import {
-  disconnectPlayerNotification,
+  ghostDeleteNotification,
+  ghostsLocationNotification,
+} from '../../notifications/ghost/ghost.notification.js';
+import { usersLocationNotification } from '../../notifications/player/player.notification.js';
+import {
   remainingTimeNotification,
   stageEndNotification,
 } from '../../notifications/system/system.notification.js';
-import ItemQueueManager from '../managers/itemQueueManager.js';
-import DoorQueueManager from '../managers/doorQueueManager.js';
-import { Door } from './door.class.js';
-import { config } from '../../config/config.js';
-import { getGameAssets } from '../../init/load.assets.js';
-import { setGameStateRedis } from '../../redis/game.redis.js';
 import { itemDeleteNotification } from '../../notifications/item/item.notification.js';
+import { extractSoulNotification } from '../../notifications/extractor/extractor.notification.js';
+// utils
+import { setGameStateRedis } from '../../redis/game.redis.js';
+import { getRandomInt } from '../../utils/math/getRandomInt.js';
+import { removeGameRedis } from '../../redis/game.redis.js';
+// config
+import config from '@peekaboo-ssr/config/game';
+import { DOOR_STATE } from '../../constants/state.js';
+import {
+  SUBMISSION_DURATION,
+  MAX_PLAYER,
+  MAX_DOOR_NUM,
+} from '../../constants/game.js';
+import { CHARACTER_STATE } from '../../constants/state.js';
+import { lifeResponse } from '../../response/player/life.response.js';
 
 class Game {
   constructor(id, inviteCode) {
     this.id = id;
     this.socket = null; // 자체적으로 게이트웨이에 보내기 위한 socket
     this.hostId = null;
+    this.isCreated = false;
     this.isInit = false;
 
     // 게임 관련 오브젝트를 저장한 배열
@@ -29,28 +51,36 @@ class Game {
     this.doors = []; // 문
 
     // 게임 관련 데이터
-    this.state = GAME_SESSION_STATE.PREPARE; // 게임 상태 (준비, 플레이, 종료)
+    this.state = config.clientState.gameState.PREPARE; // 게임 상태 (준비, 플레이, 종료)
     this.inviteCode = inviteCode; // 게임 초대 코드
     this.day = null; // 스테이지 단계
+    this.submissionDay = null; // 서브미션 데이
     this.submissionId = null; // 서브미션 단계
     this.difficultyId = null; // 난이도
     this.remainingTime = null; // 스테이지 남은 시간
-    this.goalSoulAmount = 0; // 소울 수집 목표량
-    this.soulAccumulatedAmount = 0; // 현재 소울량
-    this.ghostSpawnPositions = null; // 귀신 스폰 지역
-    this.itemSpawnPositions = null; // 아이템(소울) 스폰 지역
+    this.defaultRemainingTime = null; // 제한 시간
+    this.isRemainingTimeOver = false; // 제한 시간 경과로 인한 게임 오버
     this.gameAssets = getGameAssets(); // 게임 에셋 복제
 
+    // 소울 관련 데이터
+    this.goalSoulCredit = null; // 소울 수집 목표량
+    this.soulCredit = null; // 현재 소울량
+    this.itemSpawnPositions = null; // 소울 아이템 스폰 지역
+    this.minSoulItemNumber = null; // 소울 아이템 최소 스폰수
+    this.maxSoulItemNumber = null; // 소울 아이템 최대 스폰수
+
     // 귀신 관련 데이터
+    this.ghostSpawnPositions = null; // 귀신 스폰 지역
+    this.spawnGhost = null; // 스폰 가능한 귀신
+    this.minGhostNumber = null; // 귀신 최소 스폰수
+    this.maxGhostNumber = null; // 귀신 최대 스폰수
     this.ghostIdCount = 1; // 귀신에 부여할 ID (스폰될떄마다 증가)
     this.ghostCSpawn = false;
 
     // 아이템 관련 데이터
     this.itemIdCount = 1; // 아이템에 부여할 ID (스폰될때마다 증가)
-    this.itemQueue = new ItemQueueManager(this);
-
-    // 문관련 데이터
-    this.doorQueue = new DoorQueueManager(this);
+    this.gameQueue = new GameQueueManager(this);
+    this.gameQueue.initializeQueue();
 
     // 스테이지 초기화
     this.initStage();
@@ -60,66 +90,51 @@ class Game {
       this.printGameInfo.bind(this),
       3000,
     );
+
+    IntervalManager.getInstance().addPlayersInterval(
+      this.id,
+      () => usersLocationNotification(this),
+      100,
+    );
   }
 
-  initStage() {
-    // 맨 처음 스테이지를 초기화할 때에는 day와 submissionId를 직접 지정해준다.
+  async initStage() {
+    // 서브미션 첫 시작할 때에는 day와 submissionId를 직접 지정해준다.
     if (!this.isInit) {
-      this.day = 1;
+      this.day = SUBMISSION_DURATION;
       const initSubMissionData = this.gameAssets.submission.data[0];
       this.submissionId = initSubMissionData.Id;
-      this.goalSoulAmount = initSubMissionData.SubmissionValue;
-      this.soulAccumulatedAmount = 1000;
+      this.submissionDay = initSubMissionData.Day;
+      this.goalSoulCredit = initSubMissionData.SubmissionValue;
+      this.soulCredit = 0;
+      // 플레이어 생명력도 다 초기로 돌림
+      this.users.forEach((user) => {
+        const maxHp = user.character.maxLife;
+        user.character.life = maxHp;
+      });
+      this.isInit = true;
     }
 
-    // 귀신 스폰 가능 지점 초기화 => 원본 데이터 유지를 위한 복제
-    this.ghostSpawnPositions = [...this.gameAssets.ghostSpawnPos.data];
-    this.itemSpawnPositions = [...this.gameAssets.soulItemPos.data];
-
-    // 문, 아이템, 귀신 초기화
+    // 문, 아이템, 귀신, 플레이어 초기화
     this.initDoors();
     this.initItems();
     this.initGhosts();
+    this.initPlayers();
 
-    // 다음 스테이지 검사
-    this.day += 1;
-    if (this.day > config.game.submission_duration) {
-      // 만약 영혼 할당치를 못모았다면?
-      // 1) 게임 종료 후 => 메인화면
-      // 2) submission "A"로 초기화
-      // 3) 현재 submission "~"로 초기화
-      if (this.goalSoulAmount > this.soulAccumulatedAmount) {
-        //
-      } else {
-        // 영혼 할당치를 모두 모았다면
-        this.day -= config.game.submission_duration;
-        const nextSubMissionData = gameAssets.submission.data.find(
-          (submission) => submission.Id === this.submissionId + 1,
-        );
-        if (!nextSubMissionData) {
-          console.log(`다음 서브미션이 존재하지 않습니다.`);
-        }
-        // 영혼 수집량을 0으로 초기화 or goalSoulAmount만큼 빼주기
-        // this.soulAccumulatedAmount = 0;
-        this.soulAccumulatedAmount -= this.goalSoulAmount;
-
-        this.submissionId = nextSubMissionData.Id;
-        this.goalSoulAmount = nextSubMissionData.SubmissionValue;
-      }
-    }
     // 게임 상태를 준비상태로 변경
-    this.state = GAME_SESSION_STATE.PREPARE;
+    if (this.state !== config.clientState.gameState.PREPARE) {
+      this.state = config.clientState.gameState.PREPARE;
+    }
+    this.isRemainingTimeOver = false;
   }
 
   // stage 시작
   async startStage() {
     // 게임 상태 변경
-    await this.setState(GAME_SESSION_STATE.INPROGRESS);
+    await this.setState(config.clientState.gameState.INPROGRESS);
 
     // 게임 남은 시간 초기화
-    this.remainingTime = this.gameAssets.difficulty.data.find(
-      (data) => data.id === this.difficultyId,
-    )[`TimeLimit(sec)`];
+    this.remainingTime = this.defaultRemainingTime;
 
     IntervalManager.getInstance().addGhostsInterval(
       this.id,
@@ -136,43 +151,46 @@ class Game {
 
   // 스테이지 종료 로직
   async endStage() {
-    // 게임 상태를 END로 변경한다.
-    // this.state = GAME_SESSION_STATE.END;
-    this.state = GAME_SESSION_STATE.PREPARE;
+    console.log('endStage 호출 당시 game state: ', this.state);
+    if (this.state === config.clientState.gameState.INPROGRESS) {
+      // 귀신 및 게임 타이머 인터벌 삭제 (이미 전 endStage 삭제됐음) - 에러 발생 가능성 있음
+      IntervalManager.getInstance().removeGhostsInterval(this.id);
+      IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
-    // 먼저 스테이지가 종료되었다는 stageEndNotification을 보내준다.
-    stageEndNotification(this);
+      // 게임 상태를 END로 변경한다.
+      await this.setState(config.clientState.gameState.END);
 
-    await this.setState(GAME_SESSION_STATE.PREPARE);
+      this.day -= 1;
+      await stageEndNotification(this);
 
-    // 귀신 및 게임 타이머 인터벌 삭제
-    IntervalManager.getInstance().removeGhostsInterval(this.id);
-    IntervalManager.getInstance().removeGameTimerInterval(this.id);
+      // TODO: 사망한 플레이어만큼 soulCredit 깎기
 
-    // TODO : 추후 필요한 로직들은 밑에 추가해준다.
-    // ex) 아이템 정리, 귀신 정리, 인벤토리 정리 등등...
-
-    // 점수(영혼 모은 개수)를 우선 여기서 구현할까?
-
-    // ** 임시 게임 종료 시, 게임 세션을 삭제하도록 진행
-    // 1. 해당 게임 세션에 속한 유저들의 인터벌 삭제
-    // 2. 해당 게임 세션에서 수행하는 인터벌 삭제
-    // 3. 불큐 삭제
-    // 4. destroy this
-    // this.users.forEach((user) => {
-    //   IntervalManager.getInstance().removeUserInterval(user.id);
-    // });
-    // IntervalManager.getInstance().removeGameInterval(this.id);
-    // await this.doorQueue.queue.obliterate({ force: true });
-    // await this.doorQueue.queue.close();
-    // await this.itemQueue.queue.obliterate({ force: true });
-    // await this.itemQueue.queue.close();
+      if (this.isInit === true) {
+        this.isInit === false;
+      }
+      await this.initStage();
+    }
+    // 서브미션 실패로 인한 endStage()로 판단
+    else if (this.state === config.clientState.gameState.FAIL) {
+      console.log('submission 실패로 인해 들어온 endStage...');
+      // 게임 상태를 END로 변경한다.
+      await this.setState(config.clientState.gameState.END);
+      await this.initStage();
+      await stageEndNotification(this);
+    }
+    // 스테이지 종료 후 난이도 초기화
+    this.difficultyId = null;
   }
 
   async addUser(user, isHost = false) {
+    if (this.users.length >= MAX_PLAYER) {
+      return false;
+    }
+
     if (isHost) {
       this.hostId = user.id;
     }
+
     const character = new Character();
     user.attachCharacter(character);
     user.setGameId(this.id);
@@ -180,22 +198,16 @@ class Game {
     this.users.push(user);
 
     // 핑 인터벌 추가
-    IntervalManager.getInstance().addPingInterval(
-      user.id,
-      () => user.ping(this.socket),
-      1000,
-      'user',
-    );
-  }
+    setTimeout(() => {
+      IntervalManager.getInstance().addPingInterval(
+        user.id,
+        () => user.ping(this.socket),
+        1000,
+        'user',
+      );
+    }, 3000);
 
-  async removeUser(userId) {
-    const removeUserIndex = this.users.findIndex((user) => user.id === userId);
-    this.users.splice(removeUserIndex, 1);
-
-    // 연결을 종료한 사실을 다른 유저들에게 disconnectPlayerNotification로 알려준다.
-    await disconnectPlayerNotification(this, userId);
-
-    IntervalManager.getInstance().removeUserInterval(userId);
+    return true;
   }
 
   getUser(userId) {
@@ -226,32 +238,169 @@ class Game {
     return this.items.splice(index, 1)[0];
   }
 
+  setDifficulty(difficultyId) {
+    this.difficultyId = difficultyId;
+    console.log(`difficultyId : ${difficultyId}`);
+
+    const difficultyData = this.gameAssets.difficulty.data.find(
+      (data) => data.Id === this.difficultyId,
+    );
+
+    if (!difficultyData) {
+      console.error(`Not exist difficulty data`);
+    }
+
+    this.spawnGhost = difficultyData.SpawnGhost;
+    this.defaultRemainingTime = difficultyData.TimeLimit;
+    this.minGhostNumber = difficultyData.MinGhostNumber;
+    this.maxGhostNumber = difficultyData.MaxGhostNumber;
+    this.minSoulItemNumber = difficultyData.MinSoulItemNumber;
+    this.maxSoulItemNumber = difficultyData.MaxSoulItemNumber;
+
+    this.spawnSoulItem = this.gameAssets.item.data
+      .filter((data) => data.Extraction === 'TRUE')
+      .map((data) => data.Id);
+    this.itemSpawnPositions = this.gameAssets.soulItemPos.data.map((data) => {
+      const [x, y, z] = data.POS.split(',').map(Number);
+      return new Position(x, y, z);
+    });
+    this.ghostSpawnPositions = this.gameAssets.ghostSpawnPos.data.map(
+      (data) => {
+        const [x, y, z] = data.GhostSpawnPos.split(',').map(Number);
+        return new Position(x, y, z);
+      },
+    );
+    console.log(`itemSpawnPositions : ${this.itemSpawnPositions}`);
+    console.log(`ghostSpawnPositions : ${this.ghostSpawnPositions}`);
+    console.log(`minSoulItemNumber : ${this.minSoulItemNumber}`);
+    console.log(`maxSoulItemNumber : ${this.maxSoulItemNumber}`);
+  }
+
   initDoors() {
-    for (let i = 0; i < config.game.max_door_num; i++) {
-      const door = new Door(i + 1);
-      this.doors.push(door);
+    // 문이 이미 생성된 상태라면 모두 MIDDLE로 초기화
+    if (this.doors.length !== 0) {
+      for (let i in this.doors) {
+        this.doors[i].setStatus(DOOR_STATE.DOOR_MIDDLE);
+      }
+    } else {
+      for (let i = 0; i < MAX_DOOR_NUM; i++) {
+        const door = new Door(i + 1);
+        this.doors.push(door);
+      }
     }
   }
 
   initItems() {
     if (this.items.length === 0) return;
-
-    // 클라이언트에게 인벤토리에 포함되지 아이템들을 삭제하라고 알려주기 위해
-    // ItemDeleteNotification을 보내준다.
-    const deleteItems = this.items
-      .filter((item) => item.mapOn === true)
-      .map((item) => item.id);
-    itemDeleteNotification(this, deleteItems);
-
-    const deleteGhosts = this.ghosts.map((ghost) => ghost.id);
-    ghostDeleteNotification(this, deleteGhosts);
-
-    // 인벤토리에 들어간 아이템이 아닌 맵에 존재하는 아이템들을 삭제한다.
-    this.items = this.items.filter((item) => item.mapOn === false);
+    if (this.isRemainingTimeOver) {
+      // 전부 죽거나, 타임아웃 상태
+      const deleteItems = this.items.map((item) => item.id);
+      itemDeleteNotification(this, deleteItems);
+      // 아이템 빈 배열로 만듦
+      this.items = [];
+    } else {
+      // 클라이언트에게 인벤토리에 포함되지 아이템들을 삭제하라고 알려주기 위해
+      // ItemDeleteNotification을 보내준다.
+      const deleteItems = this.items
+        .filter((item) => item.mapOn === true)
+        .map((item) => item.id);
+      itemDeleteNotification(this, deleteItems);
+      // 인벤토리에 들어간 아이템이 아닌 맵에 존재하는 아이템들을 삭제한다.
+      this.items = this.items.filter((item) => item.mapOn === false);
+    }
   }
 
   initGhosts() {
+    if (this.ghosts.length === 0) return;
+    const deleteGhosts = this.ghosts.map((ghost) => ghost.id);
+    ghostDeleteNotification(this, deleteGhosts);
     this.ghosts = [];
+  }
+
+  initPlayers() {
+    const startPosition = new Position(-13.17, 1, 22.5);
+    // 위치 및 상태초기화
+    this.users.forEach((user) => {
+      user.character.position.updateClassPosition(startPosition);
+
+      if (user.character.life <= 0) {
+        user.character.state = CHARACTER_STATE.IDLE;
+        user.character.life = 1;
+      }
+    });
+  }
+
+  spawnItems() {
+    const spawnSoulItemNumber = getRandomInt(
+      this.minSoulItemNumber,
+      this.maxSoulItemNumber + 1,
+    );
+    const copyItemSpawnPosition = [...this.itemSpawnPositions];
+    const itemInfos = [];
+    for (let i = 0; i < spawnSoulItemNumber; i++) {
+      const itemId = this.getUniqueItemId();
+      const itemTypeId =
+        this.spawnSoulItem[getRandomInt(0, this.spawnSoulItem.length)];
+      const randomPosIdx = getRandomInt(0, copyItemSpawnPosition.length);
+      const itemPosition = copyItemSpawnPosition[randomPosIdx];
+      copyItemSpawnPosition.splice(randomPosIdx, 1);
+      this.items.push(new Item(itemId, itemTypeId, itemPosition));
+
+      const itemInfo = {
+        itemId,
+        itemTypeId,
+        position: itemPosition.getPosition(),
+      };
+
+      itemInfos.push(itemInfo);
+    }
+    console.log('spawnedItems: ', this.items);
+
+    return itemInfos;
+  }
+
+  spawnGhosts() {
+    const spawnGhostNumber = getRandomInt(
+      this.minGhostNumber,
+      this.maxGhostNumber + 1,
+    );
+    const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
+    const copyGhostTypes = [...this.spawnGhost];
+    const ghostInfos = [];
+    for (let i = 0; i < spawnGhostNumber; i++) {
+      const ghostId = this.getUniqueGhostId();
+      const randomTypeIdx = getRandomInt(0, copyGhostTypes.length);
+      const ghostTypeId = copyGhostTypes[randomTypeIdx];
+      if (copyGhostTypes.length !== 1) {
+        copyGhostTypes.splice(randomTypeIdx, 1);
+      }
+      const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
+      const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
+      copyGhostSpawnPositions.splice(randomPosIdx, 1);
+
+      const ghostData = this.gameAssets.ghost.data.find((ghost) => {
+        return ghost.Id === ghostTypeId;
+      });
+
+      const rotation = { x: 0, y: 0, z: 0 };
+      const moveInfo = {
+        position: ghostPosition.getPosition(),
+        rotation,
+      };
+      const ghostInfo = {
+        ghostId,
+        ghostTypeId,
+        moveInfo,
+      };
+      this.ghosts.push(
+        new Ghost(ghostId, ghostTypeId, ghostPosition, 0, ghostData.Speed),
+      );
+      ghostInfos.push(ghostInfo);
+    }
+
+    console.log('spawnedGhost: ', this.ghosts);
+
+    return ghostInfos;
   }
 
   getDoor(doorId) {
@@ -294,7 +443,7 @@ class Game {
     this.ghosts.forEach((ghost, index) => {
       // user.printUserInfo()
       // - pos, rot, latency를 출력해준다.
-      console.log(`[${index + 1}}] Ghost : ${ghost.printInfo()}`);
+      console.log(`[${index + 1}] Ghost : ${ghost.printInfo()}`);
     });
     console.log(
       `---------------------------------------------------------------------------------------------------------`,
@@ -302,29 +451,89 @@ class Game {
   }
 
   gameTimer() {
-    if (this.state !== GAME_SESSION_STATE.INPROGRESS) {
+    if (this.state !== config.clientState.gameState.INPROGRESS) {
       return;
     }
     this.remainingTime -= 1;
 
+    // 게임 남은 시간 동기화를 위해 remainingTimeNotification 패킷을 보낸다.
+    remainingTimeNotification(this);
+
     if (this.remainingTime <= 0) {
+      console.log('게임 오버!!!!!!!!!');
+      this.users.forEach((user) => {
+        user.character.state = CHARACTER_STATE.DIED;
+        user.character.life = 0;
+        const lifePayload = {
+          life: 0,
+          isAttacked: false,
+        };
+        lifeResponse(this.socket, user.clientKey, lifePayload);
+      });
+      this.isRemainingTimeOver = true;
       this.endStage();
-    } else {
-      // 게임 남은 시간 동기화를 위해 remainingTimeNotification 패킷을 보낸다.
-      remainingTimeNotification(this);
     }
   }
 
   // 모든 플레이어가 죽었거나 탈출했는지 검사하는 함수
   checkStageEnd() {
+    console.log('checkStageEnd.....');
     const isEndStage = this.users.every((user) => {
-      return (
-        user.character.state === CHARACTER_STATE.DIED ||
-        user.character.state === CHARACTER_STATE.EXIT
-      );
+      return user.character.life <= 0;
     });
-
+    console.log(isEndStage);
     return isEndStage;
+  }
+
+  async endSubmission() {
+    // submission 목표치 검증
+    if (this.soulCredit >= this.goalSoulCredit) {
+      console.log(
+        `${this.soulCredit}/${this.goalSoulCredit} => submission 성공`,
+      );
+      // 목표치를 모았다면 성공
+      this.day += SUBMISSION_DURATION;
+      const nextSubMissionData = this.gameAssets.submission.data.find(
+        (submission) => submission.Id === this.submissionId + 1,
+      );
+      if (!nextSubMissionData) {
+        console.log(`다음 서브미션이 존재하지 않습니다.`);
+      }
+      // 영혼 수집량을 0으로 초기화 or goalSoulCredit만큼 빼주기
+      this.soulCredit -= this.goalSoulCredit;
+      // 영혼 할당량 뺀 다음 Notification 날리기
+      extractSoulNotification(this);
+      this.submissionId = nextSubMissionData.Id;
+      this.submissionDay = nextSubMissionData.Day;
+      this.goalSoulCredit = nextSubMissionData.SubmissionValue;
+      return true;
+    } else {
+      console.log(
+        `${this.soulCredit}/${this.goalSoulCredit} => submission 실패`,
+      );
+      console.log('현재 게임 상태: ', this.state);
+      this.state = config.clientState.gameState.FAIL;
+      // initStage()가 이후에 호출될 때 완전 초기로 세팅
+      this.isInit = false;
+      return false;
+    }
+  }
+
+  getUniqueItemId() {
+    return this.itemIdCount++;
+  }
+
+  getUniqueGhostId() {
+    return this.ghostIdCount++;
+  }
+
+  async checkRemainUsers(game) {
+    if (game.users.length <= 0) {
+      IntervalManager.getInstance().clearAll();
+      await removeGameRedis(game.id);
+      console.log('-------남은 유저가 없어 종료합니다-------');
+      process.exit(1);
+    }
   }
 }
 

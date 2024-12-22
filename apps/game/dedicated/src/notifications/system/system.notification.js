@@ -1,32 +1,13 @@
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
-import { PACKET_TYPE } from '../../constants/packet.js';
-
-/**
- * 연결 종료한 유저를 접속 중인 다른 유저들에게 disconnectPlayerNotification로 알려주는 함수
- * @param {*} game
- * @param {*} disconnectUserId
- */
-export const disconnectPlayerNotification = async (game, disconnectUserId) => {
-  const payload = {
-    userId: disconnectUserId,
-  };
-
-  game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.game.DisconnectPlayerNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
-  });
-};
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import config from '@peekaboo-ssr/config/game';
+import { CHARACTER_STATE } from '../../constants/state.js';
 
 export const blockInteractionNotification = (game) => {
   const payload = {};
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.BlockInteractionNotification,
+      config.clientPacket.dedicated.BlockInteractionNotification,
       user.clientKey,
       payload,
     );
@@ -42,7 +23,7 @@ export const remainingTimeNotification = (game) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.RemainingTimeNotification,
+      config.clientPacket.dedicated.RemainingTimeNotification,
       user.clientKey,
       payload,
     );
@@ -51,14 +32,65 @@ export const remainingTimeNotification = (game) => {
   });
 };
 
-export const stageEndNotification = (game) => {
+export const stageEndNotification = async (game) => {
+  const startPosition = {
+    x: -13.17,
+    y: 1,
+    z: 22.5,
+  };
+
+  const [aliveCount, diedCount] = game.users.reduce(
+    ([alive, died], user) => {
+      if (user.character.life <= 0) {
+        return [alive, died + 1];
+      }
+      return [alive + 1, died];
+    },
+    [0, 0],
+  );
+
   const payload = {
-    difficultyId: game.difficultyId,
+    remainingDay: game.day,
+    startPosition,
+    soulCredit: game.soulCredit,
+    aliveCount,
+    diedCount,
   };
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.game.StageEndNotification,
+      config.clientPacket.dedicated.StageEndNotification,
+      user.clientKey,
+      payload,
+    );
+    game.socket.write(packet);
+  });
+};
+
+export const submissionEndNotification = (game, result) => {
+  const payload = {
+    result,
+    day: game.submissionDay,
+    submissionValue: game.goalSoulCredit,
+  };
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      config.clientPacket.dedicated.SubmissionEndNotification,
+      user.clientKey,
+      payload,
+    );
+
+    game.socket.write(packet);
+  });
+};
+
+export const selectDifficultyNotification = (game, difficultyId) => {
+  const payload = {
+    difficultyId,
+  };
+  game.users.forEach((user) => {
+    const packet = createPacketS2G(
+      config.clientPacket.dedicated.DifficultySelectNotification,
       user.clientKey,
       payload,
     );

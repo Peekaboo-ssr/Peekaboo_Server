@@ -7,9 +7,12 @@ const SERVICE_PACKET_MAPS = {
   [servicePacket.DisconnectedServiceNotification]:
     'disconnectedServiceNotification',
   [servicePacket.CreateDedicatedRequest]: 'createDedicatedRequest',
-  [servicePacket.ExitDedicatedRequest]: 'exitDedicatedRequest',
-  [servicePacket.ConnectDedicateRequest]: 'connectDedicateRequest',
+  [servicePacket.ExitDedicatedRequestFromSocket]:
+    'exitDedicatedRequestFromSocket',
+  [servicePacket.ExitDedicatedRequestBySelf]: 'exitDedicatedRequestBySelf',
+  [servicePacket.ConnectDedicatedRequest]: 'ConnectDedicatedRequest',
   [servicePacket.JoinDedicatedRequest]: 'joinDedicatedRequest',
+  [servicePacket.UpdateRoomInfoRequest]: 'updateRoomInfoRequest',
 };
 
 export default SERVICE_PACKET_MAPS;

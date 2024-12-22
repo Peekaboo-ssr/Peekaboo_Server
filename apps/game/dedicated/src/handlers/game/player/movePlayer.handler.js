@@ -1,15 +1,15 @@
-import CustomError from '../../../Error/custom.error.js';
+import CustomError from '@peekaboo-ssr/error/CustomError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
-import { usersLocationNotification } from '../../../notifications/player/player.notification.js';
-import { ErrorCodesMaps } from '../../../Error/error.codes.js';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+import handleError from '@peekaboo-ssr/error/handleError';
 
 // 플레이어 이동 요청에 따른 핸들러 함수
-export const movePlayerRequestHandler = ({
+export const movePlayerRequestHandler = (
   socket,
   clientKey,
   payload,
   server,
-}) => {
+) => {
   try {
     const { playerMoveInfo } = payload;
 
@@ -18,7 +18,7 @@ export const movePlayerRequestHandler = ({
     // 유저 찾기
     const user = getUserByClientKey(server.game.users, clientKey);
     if (!user) {
-      throw new CustomError(ErrorCodesMaps.USER_NOT_FOUND);
+      throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
 
     //이전 값 저장
@@ -31,9 +31,7 @@ export const movePlayerRequestHandler = ({
 
     //시간 저장
     user.character.lastUpdateTime = Date.now();
-
-    usersLocationNotification(server.game);
   } catch (e) {
-    console.error(`${e.message}`);
+    handleError(e);
   }
 };

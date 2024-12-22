@@ -1,6 +1,35 @@
-import { PACKET_TYPE } from '../../constants/packet.js';
-import { GLOBAL_FAIL_CODE } from '../../constants/state.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+
+/**
+ * 토큰이 유효하지 않을때 실패 응답 보내주는 함수입니다.
+ * @param {*} socket
+ */
+export const sendCreateRoomResponse = async (
+  socket,
+  clientKey,
+  gameId,
+  inviteCode,
+) => {
+  try {
+    const payloadData = {
+      globalFailCode: config.clientState.globalFailCode.NONE,
+      message: '방이 성공적으로 생성되었습니다.',
+      gameSessionId: gameId,
+      inviteCode,
+    };
+
+    const packet = createPacketS2G(
+      config.clientPacket.dedicated.CreateRoomResponse,
+      clientKey,
+      payloadData,
+    );
+
+    socket.write(packet);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
   const players = isSuccess
@@ -21,8 +50,8 @@ export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
 
   const data = {
     globalFailCode: isSuccess
-      ? GLOBAL_FAIL_CODE.NONE
-      : GLOBAL_FAIL_CODE.INVALID_REQUEST,
+      ? config.clientState.globalFailCode.NONE
+      : config.clientState.globalFailCode.INVALID_REQUEST,
     message: isSuccess
       ? '방에 성공적으로 참가하였습니다.'
       : `방 참가에 실패하였습니다.`,
@@ -31,7 +60,7 @@ export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
   };
 
   const packet = createPacketS2G(
-    PACKET_TYPE.game.JoinRoomResponse,
+    config.clientPacket.dedicated.JoinRoomResponse,
     clientKey,
     data,
   );

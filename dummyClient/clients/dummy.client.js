@@ -2,7 +2,12 @@ import net from 'net';
 
 // src/client/dummyClient.js
 export class DummyClient {
-  constructor({ host = '0.0.0.0', port = 6000, packetHelper, CLIENT_PACKET }) {
+  constructor({
+    host = '127.0.0.1',
+    port = 6000,
+    packetHelper,
+    CLIENT_PACKET,
+  }) {
     this.host = host;
     this.port = port;
     this.packetHelper = packetHelper;
@@ -30,7 +35,12 @@ export class DummyClient {
   onData(data) {
     const { packetType, version, sequence, payload } =
       this.packetHelper.parsePacket(data);
-    console.log('Received Packet:', { packetType, payload });
+    if (
+      packetType !== this.CLIENT_PACKET.dedicated.PlayerMoveNotification ||
+      packetType !== this.CLIENT_PACKET.dedicated.PingRequest
+    ) {
+      console.log('Received Packet:', { packetType, payload });
+    }
     // 만약 해당 packetType을 기다리는 Promise가 있다면 resolve
     const waiter = this.responseWaiters.get(packetType);
     if (waiter) {
@@ -55,7 +65,7 @@ export class DummyClient {
   }
 
   // 특정 packetType 응답 대기
-  waitForResponse(packetType, timeout = 10000) {
+  waitForResponse(packetType, timeout = 30000) {
     return new Promise((resolve, reject) => {
       // 이미 기다리는 응답이 있다면 중복 등록 에러 처리 가능
       if (this.responseWaiters.has(packetType)) {

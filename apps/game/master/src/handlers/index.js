@@ -1,6 +1,7 @@
 import config from '@peekaboo-ssr/config/game';
-import { createRoomHandler } from './room/createRoom.handler.js';
-import { joinRoomHandler } from './room/joinRoom.handler.js';
+import { createRoomHandler } from './client/room/createRoom.handler.js';
+import { joinRoomHandler } from './client/room/joinRoom.handler.js';
+import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 
 export const handlers = {
   client: {
@@ -9,6 +10,11 @@ export const handlers = {
     },
     [config.clientPacket.game.JoinRoomRequest]: {
       handler: joinRoomHandler,
+    },
+  },
+  service: {
+    [config.servicePacket.ConnectedServiceNotification]: {
+      handler: connectedServiceNotificationHandler,
     },
   },
 };

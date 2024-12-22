@@ -12,6 +12,8 @@ dotenv.config({
 export const EC1_HOST = process.env.EC1_HOST || '0.0.0.0';
 export const EC2_HOST = process.env.EC2_HOST || '0.0.0.0';
 
+export const MONITOR_HOST = process.env.MONITOR_HOST || '127.0.0.1';
+
 // SERVER PORT
 export const LOBBY_PORT = process.env.LOBBY_PORT || '6000';
 export const ACCOUNT_PORT = process.env.ACCOUNT_PORT || '6100';

@@ -1,48 +1,80 @@
-import redisManager from '../classes/managers/redisManager.js';
-import { config } from '../config/config.js';
+import redisManager from '../classes/managers/redis.manager.js';
+import config from '@peekaboo-ssr/config/game';
 
 /**
- * 해당 유저의 정보를 redis에 저장하는 함수입니다.
- * @param {*} userId
- * @param {*} gameId
- * @param {*} position
+ * 해당 유저의 정보를 Redis에 저장하는 함수입니다.
+ * @param {string} userId - 유저 ID
+ * @param {string} gameId - 게임 ID
  */
 export const setUserRedis = async (userId, gameId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
   const data = { gameId };
 
-  await redisManager.getClient().hset(key, data);
-
-  // 키에 유효 시간 설정
-  await redisManager.getClient().expire(key, 640); // 임시 시간 640 10분 40초
+  try {
+    const client = redisManager.getClient();
+    await client.hset(key, data);
+    await client.expire(key, 640); // 유효 시간 10분 40초
+  } catch (error) {
+    console.error(`Failed to set user Redis data for key ${key}:`, error);
+    throw error;
+  }
 };
 
 /**
- * redis에 저장한 해당 유저 정보를 반환하는 함수입니다.
- * @param {*} userId 해당 유저 id
- * @param {*} feild 원하는 필드 값
- * @returns feild를 추가하지 않으면 기본적으로 유저의 모든 정보를 반환합니다.
+ * Redis에 저장한 해당 유저 정보를 반환하는 함수입니다.
+ * @param {string} userId - 유저 ID
+ * @returns {Promise<Object>} - 유저 정보
  */
 export const getUserRedis = async (userId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
-  const redisData = await redisManager.getClient().hgetall(key);
+  try {
+    const client = redisManager.getClient();
+    const redisData = await client.hgetall(key);
 
-  const data = {
-    gameId: redisData.gameId,
-  };
-
-  return data;
+    return {
+      gameId: redisData.gameId,
+    };
+  } catch (error) {
+    console.error(`Failed to get user Redis data for key ${key}:`, error);
+    throw error;
+  }
 };
 
 /**
- * redis에 저장한 해당 유저 정보를 반환하는 함수입니다.
- * @param {*} userId
- * @returns
+ * Redis에 저장한 해당 유저 정보를 삭제하는 함수입니다.
+ * @param {string} userId - 유저 ID
  */
 export const removeUserRedis = async (userId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
-  await redisManager.getClient().del(key);
+  try {
+    const client = redisManager.getClient();
+    await client.del(key);
+  } catch (error) {
+    console.error(`Failed to remove user Redis data for key ${key}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Redis에 저장한 해당 유저의 게임 정보를 삭제하는 함수입니다.
+ *
+ * @async
+ * @param {*} userId - 유저 ID
+ * @param {*} gameId - 게임 ID
+ */
+export const removeUserRedisFromGame = async (userId, gameId) => {
+  const key = `${config.redis.userSetKey}:${userId}`;
+
+  const data = { gameId };
+
+  try {
+    const client = redisManager.getClient();
+    await client.hdel(userId, data);
+  } catch (error) {
+    console.error(`Failed to remove user Redis data for key ${key}:`, error);
+    throw error;
+  }
 };

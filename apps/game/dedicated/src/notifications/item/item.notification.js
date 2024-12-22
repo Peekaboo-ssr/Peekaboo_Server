@@ -1,5 +1,5 @@
-import { PACKET_TYPE } from '../../constants/packet.js';
-import { createPacketS2G } from '../../utils/packet/create.packet.js';
+import config from '@peekaboo-ssr/config/game';
+import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
 export const itemChangeNotification = (game, userId, itemId) => {
   const payload = {
@@ -8,7 +8,7 @@ export const itemChangeNotification = (game, userId, itemId) => {
   };
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemChangeNotification,
+      config.clientPacket.dedicated.ItemChangeNotification,
       user.clientKey,
       payload,
     );
@@ -23,28 +23,38 @@ export const itemUseNotification = (game, userId, itemId) => {
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.ItemUseNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (user.id !== userId) {
+      const packet = createPacketS2G(
+        config.clientPacket.dedicated.ItemUseNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 
 export const itemDiscardNotification = (game, userId, itemId) => {
+  const item = game.getItem(itemId);
+
+  if (item) {
+    item.mapOn = true;
+  }
+
   const payload = {
     userId,
     itemId,
   };
 
   game.users.forEach((user) => {
-    const packet = createPacketS2G(
-      PACKET_TYPE.ItemDiscardNotification,
-      user.clientKey,
-      payload,
-    );
-    game.socket.write(packet);
+    if (userId !== user.id) {
+      const packet = createPacketS2G(
+        config.clientPacket.dedicated.ItemDiscardNotification,
+        user.clientKey,
+        payload,
+      );
+      game.socket.write(packet);
+    }
   });
 };
 
@@ -55,7 +65,7 @@ export const itemDeleteNotification = (game, itemIds) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemDeleteNotification,
+      config.clientPacket.dedicated.ItemDeleteNotification,
       user.clientKey,
       payload,
     );
@@ -71,7 +81,7 @@ export const itemDisuseNotification = (game, userId, itemId) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemDisuseNotification,
+      config.clientPacket.dedicated.ItemDisuseNotification,
       user.clientKey,
       payload,
     );
@@ -85,7 +95,7 @@ export const itemCreateNotification = (game, itemInfo) => {
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemCreateNotification,
+      config.clientPacket.dedicated.ItemCreateNotification,
       user.clientKey,
       payload,
     );
@@ -103,7 +113,7 @@ export const itemGetNotification = (game, itemId, userId) => {
   game.users.forEach((user) => {
     if (user.id !== userId) {
       const packet = createPacketS2G(
-        PACKET_TYPE.ItemGetNotification,
+        config.clientPacket.dedicated.ItemGetNotification,
         user.clientKey,
         payload,
       );
@@ -115,11 +125,12 @@ export const itemGetNotification = (game, itemId, userId) => {
 export const itemPurchaseNotification = (game, itemInfo) => {
   const payload = {
     itemInfo,
+    soulCredit: game.soulCredit,
   };
 
   game.users.forEach((user) => {
     const packet = createPacketS2G(
-      PACKET_TYPE.ItemPurchaseNotification,
+      config.clientPacket.dedicated.ItemPurchaseNotification,
       user.clientKey,
       payload,
     );

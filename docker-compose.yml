@@ -1,0 +1,107 @@
+services:
+  dedicated:
+    build:
+      context: .
+      dockerfile: apps/game/dedicated/dockerfile
+    image: dedicated_server:latest
+    command: echo "Image build complete, no container execution."
+
+  distributor:
+    build:
+      context: .
+      dockerfile: apps/distributor/dockerfile
+    container_name: distributor
+    hostname: distributor
+    networks:
+      - peekaboo-network
+    ports:
+      - '6030:6030'
+      - '8030:8030'
+    env_file:
+      - ./packages/common/config/.env
+
+  game:
+    build:
+      context: .
+      dockerfile: apps/game/master/dockerfile
+    container_name: game
+    hostname: game
+    networks:
+      - peekaboo-network
+    ports:
+      - '6050:6050'
+      - '8050:8050'
+    env_file:
+      - ./packages/common/config/.env
+    depends_on:
+      - distributor
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  lobby:
+    build:
+      context: .
+      dockerfile: apps/lobby/dockerfile
+    container_name: lobby
+    hostname: lobby
+    networks:
+      - peekaboo-network
+    ports:
+      - '6010:6010'
+      - '8010:8010'
+    env_file:
+      - ./packages/common/config/.env
+    depends_on:
+      - game
+
+  account:
+    build:
+      context: .
+      dockerfile: apps/account/dockerfile
+    container_name: account
+    hostname: account
+    networks:
+      - peekaboo-network
+    ports:
+      - '6020:6020'
+      - '8020:8020'
+    env_file:
+      - ./packages/common/config/.env
+    depends_on:
+      - lobby
+
+  session:
+    build:
+      context: .
+      dockerfile: apps/session/dockerfile
+    container_name: session
+    hostname: session
+    networks:
+      - peekaboo-network
+    ports:
+      - '6040:6040'
+      - '8040:8040'
+    env_file:
+      - ./packages/common/config/.env
+    depends_on:
+      - account
+
+  gateway:
+    build:
+      context: .
+      dockerfile: apps/gateway/dockerfile
+    container_name: gateway
+    hostname: gateway
+    networks:
+      - peekaboo-network
+    ports:
+      - '6000:6000'
+      - '8000:8000'
+    env_file:
+      - ./packages/common/config/.env
+    depends_on:
+      - session
+
+networks:
+  peekaboo-network:
+    driver: bridge

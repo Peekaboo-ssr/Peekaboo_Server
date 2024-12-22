@@ -3,6 +3,8 @@ import serviceHeader from '@peekaboo-ssr/modules-constants/serviceHeader';
 import routeHeader from '@peekaboo-ssr/modules-constants/routeHeader';
 import pubAction from '@peekaboo-ssr/modules-constants/pubAction';
 import subChannel from '@peekaboo-ssr/modules-constants/subChannel';
+import clientState from '@peekaboo-ssr/modules-constants/clientState';
+import redisKey from '@peekaboo-ssr/modules-constants/redisKey';
 
 import {
   DB1_NAME,
@@ -14,6 +16,7 @@ import {
   REDIS_HOST,
   REDIS_PORT,
   REDIS_PASSWORD,
+  MONITOR_HOST,
   EC1_HOST,
   DISTRIBUTOR_PORT,
   CLIENT_VERSION,
@@ -22,6 +25,9 @@ import {
 
 const SHARED_CONFIG = {
   version: CLIENT_VERSION,
+  monitor: {
+    host: MONITOR_HOST,
+  },
   distributor: {
     host: EC1_HOST,
     port: DISTRIBUTOR_PORT,
@@ -56,9 +62,12 @@ const SHARED_CONFIG = {
     host: REDIS_HOST,
     port: REDIS_PORT,
     password: REDIS_PASSWORD,
+    gameSetKey: redisKey.REDIS_GAME_SET_KEY,
+    userSetKey: redisKey.REDIS_USER_SET_KEY,
   },
   pubAction: pubAction,
   subChannel: subChannel,
+  clientState,
 };
 
 export default SHARED_CONFIG;

@@ -3,6 +3,7 @@ dist/
 node_modules/
 .turbo
 
+
 # Logs
 logs
 *.log
@@ -38,3 +39,6 @@ lerna-debug.log*
 #env
 .env
 
+# compiled output
+__pycache__/
+*.pyc

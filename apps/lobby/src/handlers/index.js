@@ -1,18 +1,20 @@
 import config from '@peekaboo-ssr/config/lobby';
-import { enterLobbyHandler } from './lobby/enterLobby.handler.js';
-import { refreshLobbyHandler } from './lobby/refreshLobby.handler.js';
-import { searchLobbyHandler } from './lobby/searchLobby.handler.js';
+import { enterLobbyHandler } from './client/lobby/enterLobby.handler.js';
+import { showWaitingRoomHandler } from './client/lobby/showWaitingRoom.handler.js';
+import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 
 export const handlers = {
   client: {
     [config.clientPacket.lobby.EnterLobbyRequest]: {
       handler: enterLobbyHandler,
     },
-    [config.clientPacket.lobby.RefreshLobbyRequest]: {
-      handler: refreshLobbyHandler,
+    [config.clientPacket.lobby.WaitingRoomListRequest]: {
+      handler: showWaitingRoomHandler,
     },
-    [config.clientPacket.lobby.SearchRoomRequest]: {
-      handler: searchLobbyHandler,
+  },
+  service: {
+    [config.servicePacket.ConnectedServiceNotification]: {
+      handler: connectedServiceNotificationHandler,
     },
   },
 };

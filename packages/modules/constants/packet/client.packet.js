@@ -2,9 +2,9 @@ const CLIENT_PACKET = {
   game: {
     // 방 : 600번대
     CreateRoomRequest: 601,
-    CreateRoomResponse: 602,
     JoinRoomRequest: 603,
-    JoinRoomResponse: 604,
+    JoinRoomByGameSessionIdRequest: 604,
+    JoinRoomResponse: 605, // 참가 실패 시 게임에서도 response 해줌.
   },
   account: {
     // 로그인, 로비 : 500번대
@@ -18,10 +18,8 @@ const CLIENT_PACKET = {
   lobby: {
     EnterLobbyRequest: 506,
     EnterLobbyResponse: 507,
-    RefreshLobbyRequest: 508,
-    RefreshLobbyResponse: 509,
-    SearchRoomRequest: 510,
-    SearchRoomResponse: 511,
+    WaitingRoomListRequest: 508,
+    WaitingRoomListResponse: 509,
   },
   dedicated: {
     // 1 ~ 15
@@ -41,6 +39,7 @@ const CLIENT_PACKET = {
     // 플레이어 : 100번대
     PlayerAttackedRequest: 101,
     PlayerLifeResponse: 102,
+    LifeUpdateRequest: 103,
 
     // 귀신 : 200번대
     GhostSpecialStateRequest: 201,
@@ -77,15 +76,20 @@ const CLIENT_PACKET = {
     ExtractSoulRequest: 401,
     ExtractSoulNotification: 402,
     DisconnectPlayerNotification: 403,
-    BlockInteractionNotification: 404,
-    RemainingTimeNotification: 405,
+    RemainingTimeNotification: 404,
+    BlockInteractionNotification: 405,
     StartStageRequest: 406,
-    SpawnInitialDataRequest: 407,
-    SpawnInitialDataResponse: 408,
-    StartStageNotification: 409,
-    StageEndNotification: 410,
+    StartStageNotification: 407,
+    StageEndNotification: 408,
+    SubmissionEndNotification: 409,
+    DifficultySelectRequest: 410,
+    DifficultySelectNotification: 411,
+    DisconnectRoomRequest: 412,
+    KickRoomNotification: 413,
 
-    JoinRoomNotification: 605,
+    CreateRoomResponse: 602,
+    JoinRoomResponse: 605,
+    JoinRoomNotification: 606,
   },
 };
 

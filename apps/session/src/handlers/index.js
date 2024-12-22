@@ -7,10 +7,13 @@ import {
 import { findUserHandler } from './redis/findUser.handler.js';
 import { joinSessionHandler } from './redis/joinSession.handler.js';
 import config from '@peekaboo-ssr/config/session';
+import { waitingRoomResponse } from './redis/waitingRoom.handler.js';
+import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
+import { updateRoomInfoHandler } from './service/updateRoomInfo.handler.js';
+import { exitDedicatedHandler } from './redis/exitDedicate.handler.js';
 
 export const handlers = {
   client: {},
-  service: {},
   pubsub: {
     [config.pubAction.FindUserRequest]: {
       handler: findUserHandler,
@@ -21,7 +24,7 @@ export const handlers = {
     [config.pubAction.ExitSessionRequest]: {
       handler: exitSessionHandler,
     },
-    [config.pubAction.CreateDedicateRequest]: {
+    [config.pubAction.CreateDedicatedRequest]: {
       handler: createDedicatedHandler,
     },
     [config.pubAction.FindDedicateByInviteCodeRequest]: {
@@ -29,6 +32,20 @@ export const handlers = {
     },
     [config.pubAction.FindDedicateByIdRequest]: {
       handler: FindDedicateByIdHandler,
+    },
+    [config.pubAction.WaitingRoomInfosRequest]: {
+      handler: waitingRoomResponse,
+    },
+    [config.pubAction.ExitDedicateRequest]: {
+      handler: exitDedicatedHandler,
+    },
+  },
+  service: {
+    [config.servicePacket.ConnectedServiceNotification]: {
+      handler: connectedServiceNotificationHandler,
+    },
+    [config.servicePacket.UpdateRoomInfoRequest]: {
+      handler: updateRoomInfoHandler,
     },
   },
 };

@@ -1,0 +1,49 @@
+# 빌드 스테이지
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# 워크스페이스 설정 파일들 복사
+COPY package.json yarn.lock turbo.json ./
+COPY apps/session/package.json ./apps/session/
+COPY packages/common ./packages/common
+COPY packages/modules ./packages/modules
+
+# 의존성 설치
+RUN yarn install --frozen-lockfile
+
+# session 서비스 소스 복사
+COPY apps/session ./apps/session
+
+# Protobuf 파일들 복사
+COPY packages/common/protobufs ./protobufs
+
+# 공통 환경 변수 파일 복사
+COPY packages/common/config/.env ./packages/common/config/.env
+
+# 빌드
+WORKDIR /app/apps/session
+RUN yarn add glob@^11.0.0 esbuild del-cli --dev
+RUN NODE_ENV=development yarn build
+
+# 실행 스테이지
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+# package.json 파일들 복사
+COPY package.json yarn.lock turbo.json ./
+COPY apps/session/package.json ./apps/session/
+COPY packages/common ./packages/common
+COPY packages/modules ./packages/modules
+
+# 빌드된 파일들 복사
+COPY --from=builder /app/apps/session/dist ./dist
+COPY --from=builder /app/protobufs ./protobufs
+COPY --from=builder /app/packages/common/config/.env ./packages/common/config/.env
+COPY --from=builder /app/node_modules ./node_modules
+
+# 실행 환경 설정
+ENV NODE_ENV=production
+EXPOSE 6020
+
+# 실행
+CMD ["node", "dist/session.server.js"]

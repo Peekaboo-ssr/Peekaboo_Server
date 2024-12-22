@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/*",
     "apps/*/master",
+    "apps/*/dedicated",
     "packages/common/*",
     "packages/modules/*"
   ],
@@ -12,11 +13,18 @@
     "start": "turbo run gateway:start",
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "docker-compose:build": "docker-compose up --build -d",
+    "docker-compose:down": "docker-compose down"
   },
   "dependencies": {
     "dotenv-flow": "^4.1.0",
     "esbuild": "^0.24.0",
+    "esbuild-plugin-copy": "^2.1.1",
+    "express": "^4.21.2",
+    "glob": "^11.0.0",
+    "pidusage": "^3.0.2",
+    "prom-client": "^15.1.3",
     "protobufjs": "^7.4.0"
   },
   "devDependencies": {

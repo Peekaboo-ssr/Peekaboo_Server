@@ -46,6 +46,19 @@ message JoinDedicatedRequest {
   string userId = 2;
 }
 
-message ExitDedicatedRequest {
+message ExitDedicatedRequestFromSocket {
   string clientKey = 1;
+}
+
+message ExitDedicatedRequestBySelf {
+  string clientKey = 1;
+  string gameSessionKey = 2;
+  string gameSessionId = 3;
+}
+
+message UpdateRoomInfoRequest {
+  string gameSessionId = 1;
+  uint32 numberOfPlayer = 2;
+  uint32 latency = 3;
+  GameSessionState gameSessionState = 4;
 }
