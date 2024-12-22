@@ -26,8 +26,8 @@
       "Id": 103,
       "DifName": "HARD",
       "SpawnGhost": [1005],
-      "MinGhostNumber": 1,
-      "MaxGhostNumber": 1,
+      "MinGhostNumber": 2,
+      "MaxGhostNumber": 2,
       "TimeLimit": 620,
       "MinSoulItemNumber": 7,
       "MaxSoulItemNumber": 10
