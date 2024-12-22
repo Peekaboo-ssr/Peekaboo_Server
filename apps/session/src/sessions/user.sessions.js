@@ -49,7 +49,7 @@ export const joinSessionByType = (userSessions, userData) => {
   );
 };
 
-export const getSessionByType = (userSessions, clientKey, clientKey, type) => {
+export const getSessionByType = (userSessions, clientKey, type) => {
   const session = userSessions[clientKey][clientKey];
   if (session && session.type) {
     return session;
