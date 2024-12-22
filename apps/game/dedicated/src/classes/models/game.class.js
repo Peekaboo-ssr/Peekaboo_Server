@@ -106,7 +106,7 @@ class Game {
       this.submissionId = initSubMissionData.Id;
       this.submissionDay = initSubMissionData.Day;
       this.goalSoulCredit = initSubMissionData.SubmissionValue;
-      this.soulCredit = 200;
+      this.soulCredit = 0;
       // 플레이어 생명력도 다 초기로 돌림
       this.users.forEach((user) => {
         const maxHp = user.character.maxLife;

@@ -41,7 +41,6 @@ export const stageEndNotification = async (game) => {
 
   const [aliveCount, diedCount] = game.users.reduce(
     ([alive, died], user) => {
-      console.log('userState: ', user.id, ':', user.character.state);
       if (user.character.state === CHARACTER_STATE.DIED) {
         return [alive, died + 1];
       }
@@ -49,8 +48,6 @@ export const stageEndNotification = async (game) => {
     },
     [0, 0],
   );
-
-  console.log(aliveCount, diedCount);
 
   const payload = {
     remainingDay: game.day,
