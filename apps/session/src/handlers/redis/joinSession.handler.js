@@ -11,6 +11,10 @@ export const joinSessionHandler = async (serverInstance, data) => {
   };
 
   try {
+    if (!data.clientKey || !type) {
+      console.error('Invalid clientKey or type');
+    }
+
     // 만약 게임 세션에 참가할 예정이라면 gameSessionId, inviteCode만 추가
     if (type === 'game' && !serverInstance.gameSessions[data.gameUUID]) {
       // 만약 게임으로 이동한다면 로비 세션이었는지 확인
@@ -24,7 +28,8 @@ export const joinSessionHandler = async (serverInstance, data) => {
     }
 
     // 만약 유저의 세션이 게임이었다면 게임 세션에서 numberOfPlayer 를 줄여준다.
-    if (serverInstance.userSessions[data.clientKey].type === 'game') {
+    const userSession = serverInstance.userSessions[data.clientKey];
+    if (userSession && userSession.type === 'game') {
       serverInstance.gameSessions[data.gameSessionId].numberOfPlayer -= 1;
     }
 

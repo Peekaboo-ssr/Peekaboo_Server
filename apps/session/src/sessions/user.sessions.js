@@ -15,7 +15,7 @@ import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 export const joinSessionByType = (userSessions, userData) => {
   // 로그인할 때 uuid를 받을텐데 이미 로그인한 유저인지 확인
   if (userData.uuid) {
-    key = getUserByUUID(userSessions, userData.uuid);
+    const key = getUserByUUID(userSessions, userData.uuid);
     if (key) {
       // 만약 클라이언트키가 다르다면 중복 로그인 처리
       if (key !== userData.clientKey)
@@ -39,15 +39,22 @@ export const joinSessionByType = (userSessions, userData) => {
   }
   // 존재한다면 해당 유저의 세션을 옮겨주는 작업
   else {
-    userSessions[userData.clientKey].type = userData.type;
+    const session = userSessions[userData.clientKey];
+    if (session) {
+      session.type = userData.type;
+    }
   }
   console.log(
     `${userData.clientKey} 유저가 ${userData.type} 세션에 참여하였습니다.`,
   );
 };
 
-export const getSessionByType = (userSessions, type) => {
-  return userSessions[type];
+export const getSessionByType = (userSessions, clientKey, type) => {
+  const session = userSessions[clientKey];
+  if (session && session.type) {
+    return session;
+  }
+  return null;
 };
 
 export const getUserByUUID = (userSessions, uuid) => {
@@ -61,5 +68,5 @@ export const getUserByUUID = (userSessions, uuid) => {
 };
 
 export const getUserByClientKey = (userSessions, clientKey) => {
-  return userSessions.find((user) => user.clientKey === clientKey);
+  return userSessions[clientKey] || null;
 };
