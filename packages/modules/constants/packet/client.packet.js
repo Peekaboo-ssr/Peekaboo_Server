@@ -84,6 +84,8 @@ const CLIENT_PACKET = {
     SubmissionEndNotification: 409,
     DifficultySelectRequest: 410,
     DifficultySelectNotification: 411,
+    DisconnectRoomRequest: 412,
+    KickRoomNotification: 413,
 
     CreateRoomResponse: 602,
     JoinRoomResponse: 605,

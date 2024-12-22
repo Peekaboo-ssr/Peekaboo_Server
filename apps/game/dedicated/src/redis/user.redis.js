@@ -7,7 +7,7 @@ import config from '@peekaboo-ssr/config/game';
  * @param {string} gameId - 게임 ID
  */
 export const setUserRedis = async (userId, gameId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
   const data = { gameId };
 
@@ -27,7 +27,7 @@ export const setUserRedis = async (userId, gameId) => {
  * @returns {Promise<Object>} - 유저 정보
  */
 export const getUserRedis = async (userId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
   try {
     const client = redisManager.getClient();
@@ -47,11 +47,32 @@ export const getUserRedis = async (userId) => {
  * @param {string} userId - 유저 ID
  */
 export const removeUserRedis = async (userId) => {
-  const key = `${config.redis.user_set}:${userId}`;
+  const key = `${config.redis.userSetKey}:${userId}`;
 
   try {
     const client = redisManager.getClient();
     await client.del(key);
+  } catch (error) {
+    console.error(`Failed to remove user Redis data for key ${key}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Redis에 저장한 해당 유저의 게임 정보를 삭제하는 함수입니다.
+ *
+ * @async
+ * @param {*} userId - 유저 ID
+ * @param {*} gameId - 게임 ID
+ */
+export const removeUserRedisFromGame = async (userId, gameId) => {
+  const key = `${config.redis.userSetKey}:${userId}`;
+
+  const data = { gameId };
+
+  try {
+    const client = redisManager.getClient();
+    await client.hdel(userId, data);
   } catch (error) {
     console.error(`Failed to remove user Redis data for key ${key}:`, error);
     throw error;

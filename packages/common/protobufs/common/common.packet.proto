@@ -62,6 +62,8 @@ message GamePacket {
     S2C_SubmissionEndNotification submissionEndNotification = 409;
     C2S_DifficultySelectRequest difficultySelectRequest = 410; 
     S2C_DifficultySelectNotification difficultySelectNotification = 411;
+    C2S_DisconnectRoomRequest disconnectRoomRequest = 412;
+    S2C_KickRoomNotification kickRoomNotification = 413;
 
     C2S_RegistAccountRequest registAccountRequest = 500;
     S2C_RegistAccountResponse registAccountResponse = 501;
@@ -91,7 +93,7 @@ message ServicePacket {
     DisconnectServiceRequest disconnectServiceRequest = 3;
     DisconnectedServiceNotification disconnectedServiceNotification = 4;
     CreateDedicatedRequest createDedicatedRequest = 5;
-    ExitDedicatedRequest exitDedicatedRequest = 6;
+    ExitDedicatedRequestBySocket exitDedicatedRequestBySocket = 6;
     ConnectDedicatedRequest ConnectDedicatedRequest = 7;
     JoinDedicatedRequest joinDedicatedRequest = 8;
     UpdateRoomInfoRequest updateRoomInfoRequest = 9;

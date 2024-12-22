@@ -12,14 +12,15 @@ import CustomError from '@peekaboo-ssr/error/CustomError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 
 // 특정 타입 세션에 참가 처리하는 함수
-export const joinSessionByType = (userSessions, type, userData) => {
-  const key = getUserByUUID(userSessions, userData.uuid);
-
-  // 이미 세션에 있는 유저가 존재
-  if (key) {
-    // 만약 클라이언트키가 다르다면 중복 로그인 처리
-    if (key !== userData.clientKey)
-      throw new CustomError(errorCodesMap.DUPLICATED_USER_CONNECT);
+export const joinSessionByType = (userSessions, userData) => {
+  // 로그인할 때 uuid를 받을텐데 이미 로그인한 유저인지 확인
+  if (userData.uuid) {
+    key = getUserByUUID(userSessions, userData.uuid);
+    if (key) {
+      // 만약 클라이언트키가 다르다면 중복 로그인 처리
+      if (key !== userData.clientKey)
+        throw new CustomError(errorCodesMap.DUPLICATED_USER_CONNECT);
+    }
   }
 
   // 만약 해당 유저의 세션이 없다면 등록해줌.
@@ -38,16 +39,11 @@ export const joinSessionByType = (userSessions, type, userData) => {
   }
   // 존재한다면 해당 유저의 세션을 옮겨주는 작업
   else {
-    // 만약 게임으로 이동한다면 로비 세션이었는지 확인
-    if (type === 'game') {
-      // if (userSessions[userData.clientKey].type !== 'lobby') {
-      //   console.log('로비>게임 비정상 접속 확인');
-      //   throw new CustomError(errorCodesMap.INVALID_PACKET);
-      // }
-    }
-    userSessions[userData.clientKey].type = type;
+    userSessions[userData.clientKey].type = userData.type;
   }
-  console.log(`${userData.clientKey} 유저가 ${type} 세션에 참여하였습니다.`);
+  console.log(
+    `${userData.clientKey} 유저가 ${userData.type} 세션에 참여하였습니다.`,
+  );
 };
 
 export const getSessionByType = (userSessions, type) => {

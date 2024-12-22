@@ -26,6 +26,7 @@ import { exitDedicatedHandler } from './service/exitDedicate.handler.js';
 import { joinDedicatedHandler } from './service/joinDedicate.handler.js';
 import { lifeUpdateHandler } from './game/player/life.handler.js';
 import { selectDifficultyHandler } from './game/system/difficulty.handler.js';
+import { disconnectRoomHandler } from './game/system/disconnectRoom.handler.js';
 
 export const handlers = {
   client: {
@@ -116,12 +117,16 @@ export const handlers = {
       handler: selectDifficultyHandler,
       protoType: 'common.GamePacket',
     },
+    [config.clientPacket.dedicated.DisconnectRoomRequest]: {
+      handler: disconnectRoomHandler,
+      protoType: 'common.GamePacket',
+    },
   },
   service: {
     [config.servicePacket.ConnectedServiceNotification]: {
       handler: connectedServiceNotificationHandler,
     },
-    [config.servicePacket.ExitDedicatedRequest]: {
+    [config.servicePacket.ExitDedicatedRequestBySocket]: {
       handler: exitDedicatedHandler,
     },
     [config.servicePacket.JoinDedicatedRequest]: {
