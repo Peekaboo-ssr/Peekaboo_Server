@@ -26,9 +26,9 @@ export const joinSessionByType = (userSessions, userData) => {
   // 만약 해당 유저의 세션이 없다면 등록해줌.
   if (!userSessions[userData.clientKey]) {
     // 유저 세션에 참여하는 경우 등록
-    if (type === 'user') {
+    if (userData.type === 'user') {
       userSessions[userData.clientKey] = {
-        type,
+        type: userData.type,
         userId: userData.uuid,
       };
     } else {
@@ -49,8 +49,8 @@ export const joinSessionByType = (userSessions, userData) => {
   );
 };
 
-export const getSessionByType = (userSessions, clientKey, type) => {
-  const session = userSessions[clientKey];
+export const getSessionByType = (userSessions, clientKey, clientKey, type) => {
+  const session = userSessions[clientKey][clientKey];
   if (session && session.type) {
     return session;
   }
