@@ -6,8 +6,8 @@
       "Id": 101,
       "DifName": "EASY",
       "SpawnGhost": [1001],
-      "MinGhostNumber": 1,
-      "MaxGhostNumber": 1,
+      "MinGhostNumber": 2,
+      "MaxGhostNumber": 2,
       "TimeLimit": 210,
       "MinSoulItemNumber": 10,
       "MaxSoulItemNumber": 16
