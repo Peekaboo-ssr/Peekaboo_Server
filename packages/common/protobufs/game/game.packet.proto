@@ -192,8 +192,14 @@ message S2C_ExtractSoulNotification {
   uint32 soulCredit = 1; 
 }
 
+message C2S_DisconnectRoomRequest {
+}
+
 message S2C_DisconnectPlayerNotification {
   string userId = 1;
+}
+
+message S2C_KickRoomNotification {
 }
 
 message S2C_BlockInteractionNotification {

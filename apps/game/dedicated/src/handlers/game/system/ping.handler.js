@@ -10,7 +10,6 @@ export const pingHandler = (socket, clientKey, payload, server) => {
     if (!user) {
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
-    console.log(user.receivePing);
 
     user.receivePing(payload);
   } catch (e) {

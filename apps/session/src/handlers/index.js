@@ -10,6 +10,7 @@ import config from '@peekaboo-ssr/config/session';
 import { waitingRoomResponse } from './redis/waitingRoom.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 import { updateRoomInfoHandler } from './service/updateRoomInfo.handler.js';
+import { exitDedicatedHandler } from './redis/exitDedicate.handler.js';
 
 export const handlers = {
   client: {},
@@ -34,6 +35,9 @@ export const handlers = {
     },
     [config.pubAction.WaitingRoomInfosRequest]: {
       handler: waitingRoomResponse,
+    },
+    [config.pubAction.ExitDedicateRequest]: {
+      handler: exitDedicatedHandler,
     },
   },
   service: {

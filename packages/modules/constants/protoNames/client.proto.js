@@ -21,6 +21,8 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.game.JoinRoomByGameSessionIdRequest]:
     'joinRoomByGameSessionIdRequest',
   [clientPacket.dedicated.JoinRoomNotification]: 'joinRoomNotification',
+  [clientPacket.dedicated.DisconnectRoomRequest]: 'disconnectRoomRequest',
+  [clientPacket.dedicated.KickRoomNotification]: 'kickRoomNotification',
 
   // 플레이어 : 1 ~ 15
   [clientPacket.dedicated.PlayerMoveRequest]: 'playerMoveRequest',

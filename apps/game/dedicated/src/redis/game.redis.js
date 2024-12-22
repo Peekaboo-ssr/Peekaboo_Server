@@ -8,7 +8,7 @@ import config from '@peekaboo-ssr/config/game';
  * @param {string} state - 게임 상태
  */
 export const setGameRedis = async (gameId, inviteCode, state) => {
-  const key = `${config.redis.game_set}:${gameId}`;
+  const key = `${config.redis.gameSetKey}:${gameId}`;
 
   const data = { inviteCode, state };
 
@@ -27,7 +27,7 @@ export const setGameRedis = async (gameId, inviteCode, state) => {
  * @param {string} state - 새로운 게임 상태
  */
 export const setGameStateRedis = async (gameId, state) => {
-  const key = `${config.redis.game_set}:${gameId}`;
+  const key = `${config.redis.gameSetKey}:${gameId}`;
 
   try {
     const client = redisManager.getClient();
@@ -45,7 +45,7 @@ export const setGameStateRedis = async (gameId, state) => {
  * @returns {Promise<Object|string|null>} - 조회된 데이터
  */
 export const getGameRedis = async (gameId, fieldName = null) => {
-  const key = `${config.redis.game_set}:${gameId}`;
+  const key = `${config.redis.gameSetKey}:${gameId}`;
 
   try {
     const client = redisManager.getClient();
@@ -70,7 +70,7 @@ export const getGameRedis = async (gameId, fieldName = null) => {
  * @param {string} gameId - 게임 ID
  */
 export const removeGameRedis = async (gameId) => {
-  const key = `${config.redis.game_set}:${gameId}`;
+  const key = `${config.redis.gameSetKey}:${gameId}`;
 
   try {
     const client = redisManager.getClient();

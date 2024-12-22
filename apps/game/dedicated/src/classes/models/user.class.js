@@ -6,7 +6,6 @@ class User {
     // 유저 기본 정보
     this.id = id;
     this.clientKey = clientKey;
-    this.state = config.clientState.userState.INGAME;
     this.exp = 0;
 
     // 게임 관련 정보
