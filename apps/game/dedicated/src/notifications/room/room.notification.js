@@ -35,8 +35,6 @@ export const startStageNotification = (game, itemInfos, ghostInfos) => {
       ghostInfos,
     };
 
-    console.log(`StartStageNotification payload : ${JSON.stringify(payload)}`);
-
     game.users.forEach((user) => {
       const packet = createPacketS2G(
         config.clientPacket.dedicated.StartStageNotification,

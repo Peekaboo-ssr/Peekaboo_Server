@@ -151,7 +151,6 @@ class Game {
 
   // 스테이지 종료 로직
   async endStage() {
-    console.log('endStage 호출 당시 game state: ', this.state);
     if (this.state === config.clientState.gameState.INPROGRESS) {
       // 귀신 및 게임 타이머 인터벌 삭제 (이미 전 endStage 삭제됐음) - 에러 발생 가능성 있음
       IntervalManager.getInstance().removeGhostsInterval(this.id);
@@ -172,7 +171,6 @@ class Game {
     }
     // 서브미션 실패로 인한 endStage()로 판단
     else if (this.state === config.clientState.gameState.FAIL) {
-      console.log('submission 실패로 인해 들어온 endStage...');
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
       await this.initStage();
@@ -240,7 +238,6 @@ class Game {
 
   setDifficulty(difficultyId) {
     this.difficultyId = difficultyId;
-    console.log(`difficultyId : ${difficultyId}`);
 
     const difficultyData = this.gameAssets.difficulty.data.find(
       (data) => data.Id === this.difficultyId,
@@ -270,10 +267,10 @@ class Game {
         return new Position(x, y, z);
       },
     );
-    console.log(`itemSpawnPositions : ${this.itemSpawnPositions}`);
-    console.log(`ghostSpawnPositions : ${this.ghostSpawnPositions}`);
-    console.log(`minSoulItemNumber : ${this.minSoulItemNumber}`);
-    console.log(`maxSoulItemNumber : ${this.maxSoulItemNumber}`);
+    // console.log(`itemSpawnPositions : ${this.itemSpawnPositions}`);
+    // console.log(`ghostSpawnPositions : ${this.ghostSpawnPositions}`);
+    // console.log(`minSoulItemNumber : ${this.minSoulItemNumber}`);
+    // console.log(`maxSoulItemNumber : ${this.maxSoulItemNumber}`);
   }
 
   initDoors() {
@@ -354,7 +351,6 @@ class Game {
 
       itemInfos.push(itemInfo);
     }
-    console.log('spawnedItems: ', this.items);
 
     return itemInfos;
   }
@@ -397,8 +393,6 @@ class Game {
       );
       ghostInfos.push(ghostInfo);
     }
-
-    console.log('spawnedGhost: ', this.ghosts);
 
     return ghostInfos;
   }
@@ -477,20 +471,15 @@ class Game {
 
   // 모든 플레이어가 죽었거나 탈출했는지 검사하는 함수
   checkStageEnd() {
-    console.log('checkStageEnd.....');
     const isEndStage = this.users.every((user) => {
       return user.character.life <= 0;
     });
-    console.log(isEndStage);
     return isEndStage;
   }
 
   async endSubmission() {
     // submission 목표치 검증
     if (this.soulCredit >= this.goalSoulCredit) {
-      console.log(
-        `${this.soulCredit}/${this.goalSoulCredit} => submission 성공`,
-      );
       // 목표치를 모았다면 성공
       this.day += SUBMISSION_DURATION;
       const nextSubMissionData = this.gameAssets.submission.data.find(
@@ -508,10 +497,6 @@ class Game {
       this.goalSoulCredit = nextSubMissionData.SubmissionValue;
       return true;
     } else {
-      console.log(
-        `${this.soulCredit}/${this.goalSoulCredit} => submission 실패`,
-      );
-      console.log('현재 게임 상태: ', this.state);
       this.state = config.clientState.gameState.FAIL;
       // initStage()가 이후에 호출될 때 완전 초기로 세팅
       this.isInit = false;

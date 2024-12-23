@@ -5,13 +5,10 @@ import { serviceMap } from '../../source/connection.source.js';
  */
 export const connectServiceHandler = async (socket, payload) => {
   const { host, port, name } = payload;
-  console.log('Registering service:', { host, port, name });
-
   const key = host + ':' + port;
 
   try {
     if (name === 'dedicated') {
-      console.log('데디케이트 키: ', serviceMap.dedicates);
       serviceMap.dedicates[key] = {
         socket: socket,
         info: payload,

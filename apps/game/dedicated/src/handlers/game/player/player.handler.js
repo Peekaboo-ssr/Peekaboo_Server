@@ -84,7 +84,6 @@ export const playerAttackedRequestHandler = async (
 
       // 만약 player가 죽었다면 아이템을 바닥에 뿌린다
       if (user.character.life <= 0) {
-        console.log('주금');
         user.character.state = CHARACTER_STATE.DIED;
         const length = user.character.inventory.slot.length;
         for (let i = 0; i < length; i++) {
@@ -112,7 +111,6 @@ export const playerAttackedRequestHandler = async (
       const playerStatePayload = {
         playerStateInfo,
       };
-      console.log('플레이어 상태 변경: ', playerStatePayload);
       playerStateChangeNotification(server.game, playerStatePayload);
 
       // 플레이어가 죽은 경우 스테이지 종료를 검사한다.

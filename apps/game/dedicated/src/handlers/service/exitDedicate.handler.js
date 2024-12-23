@@ -10,7 +10,6 @@ import {
 
 export const ExitDedicatedBySocketHandler = async (server, payload) => {
   try {
-    console.log('exitUser....');
     const { clientKey } = payload;
     // 1. 유저를 체크 및 유저 삭제 진행
     const removeUserIndex = server.game.users.findIndex(
@@ -34,7 +33,6 @@ export const ExitDedicatedBySocketHandler = async (server, payload) => {
     // 4. 캐릭터가 살아있다면
     if (user.character.life > 0) {
       // 4-1. 캐릭터 아이템을 뿌려주기
-      console.log('유저 연결 끊겨 삭제');
       user.character.life = 0;
       user.character.state = CHARACTER_STATE.DIED;
       const length = user.character.inventory.slot.length;

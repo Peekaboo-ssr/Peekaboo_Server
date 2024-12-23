@@ -12,7 +12,6 @@ export const createDedicatedHandler = (server, payload) => {
 
   // 현재 연결된 유저맵에 gameSessionKey를 저장 (데디에 참여했는지 빠른 확인을 위함)
   server.connectClients[hostKey].gameSessionKey = dedicateKey;
-  console.log('@@', server.connectClients[hostKey].gameSessionKey);
 
   // 세션 서비스에 등록 요청
   const pubMessage = {

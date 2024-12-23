@@ -5,8 +5,6 @@ import {
 
 export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
   const { responseChannel, inviteCode } = data;
-
-  console.log('FindDedicateByInvite...');
   try {
     const resMessage = {
       isSuccess: false,
@@ -26,7 +24,6 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
         JSON.stringify(resMessage),
       );
     } else {
-      console.log('@@@ 데디 찾음');
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
       resMessage.distributorKey = distributorKey;

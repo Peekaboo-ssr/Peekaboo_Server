@@ -55,7 +55,6 @@ class S2DEventHandler {
       socket.buffer = socket.buffer.subarray(totalPacketLength);
 
       try {
-        console.log('S2D Received packet type:', packetType);
         const receiverSocket = findServiceByReceiver(receiver);
 
         if (!receiverSocket) {

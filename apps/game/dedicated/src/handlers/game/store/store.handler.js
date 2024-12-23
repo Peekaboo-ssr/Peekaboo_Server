@@ -30,8 +30,6 @@ export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
     // 아이템 가격만큼 골드 차감
     server.game.soulCredit -= itemInfo.Value;
 
-    console.log(`남은 게임 머니 : ${server.game.soulCredit}`);
-
     if (itemInfo.SpaceValue === 0) {
       // 아이템의 SpaceValue가 0이면 Heart 아이템으로 응답만
       itemPurchaseResponse(user.clientKey, server.game.socket, true);

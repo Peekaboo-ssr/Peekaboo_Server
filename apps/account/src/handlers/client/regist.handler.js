@@ -13,7 +13,6 @@ export const registAccountHandler = async (
   payload,
   server,
 ) => {
-  console.log('registAccount....');
   const { id, password } = payload;
 
   try {

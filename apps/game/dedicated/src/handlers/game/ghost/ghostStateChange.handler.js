@@ -20,8 +20,6 @@ export const ghostStateChangeRequestHandler = (
     if (!user) {
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
-
-    console.log('ghostState--------', characterState);
     ghostStateChangeNotification(server.game, ghostId, characterState);
   } catch (e) {
     handleError(e);

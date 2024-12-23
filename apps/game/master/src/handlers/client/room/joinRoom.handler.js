@@ -25,10 +25,10 @@ export const joinRoomHandler = async (socket, clientKey, payload, server) => {
       pubMessage,
     );
 
-    console.log('참여할 데디 키: ', response.dedicateKey);
+    // console.log('참여할 데디 키: ', response.dedicateKey);
 
     if (response.isSuccess) {
-      console.log('이거 pubsub으로 받은 dedicateKey: ', response.dedicateKey);
+      // console.log('이거 pubsub으로 받은 dedicateKey: ', response.dedicateKey);
       // 데디케이티드에 해당 유저 추가 요청
       const packetForDedicate = createPacketS2S(
         config.servicePacket.JoinDedicatedRequest,

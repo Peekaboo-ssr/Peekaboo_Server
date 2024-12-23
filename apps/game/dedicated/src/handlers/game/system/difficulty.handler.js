@@ -17,16 +17,13 @@ export const selectDifficultyHandler = async (
   const { difficultyId } = payload;
 
   if (server.game.day === 0) {
-    console.log('submissionEnd............');
     const submissionResult = await server.game.endSubmission();
-    console.log('submissionCheck 이후 결과: ', submissionResult);
     submissionEndNotification(server.game, submissionResult);
     if (submissionResult) {
       server.game.setDifficulty(difficultyId);
       selectDifficultyNotification(server.game, difficultyId);
     }
     if (!submissionResult) {
-      console.log('submissionEnd 연출을 위한 귀신 소환 요청...');
       // 귀신 여럿 소환
       const ghostSpawnPositions = server.game.gameAssets.endGhostPos.data.map(
         (data) => {
@@ -57,7 +54,6 @@ export const selectDifficultyHandler = async (
           ghostTypeId: ghost.ghostTypeId,
           moveInfo,
         };
-        console.log(ghostInfo);
         ghostSpawnNotification(server.game, ghostInfo);
       }
 

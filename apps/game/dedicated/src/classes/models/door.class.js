@@ -29,7 +29,6 @@ export class Door {
         break;
     }
 
-    console.log('문 상호작용 정상');
     return true;
   }
 
