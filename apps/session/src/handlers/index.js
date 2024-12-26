@@ -1,4 +1,4 @@
-import { createDedicatedHandler } from './redis/createDedicate.handler.js';
+import { createDedicatedHandler } from './service/createDedicate.handler.js';
 import { exitSessionHandler } from './redis/exitSession.handler.js';
 import {
   FindDedicateByInviteCodeHandler,
@@ -24,9 +24,6 @@ export const handlers = {
     [config.pubAction.ExitSessionRequest]: {
       handler: exitSessionHandler,
     },
-    [config.pubAction.CreateDedicatedRequest]: {
-      handler: createDedicatedHandler,
-    },
     [config.pubAction.FindDedicateByInviteCodeRequest]: {
       handler: FindDedicateByInviteCodeHandler,
     },
@@ -41,6 +38,9 @@ export const handlers = {
     },
   },
   service: {
+    [config.servicePacket.CreateDedicatedRequest]: {
+      handler: createDedicatedHandler,
+    },
     [config.servicePacket.ConnectedServiceNotification]: {
       handler: connectedServiceNotificationHandler,
     },

@@ -13,17 +13,16 @@ export const createRoomHandler = async (socket, clientKey, payload, server) => {
     // 데디 데이터 세팅
     const gameUUID = uuidv4();
     const inviteCode = getInviteCode();
-    // 세션 확인
-    const responseChannel = `join_game_${clientKey}_${Date.now()}`;
+
+    // 로비 세션인지 확인
+    const responseChannel = `find_user_${clientKey}_${Date.now()}`;
     const pubMessage = {
-      action: config.pubAction.JoinSessionRequest,
+      action: config.pubAction.FindUserRequest,
       responseChannel,
-      type: 'game',
+      type: 'lobby',
       clientKey,
-      uuid: userId,
-      gameUUID,
-      inviteCode,
     };
+
     const response = await server.pubSubManager.sendAndWaitForResponse(
       config.subChannel.session,
       responseChannel,
