@@ -106,11 +106,6 @@ class GameQueueManager {
 
       itemGetResponse(user.clientKey, this.game.socket, itemId, inventorySlot);
       itemGetNotification(this.game, itemId, user.id);
-
-      if (!this.game.ghostCSpawn && user.character.inventory.itemCount === 4) {
-        this.game.ghostCSpawn = true;
-        // ghostC 소환 요청 로직 추가
-      }
     } finally {
       await RedisManager.getClient().del(lockKey);
     }

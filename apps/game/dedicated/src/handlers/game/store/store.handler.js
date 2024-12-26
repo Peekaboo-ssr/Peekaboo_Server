@@ -5,6 +5,8 @@ import { itemPurchaseResponse } from '../../../response/item/item.response.js';
 import handleError from '@peekaboo-ssr/error/handleError';
 import { getUserByClientKey } from '../../../sessions/user.sessions.js';
 import CustomError from '@peekaboo-ssr/error/CustomError';
+import { lifeResponse } from '../../../response/player/life.response.js';
+import { extractSoulNotification } from '../../../notifications/extractor/extractor.notification.js';
 
 export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
   try {
@@ -23,7 +25,7 @@ export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
     }
 
     if (server.game.soulCredit < itemInfo.Value) {
-      itemPurchaseResponse(user.socket, false);
+      itemPurchaseResponse(user.clientKey, server.game.socket, false);
       return;
     }
 
@@ -32,8 +34,29 @@ export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
 
     if (itemInfo.SpaceValue === 0) {
       // 아이템의 SpaceValue가 0이면 Heart 아이템으로 응답만
+      // TODO : 하트 life + 2아이템이 있으면 따로 로직 수정해야됨.
+
+      if (user.character.life >= user.character.maxLife) {
+        itemPurchaseResponse(user.clientKey, server.game.socket, false);
+        server.game.soulCredit += itemInfo.Value;
+        return;
+      }
+
+      user.character.life += 1;
+
       itemPurchaseResponse(user.clientKey, server.game.socket, true);
-      // TODO : HP 증가했다고 알려주는 Response 필요 =>
+
+      // HP 증가했다고 알려주는 Response 필요
+
+      const lifePayload = {
+        life: user.character.life,
+        isAttacked: false,
+      };
+
+      lifeResponse(user.clientKey, server.game.socket, lifePayload);
+
+      // 소울 크레딧 동기화를 위해 extrackSoulNotification을 보낸다.
+      extractSoulNotification(server.game);
     } else {
       // 아이템의 SpaceValue가 1이상이면 랜턴
       const newItemId = server.game.getUniqueItemId();
@@ -54,6 +77,7 @@ export const itemPurchaseHandler = (socket, clientKey, payload, server) => {
         itemTypeId: item.typeId,
         position: storePosition,
       };
+
       itemPurchaseNotification(server.game, itemInfo);
     }
   } catch (e) {

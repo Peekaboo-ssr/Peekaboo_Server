@@ -75,7 +75,6 @@ class Game {
     this.minGhostNumber = null; // 귀신 최소 스폰수
     this.maxGhostNumber = null; // 귀신 최대 스폰수
     this.ghostIdCount = 1; // 귀신에 부여할 ID (스폰될떄마다 증가)
-    this.ghostCSpawn = false;
 
     // 아이템 관련 데이터
     this.itemIdCount = 1; // 아이템에 부여할 ID (스폰될때마다 증가)
@@ -162,11 +161,15 @@ class Game {
       this.day -= 1;
       await stageEndNotification(this);
 
-      // TODO: 사망한 플레이어만큼 soulCredit 깎기
+      // 사망한 플레이어만큼 soulCredit 깎기
+      this.users.forEach((user) => {
+        if (user.character.life <= 0) {
+          this.soulCredit -= this.penalty;
+        }
+      });
 
-      if (this.isInit === true) {
-        this.isInit === false;
-      }
+      extractSoulNotification(this);
+
       await this.initStage();
     }
     // 서브미션 실패로 인한 endStage()로 판단
@@ -181,10 +184,6 @@ class Game {
   }
 
   async addUser(user, isHost = false) {
-    if (this.users.length >= MAX_PLAYER) {
-      return false;
-    }
-
     if (isHost) {
       this.hostId = user.id;
     }
@@ -204,8 +203,6 @@ class Game {
         'user',
       );
     }, 3000);
-
-    return true;
   }
 
   getUser(userId) {
@@ -253,6 +250,7 @@ class Game {
     this.maxGhostNumber = difficultyData.MaxGhostNumber;
     this.minSoulItemNumber = difficultyData.MinSoulItemNumber;
     this.maxSoulItemNumber = difficultyData.MaxSoulItemNumber;
+    this.penalty = difficultyData.Penalty;
 
     this.spawnSoulItem = this.gameAssets.item.data
       .filter((data) => data.Extraction === 'TRUE')
@@ -456,6 +454,8 @@ class Game {
     if (this.remainingTime <= 0) {
       console.log('게임 오버!!!!!!!!!');
       this.users.forEach((user) => {
+        if (user.character.life <= 0) return;
+
         user.character.state = CHARACTER_STATE.DIED;
         user.character.life = 0;
         const lifePayload = {
@@ -491,6 +491,7 @@ class Game {
       // 영혼 수집량을 0으로 초기화 or goalSoulCredit만큼 빼주기
       this.soulCredit -= this.goalSoulCredit;
       // 영혼 할당량 뺀 다음 Notification 날리기
+      // 차이 : prev.soulCredit - packet.soulCredit
       extractSoulNotification(this);
       this.submissionId = nextSubMissionData.Id;
       this.submissionDay = nextSubMissionData.Day;
