@@ -181,10 +181,6 @@ class Game {
   }
 
   async addUser(user, isHost = false) {
-    if (this.users.length >= MAX_PLAYER) {
-      return false;
-    }
-
     if (isHost) {
       this.hostId = user.id;
     }
@@ -204,8 +200,6 @@ class Game {
         'user',
       );
     }, 3000);
-
-    return true;
   }
 
   getUser(userId) {
