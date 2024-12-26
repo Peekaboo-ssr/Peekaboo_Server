@@ -50,13 +50,15 @@ export const startStageNotification = (game, itemInfos, ghostInfos) => {
 
 export const kickRoomNotification = (game) => {
   game.users.forEach(async (user) => {
-    await removeUserRedisFromGame(user.id, game.id);
-    const packet = createPacketS2G(
-      config.clientPacket.dedicated.KickRoomNotification,
-      user.clientKey,
-      {},
-    );
-    game.socket.write(packet);
+    if (user.id !== game.hostId) {
+      await removeUserRedisFromGame(user.id, game.id);
+      const packet = createPacketS2G(
+        config.clientPacket.dedicated.KickRoomNotification,
+        user.clientKey,
+        {},
+      );
+      game.socket.write(packet);
+    }
   });
 };
 

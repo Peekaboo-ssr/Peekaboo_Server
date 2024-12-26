@@ -33,10 +33,12 @@ export const disconnectRoomHandler = async (
       throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     }
     const user = server.game.users.splice(removeUserIndex, 1);
+    console.log(user[0].id);
 
     // 2. 인원이 없는 경우 모든 인터벌 삭제 및 데디 삭제
     // 3. 호스트인 경우 남아있는 유저를 로비로 내쫓도록 수정
     if (user[0].id === server.game.hostId) {
+      console.log('호스트 유저 나감!!');
       // 3-1. kickNotification을 남아있는 유저에게 보냄
       kickRoomNotification(server.game);
 
@@ -74,21 +76,20 @@ export const disconnectRoomHandler = async (
 
       // 6. 유저 삭제를 통지
       await disconnectPlayerNotification(server.game, user[0].id);
-
-      // 7. 게이트웨이 및 세션 서비스에서 해당 유저 세션을 로비로 옮겨주는 작업 진행
-      const s2sPayload = {
-        clientKey,
-        dedicateKey: `${server.context.host}:${server.context.port}`,
-        gameSessionId: server.game.id,
-      };
-      const s2sPacket = createPacketS2S(
-        config.servicePacket.ExitDedicatedRequestBySelf,
-        'dedicated',
-        'gateway',
-        s2sPayload,
-      );
-      server.clientToDistributor.write(s2sPacket);
     }
+    // 7. 게이트웨이 및 세션 서비스에서 해당 유저 세션을 로비로 옮겨주는 작업 진행
+    const s2sPayload = {
+      clientKey,
+      dedicateKey: `${server.context.host}:${server.context.port}`,
+      gameSessionId: server.game.id,
+    };
+    const s2sPacket = createPacketS2S(
+      config.servicePacket.ExitDedicatedRequestBySelf,
+      'dedicated',
+      'gateway',
+      s2sPayload,
+    );
+    server.clientToDistributor.write(s2sPacket);
 
     // 8. 인원이 없는 경우 모든 인터벌 삭제 및 데디 종료
     server.game.checkRemainUsers(server.game);
