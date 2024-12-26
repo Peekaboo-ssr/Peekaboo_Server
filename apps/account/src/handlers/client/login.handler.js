@@ -17,10 +17,10 @@ export const loginRequestHandler = async (
 ) => {
   const { id, password } = payload;
   try {
-    // DB 검증, ID / PASSWORD 검증
+    // DB 검증
     const user = await userCommands.findUser(databaseManager, id);
 
-    if (!user || user.password !== password) {
+    if (!user) {
       throw new CustomError(
         errorCodesMap.AUTHENTICATION_ERROR,
         config.clientPacket.account.LoginResponse,
@@ -29,11 +29,16 @@ export const loginRequestHandler = async (
       );
     }
 
-    // 나중에는 bcrypt 검증으로 강화 - 회원가입 기능 추가시 TODO
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    // if(!isPasswordValid){
-    //   throw new Error(`비밀번호가 맞지 않습니다.`);
-    // }
+    // 패스워드 bcrypt 검증
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      throw new CustomError(
+        errorCodesMap.AUTHENTICATION_ERROR,
+        config.clientPacket.account.LoginResponse,
+        clientKey,
+        socket,
+      );
+    }
 
     // UUID DB에 있는지 검증 후 발급
     const userId = !user.uuid

@@ -22,15 +22,18 @@ export const registAccountHandler = async (
     // 유저가 이미 존재하는 경우 에러 반환
     if (user) {
       throw new CustomError(
-        errorCodesMap.AUTHENTICATION_ERROR,
+        errorCodesMap.DUPLICATED_USER,
         config.clientPacket.account.RegistAccountResponse,
         clientKey,
         socket,
       );
     }
 
+    // bcrypt로 비밀번호 변경
+    const hashPassword = await bcrypt.hash(password, 10);
+
     // 회원가입 진행
-    await userCommands.createUser(databaseManager, id, password, nickname);
+    await userCommands.createUser(databaseManager, id, hashPassword, nickname);
 
     const payloadDataForClient = {
       globalFailCode: config.clientState.globalFailCode.NONE,
