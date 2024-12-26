@@ -54,7 +54,7 @@ export const JoinRoomByInviteCodeHandler = async (
     handleError(e);
 
     const payloadData = {
-      globalFailCode: config.globalFailCode.UNKNOWN_ERROR,
+      globalFailCode: config.clientState.globalFailCode.UNKNOWN_ERROR,
       message: '방에 참가하지 못했습니다.',
       gameSessionId: '',
       playerInfos: [],

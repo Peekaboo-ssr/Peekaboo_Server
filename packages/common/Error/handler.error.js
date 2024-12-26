@@ -1,6 +1,5 @@
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
-import errorResponse from './response.error';
 
 const handleError = (error) => {
   let responseCode;
