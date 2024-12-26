@@ -42,6 +42,14 @@ const errorResponse = {
       },
     },
   },
+  [clientPacket.lobby.ChangeNicknameResponse]: {
+    [errorCodesMap.HANDLER_ERROR]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.UNKNOWN_ERROR,
+        message: '알 수 없는 이유로 변경 실패',
+      },
+    },
+  },
 };
 
 export default errorResponse;

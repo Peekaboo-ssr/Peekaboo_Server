@@ -8,6 +8,8 @@ const USER_SQL_QUERIES = {
   UPDATE_USER_LOGIN: `UPDATE users SET last_Login = CURRENT_TIMESTAMP WHERE user_id = ?`,
 
   CREATE_USER_UUID: `UPDATE users SET uuid = ? WHERE user_id = ?`,
+
+  UPDATE_USER_NICKNAME: `UPDATE users SET nickname = ? WHERE uuid = ?`,
 };
 
 export default USER_SQL_QUERIES;

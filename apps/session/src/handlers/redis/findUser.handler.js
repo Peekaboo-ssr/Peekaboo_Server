@@ -10,9 +10,9 @@ export const findUserHandler = (server, data) => {
     isSuccess: false,
   };
   try {
-    // const user = getUserByClientKey(server.userSessions, clientKey);
+    const user = getUserByClientKey(server.userSessions, clientKey);
 
-    // 유저가 없거나 유저가 현재 로비 세션이 아닌 경우는 USER_NOT_FOUND 보내주도록 함.
+    // 유저가 없거나 유저가 현재 type의 세션이 아닌 경우는 USER_NOT_FOUND 보내주도록 함.
     // if (!user || user.type !== type) {
     //   throw new CustomError(errorCodesMap.USER_NOT_FOUND);
     // }

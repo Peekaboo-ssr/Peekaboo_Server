@@ -11,7 +11,6 @@ export const handlers = {
     [config.clientPacket.account.LoginRequest]: {
       handler: loginRequestHandler,
     },
-    [config.clientPacket.account.ChangeNicknameRequest]: {},
   },
   pubsub: {},
   service: {

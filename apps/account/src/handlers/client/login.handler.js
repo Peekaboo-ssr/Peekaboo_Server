@@ -40,6 +40,9 @@ export const loginRequestHandler = async (
       );
     }
 
+    // 마지막 유저 로그인 업데이트
+    await userCommands.updateUserLogin(databaseManager, id);
+
     // UUID DB에 있는지 검증 후 발급
     const userId = !user.uuid
       ? await userCommands.createUserUuid(databaseManager, id, uuidv4())

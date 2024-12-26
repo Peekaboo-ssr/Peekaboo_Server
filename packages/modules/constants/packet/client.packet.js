@@ -12,10 +12,10 @@ const CLIENT_PACKET = {
     RegistAccountResponse: 501,
     LoginRequest: 502,
     LoginResponse: 503,
-    ChangeNicknameRequest: 504,
-    ChangeNicknameResponse: 505,
   },
   lobby: {
+    ChangeNicknameRequest: 504,
+    ChangeNicknameResponse: 505,
     EnterLobbyRequest: 506,
     EnterLobbyResponse: 507,
     WaitingRoomListRequest: 508,
