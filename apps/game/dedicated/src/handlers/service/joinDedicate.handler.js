@@ -15,9 +15,9 @@ export const joinDedicatedHandler = (server, payload) => {
       return;
     }
 
-    // 게임이 준비 단계가 아니거나 서브미션이 첫번째가 아닌 경우 실패
+    // 게임이 준비 단계이고, 서브미션이 첫번째가 아닌 경우 실패
     if (
-      server.game.state !== config.clientState.gameState.PREPARE ||
+      server.game.state !== config.clientState.gameState.PREPARE &&
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
       sendJoinRoomResponse(server.game, clientKey, false);
@@ -34,7 +34,6 @@ export const joinDedicatedHandler = (server, payload) => {
       clientKey,
       userId,
     };
-
     const packetForGate = createPacketS2S(
       config.servicePacket.ConnectDedicatedRequest,
       'dedicated',
