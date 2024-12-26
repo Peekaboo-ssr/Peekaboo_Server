@@ -3,6 +3,7 @@ import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 import config from '@peekaboo-ssr/config/game';
 import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
+import { SUBMISSION_DURATION } from '../../constants/game.js';
 
 export const joinDedicatedHandler = (server, payload) => {
   console.log('joinDedicated.....');
@@ -18,6 +19,7 @@ export const joinDedicatedHandler = (server, payload) => {
     // 게임이 준비 단계이고, 서브미션이 첫번째가 아닌 경우 실패
     if (
       server.game.state !== config.clientState.gameState.PREPARE &&
+      server.game.day !== SUBMISSION_DURATION &&
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
       sendJoinRoomResponse(server.game, clientKey, false);

@@ -47,10 +47,6 @@ export const playerStateChangeRequestHandler = async (
       // 만약 player 한명이라도 탈출했다면 스테이지 종료한다.
       if (user.character.state === CHARACTER_STATE.EXIT) {
         await server.game.endStage();
-        // if (.checkStageEnd()) {
-        //   // 스테이지 종료 조건이 만족했다면,
-
-        // }
       }
     }
   } catch (e) {
@@ -118,6 +114,7 @@ export const playerAttackedRequestHandler = async (
       // 스테이지 종료 조건을 확인하기 2중으로 체크하도록 함 : 윤수빈
       if (user.character.state === CHARACTER_STATE.DIED) {
         if (server.game.checkStageEnd()) {
+          server.game.isRemainingTimeOver = true;
           await server.game.endStage();
         }
       }

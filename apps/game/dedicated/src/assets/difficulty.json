@@ -10,7 +10,9 @@
       "MaxGhostNumber": 3,
       "TimeLimit": 360,
       "MinSoulItemNumber": 7,
-      "MaxSoulItemNumber": 10
+      "MaxSoulItemNumber": 10,
+      "Penalty": 0
+
     },
     {
       "Id": 102,
@@ -20,7 +22,8 @@
       "MaxGhostNumber": 4,
       "TimeLimit": 300,
       "MinSoulItemNumber": 8,
-      "MaxSoulItemNumber": 13
+      "MaxSoulItemNumber": 13,
+      "Penalty": 10
     },
     {
       "Id": 103,
@@ -30,7 +33,8 @@
       "MaxGhostNumber": 4,
       "TimeLimit": 240,
       "MinSoulItemNumber": 10,
-      "MaxSoulItemNumber": 16
+      "MaxSoulItemNumber": 16,
+      "Penalty": 20
     }
   ]
 }
