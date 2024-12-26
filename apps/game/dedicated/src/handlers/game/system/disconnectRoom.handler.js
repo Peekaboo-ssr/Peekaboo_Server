@@ -78,7 +78,7 @@ export const disconnectRoomHandler = async (
       // 7. 게이트웨이 및 세션 서비스에서 해당 유저 세션을 로비로 옮겨주는 작업 진행
       const s2sPayload = {
         clientKey,
-        gameSessionKey: `${server.context.host}:${server.context.port}`,
+        dedicateKey: `${server.context.host}:${server.context.port}`,
         gameSessionId: server.game.id,
       };
       const s2sPacket = createPacketS2S(

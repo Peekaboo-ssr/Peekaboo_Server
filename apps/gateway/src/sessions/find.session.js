@@ -14,7 +14,7 @@ export const getSocketByClientKey = (connection, clientKey) => {
 
 export const getDedicateKeyByClientKey = (connection, clientKey) => {
   try {
-    const dedicateKey = connection[clientKey].gameSessionKey;
+    const dedicateKey = connection[clientKey].dedicateKey;
 
     if (!dedicateKey) {
       throw new Error('해당 유저는 참여한 게임이 없습니다!');

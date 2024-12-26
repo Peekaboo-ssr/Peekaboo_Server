@@ -19,11 +19,6 @@ export const createDedicatedHandler = (server, payload) => {
     // 현재 연결된 유저맵에 dedicateKey를 저장 (데디에 참여했는지 빠른 확인을 위함)
     server.connectClients[hostKey].dedicateKey = dedicateKey;
 
-    console.log(
-      'Dedicate mapClient에 추가: ',
-      server.mapClients.dedicates[dedicateKey],
-    );
-
     // 세션 서비스에 등록 요청 S2S
     const s2sPacket = createPacketS2S(
       config.servicePacket.CreateDedicatedRequest,

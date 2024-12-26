@@ -5,18 +5,17 @@ import {
 
 export const FindDedicateByInviteCodeHandler = async (server, data) => {
   const { responseChannel, inviteCode } = data;
+  let resMessage = {
+    isSuccess: false,
+    dedicateKey: null,
+  };
   try {
-    const resMessage = {
-      isSuccess: false,
-      dedicateKey: null,
-      distributorKey: null,
-    };
-
     const { dedicateKey, distributorKey } = getGameByInviteCode(
       server.gameSessions,
       inviteCode,
     );
-    // console.log(dedicateKey, distributorKey);
+    console.log(dedicateKey, distributorKey);
+    console.log(responseChannel);
 
     if (!dedicateKey || !distributorKey) {
       server.pubSubManager.publisher.publish(
@@ -26,7 +25,6 @@ export const FindDedicateByInviteCodeHandler = async (server, data) => {
     } else {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
-      resMessage.distributorKey = distributorKey;
       server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
@@ -38,14 +36,13 @@ export const FindDedicateByInviteCodeHandler = async (server, data) => {
 };
 
 export const FindDedicateByIdHandler = async (server, data) => {
+  const { responseChannel, gameSessionId } = data;
+  const resMessage = {
+    isSuccess: false,
+    dedicateKey: null,
+    distributorKey: null,
+  };
   try {
-    const { responseChannel, gameSessionId } = data;
-    const resMessage = {
-      isSuccess: false,
-      dedicateKey: null,
-      distributorKey: null,
-    };
-
     const { dedicateKey, distributorKey } = getGameByGameSessionId(
       server.gameSessions,
       gameSessionId,

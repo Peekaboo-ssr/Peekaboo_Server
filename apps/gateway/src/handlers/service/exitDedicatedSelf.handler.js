@@ -4,11 +4,11 @@ import config from '@peekaboo-ssr/config/gateway';
 export const exitDedicatedSelfHandler = (server, payload) => {
   console.log('exitDedicatedSelf.....');
 
-  const { clientKey, gameSessionKey, gameSessionId } = payload;
+  const { clientKey, dedicateKey, gameSessionId } = payload;
   console.log('나가는 유저: ', clientKey);
-  console.log('나가려는 데디 방: ', gameSessionKey);
+  console.log('나가려는 데디 방: ', dedicateKey);
   // 1. 해당 데디에서 삭제하도록 함
-  deleteUserToDedicates(server, gameSessionKey, clientKey);
+  deleteUserToDedicates(server, dedicateKey, clientKey);
 
   // 세션 서비스에 등록 요청
   const pubMessage = {

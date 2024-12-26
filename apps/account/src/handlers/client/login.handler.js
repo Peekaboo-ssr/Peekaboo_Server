@@ -73,7 +73,7 @@ export const loginRequestHandler = async (
         payloadDataForClient,
       );
       socket.write(packetForClient);
-    } else {
+    } else if (!response.isSuccess) {
       if (response.message === 'duplicated') {
         throw new CustomError(
           errorCodesMap.DUPLICATED_USER,

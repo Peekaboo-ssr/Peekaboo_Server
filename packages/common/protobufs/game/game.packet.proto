@@ -311,7 +311,7 @@ message C2S_JoinRoomByInviteCodeRequest {
 
 message C2S_JoinRoomByGameSessionIdRequest {
   string userId = 1;
-  string inviteCode = 2;
+  string gameSessionId = 2;
   string token = 3;
 }
 

@@ -4,6 +4,7 @@ import config from '@peekaboo-ssr/config/game';
 import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 import { SUBMISSION_DURATION } from '../../constants/game.js';
+import { MAX_PLAYER } from '../../constants/game.js';
 
 export const joinDedicatedHandler = (server, payload) => {
   console.log('joinDedicated.....');
@@ -12,16 +13,18 @@ export const joinDedicatedHandler = (server, payload) => {
   try {
     // 4인 초과라면 실패
     if (server.game.users.length >= MAX_PLAYER) {
+      console.log('최대 인원이므로 참가가 불가합니다.');
       sendJoinRoomResponse(server.game, clientKey, false);
       return;
     }
 
-    // 게임이 준비 단계이고, 서브미션이 첫번째가 아닌 경우 실패
+    // 게임 준비 단계 / 서브미션이 첫번째에 첫 날인지 검증
     if (
       server.game.state !== config.clientState.gameState.PREPARE &&
       server.game.day !== SUBMISSION_DURATION &&
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
+      console.log('게임이 이미 진행중입니다.');
       sendJoinRoomResponse(server.game, clientKey, false);
       return;
     }
@@ -48,6 +51,7 @@ export const joinDedicatedHandler = (server, payload) => {
     sendJoinRoomResponse(server.game, clientKey, true);
     joinRoomNotification(server.game, user.id);
   } catch (e) {
+    console.error(e);
     sendJoinRoomResponse(server.game, clientKey, false);
   }
 };

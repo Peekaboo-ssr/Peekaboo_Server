@@ -29,7 +29,7 @@ export const createRoomHandler = async (socket, clientKey, payload, server) => {
       pubMessage,
     );
 
-    if (response.isSuccess) {
+    if (response && response.isSuccess) {
       createDedicatedServer(gameUUID, clientKey, inviteCode, userId);
     } else {
       throw new CustomError(

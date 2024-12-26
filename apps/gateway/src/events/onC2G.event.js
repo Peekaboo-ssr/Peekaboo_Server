@@ -15,7 +15,7 @@ class C2GEventHandler extends BaseEvent {
     server.connectClients[clientKey] = {
       socket: socket,
       sequence: 1,
-      gameSessionKey: null,
+      dedicateKey: null,
     };
     socket.buffer = Buffer.alloc(0);
   }

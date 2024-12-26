@@ -18,9 +18,9 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.CreateRoomResponse]: 'createRoomResponse',
   [clientPacket.game.JoinRoomByInviteCodeRequest]:
     'joinRoomByInviteCodeRequest',
-  [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
   [clientPacket.game.JoinRoomByGameSessionIdRequest]:
     'joinRoomByGameSessionIdRequest',
+  [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
   [clientPacket.dedicated.JoinRoomNotification]: 'joinRoomNotification',
   [clientPacket.dedicated.DisconnectRoomRequest]: 'disconnectRoomRequest',
   [clientPacket.dedicated.KickRoomNotification]: 'kickRoomNotification',

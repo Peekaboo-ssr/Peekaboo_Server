@@ -28,7 +28,7 @@ class GatewayServer extends TcpServer {
      * [clientKey]: {
      *    socket: socket,
      *    sequence: 1,
-     *    gameSessionKey: `dedicateKey`
+     *    dedicateKey: `dedicateKey`
      * }
      */
     this.connectClients = {};
