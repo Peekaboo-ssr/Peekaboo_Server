@@ -8,7 +8,7 @@ class BaseEvent {
     throw new Error('onConnection must be implemented');
   }
 
-  onData(socket, data, serverInstance) {
+  onData(socket, data, server) {
     throw new Error('onData must be implemented');
   }
 

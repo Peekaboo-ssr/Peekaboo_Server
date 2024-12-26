@@ -3,7 +3,7 @@ import {
   getGameByInviteCode,
 } from '../../sessions/game.session.js';
 
-export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
+export const FindDedicateByInviteCodeHandler = async (server, data) => {
   const { responseChannel, inviteCode } = data;
   try {
     const resMessage = {
@@ -13,13 +13,13 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
     };
 
     const { dedicateKey, distributorKey } = getGameByInviteCode(
-      serverInstance.gameSessions,
+      server.gameSessions,
       inviteCode,
     );
     // console.log(dedicateKey, distributorKey);
 
     if (!dedicateKey || !distributorKey) {
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
@@ -27,7 +27,7 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
       resMessage.distributorKey = distributorKey;
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
@@ -37,7 +37,7 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
   }
 };
 
-export const FindDedicateByIdHandler = async (serverInstance, data) => {
+export const FindDedicateByIdHandler = async (server, data) => {
   try {
     const { responseChannel, gameSessionId } = data;
     const resMessage = {
@@ -47,12 +47,12 @@ export const FindDedicateByIdHandler = async (serverInstance, data) => {
     };
 
     const { dedicateKey, distributorKey } = getGameByGameSessionId(
-      serverInstance.gameSessions,
+      server.gameSessions,
       gameSessionId,
     );
 
     if (!dedicateKey || !distributorKey) {
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
@@ -60,7 +60,7 @@ export const FindDedicateByIdHandler = async (serverInstance, data) => {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
       resMessage.distributorKey = distributorKey;
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );

@@ -1,7 +1,7 @@
 import config from '@peekaboo-ssr/config/lobby';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
-export const waitingRoomResponse = (serverInstance, data) => {
+export const waitingRoomResponse = (server, data) => {
   const { clientKey } = data;
 
   let roomInfos = [];
@@ -12,7 +12,7 @@ export const waitingRoomResponse = (serverInstance, data) => {
   };
 
   try {
-    for (const [key, value] of Object.entries(serverInstance.gameSessions)) {
+    for (const [key, value] of Object.entries(server.gameSessions)) {
       // 대기중인 방만 추가
       if (value.state === config.clientState.gameState.PREPARE) {
         const roomInfo = {
@@ -34,7 +34,7 @@ export const waitingRoomResponse = (serverInstance, data) => {
       payloadDataForClient,
     );
 
-    serverInstance.gateSocket.write(packetForClient);
+    server.gateSocket.write(packetForClient);
   } catch (e) {
     payloadDataForClient.globalFailCode =
       config.clientState.globalFailCode.UNKNOWN_ERROR;
@@ -44,6 +44,6 @@ export const waitingRoomResponse = (serverInstance, data) => {
       payloadDataForClient,
     );
 
-    serverInstance.gateSocket.write(packetForClient);
+    server.gateSocket.write(packetForClient);
   }
 };

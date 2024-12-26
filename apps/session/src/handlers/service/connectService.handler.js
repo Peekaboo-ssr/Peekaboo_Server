@@ -1,4 +1,4 @@
-export const connectedServiceNotificationHandler = async (server, data) => {
-  console.log('Distributor Info Data: ', data.message);
-  console.log(data.microservices);
+export const connectedServiceNotificationHandler = async (server, payload) => {
+  console.log('Distributor Info payload: ', payload.message);
+  console.log(payload.microservices);
 };
