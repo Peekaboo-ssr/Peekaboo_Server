@@ -9,6 +9,21 @@ export const joinDedicatedHandler = (server, payload) => {
   const { clientKey, userId } = payload;
 
   try {
+    // 4인 초과라면 실패
+    if (server.game.users.length >= MAX_PLAYER) {
+      sendJoinRoomResponse(server.game, clientKey, false);
+      return;
+    }
+
+    // 게임이 준비 단계이고, 서브미션이 첫번째가 아닌 경우 실패
+    if (
+      server.game.state !== config.clientState.gameState.PREPARE &&
+      server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
+    ) {
+      sendJoinRoomResponse(server.game, clientKey, false);
+      return;
+    }
+
     const user = new User(userId, clientKey);
     // 게임에 유저 등록
     server.game.addUser(user, false);

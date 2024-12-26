@@ -245,6 +245,7 @@ message S2C_SubmissionEndNotification {
 message C2S_RegistAccountRequest {
   string id = 1;
   string password = 2;
+  string nickname = 3;
 }
 
 message S2C_RegistAccountResponse {
@@ -302,7 +303,7 @@ message S2C_CreateRoomResponse {
   string inviteCode = 4;
 }
 
-message C2S_JoinRoomRequest {
+message C2S_JoinRoomByInviteCodeRequest {
   string userId = 1;
   string inviteCode = 2;
   string token = 3;
