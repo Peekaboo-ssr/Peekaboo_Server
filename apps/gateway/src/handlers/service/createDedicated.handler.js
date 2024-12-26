@@ -16,8 +16,8 @@ export const createDedicatedHandler = (server, payload) => {
     // 게이트웨이의 데디맵에 dedicated의 distributorClientKey 추가함.
     server.mapClients.dedicates[dedicateKey].distributorKey = distributorKey;
 
-    // 현재 연결된 유저맵에 gameSessionId를 저장 (데디에 참여했는지 빠른 확인을 위함)
-    server.connectClients[hostKey].gameSessionId = gameSessionId;
+    // 현재 연결된 유저맵에 dedicateKey를 저장 (데디에 참여했는지 빠른 확인을 위함)
+    server.connectClients[hostKey].dedicateKey = dedicateKey;
 
     console.log(
       'Dedicate mapClient에 추가: ',
