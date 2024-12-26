@@ -78,7 +78,7 @@ message GamePacket {
 
     C2S_CreateRoomRequest createRoomRequest = 601;
     S2C_CreateRoomResponse createRoomResponse = 602;
-    C2S_JoinRoomRequest joinRoomRequest = 603;
+    C2S_JoinRoomByInviteCodeRequest joinRoomByInviteCodeRequest = 603;
     C2S_JoinRoomByGameSessionIdRequest joinRoomByGameSessionIdRequest = 604;
     S2C_JoinRoomResponse joinRoomResponse = 605;
     S2C_JoinRoomNotification joinRoomNotification = 606;

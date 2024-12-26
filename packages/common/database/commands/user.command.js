@@ -11,10 +11,10 @@ const findUser = async (database, id) => {
 const createUser = async (database, id, password) => {
   await database.pools.USER_DB.query(USER_SQL_QUERIES.CREATE_USER, [
     id,
-    email,
     password,
+    nickname,
   ]);
-  return { id, email, password };
+  return { id, password, nickname };
 };
 
 const updateUserLogin = async (database, id) => {
