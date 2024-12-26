@@ -44,9 +44,9 @@ const errorCodesMap = {
     code: 10010,
     message: '알 수 없는 프로토타입 이름',
   },
-  DUPLICATED_USER_CONNECT: {
+  DUPLICATED_USER: {
     code: 10011,
-    message: '중복된 사용자 연결',
+    message: '중복된 사용자 오류',
   },
   DB_QUERY_ERROR: {
     code: 10012,

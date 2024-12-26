@@ -5,6 +5,11 @@ import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 // 소켓에 보낼 에러 응답 값
 const errorResponse = {
   [clientPacket.account.RegistAccountResponse]: {
+    [errorCodesMap.DUPLICATED_USER.code]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.DUPLICATED_USER,
+      },
+    },
     [errorCodesMap.AUTHENTICATION_ERROR.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.AUTHENTICATION_FAILED,
@@ -12,7 +17,7 @@ const errorResponse = {
     },
   },
   [clientPacket.account.LoginResponse]: {
-    [errorCodesMap.DUPLICATED_USER_CONNECT.code]: {
+    [errorCodesMap.DUPLICATED_USER.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.DUPLICATED_USER,
         userId: 'none',
