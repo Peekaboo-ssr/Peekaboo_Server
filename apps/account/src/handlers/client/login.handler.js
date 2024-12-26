@@ -76,7 +76,7 @@ export const loginRequestHandler = async (
     } else {
       if (response.message === 'duplicated') {
         throw new CustomError(
-          errorCodesMap.DUPLICATED_USER_CONNECT,
+          errorCodesMap.DUPLICATED_USER,
           config.clientPacket.account.LoginResponse,
           clientKey,
           socket,

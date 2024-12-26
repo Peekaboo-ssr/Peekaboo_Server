@@ -31,7 +31,7 @@ export const joinSessionHandler = async (server, data) => {
       );
     }
   } catch (e) {
-    if (e.code === errorCodesMap.DUPLICATED_USER_CONNECT.code) {
+    if (e.code === errorCodesMap.DUPLICATED_USER.code) {
       resMessage.message = 'duplicated';
     } else {
       resMessage.message = 'ERROR';
