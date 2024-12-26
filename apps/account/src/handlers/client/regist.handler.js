@@ -13,7 +13,7 @@ export const registAccountHandler = async (
   payload,
   server,
 ) => {
-  const { id, password } = payload;
+  const { id, password, nickname } = payload;
 
   try {
     // DB 검증, ID / PASSWORD 검증
@@ -30,7 +30,7 @@ export const registAccountHandler = async (
     }
 
     // 회원가입 진행
-    await userCommands.createUser(databaseManager, id, password);
+    await userCommands.createUser(databaseManager, id, password, nickname);
 
     const payloadDataForClient = {
       globalFailCode: config.clientState.globalFailCode.NONE,

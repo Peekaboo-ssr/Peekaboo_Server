@@ -16,7 +16,7 @@ export const waitingRoomResponse = (serverInstance, data) => {
       // 대기중인 방만 추가
       if (value.state === config.clientState.gameState.PREPARE) {
         const roomInfo = {
-          gameSessions: key,
+          gameSessionId: key,
           roomName: 'TEST_ROOM',
           numberOfPlayer: value.numberOfPlayer,
           latency: value.latency,

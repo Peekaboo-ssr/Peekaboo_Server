@@ -8,10 +8,11 @@
       "SpawnGhost": [1001, 1003],
       "MinGhostNumber": 2,
       "MaxGhostNumber": 3,
-      "TimeLimit": 620,
-      "MinSoulItemNumber": 10,
-      "MaxSoulItemNumber": 16,
+      "TimeLimit": 360,
+      "MinSoulItemNumber": 7,
+      "MaxSoulItemNumber": 10,
       "Penalty": 0
+
     },
     {
       "Id": 102,
@@ -19,7 +20,7 @@
       "SpawnGhost": [1001, 1003],
       "MinGhostNumber": 3,
       "MaxGhostNumber": 4,
-      "TimeLimit": 620,
+      "TimeLimit": 300,
       "MinSoulItemNumber": 8,
       "MaxSoulItemNumber": 13,
       "Penalty": 10
@@ -30,9 +31,9 @@
       "SpawnGhost": [1001, 1003, 1005],
       "MinGhostNumber": 3,
       "MaxGhostNumber": 4,
-      "TimeLimit": 620,
-      "MinSoulItemNumber": 7,
-      "MaxSoulItemNumber": 10,
+      "TimeLimit": 240,
+      "MinSoulItemNumber": 10,
+      "MaxSoulItemNumber": 16,
       "Penalty": 20
     }
   ]

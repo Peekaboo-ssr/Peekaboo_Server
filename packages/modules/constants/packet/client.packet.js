@@ -2,7 +2,7 @@ const CLIENT_PACKET = {
   game: {
     // 방 : 600번대
     CreateRoomRequest: 601,
-    JoinRoomRequest: 603,
+    JoinRoomByInviteCodeRequest: 603,
     JoinRoomByGameSessionIdRequest: 604,
     JoinRoomResponse: 605, // 참가 실패 시 게임에서도 response 해줌.
   },

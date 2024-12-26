@@ -5,7 +5,12 @@ import config from '@peekaboo-ssr/config/game';
 import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
-export const joinRoomHandler = async (socket, clientKey, payload, server) => {
+export const JoinRoomByInviteCodeHandler = async (
+  socket,
+  clientKey,
+  payload,
+  server,
+) => {
   try {
     const { userId, inviteCode } = payload;
 

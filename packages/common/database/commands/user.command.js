@@ -8,13 +8,13 @@ const findUser = async (database, id) => {
   return rows[0];
 };
 
-const createUser = async (database, id, password) => {
+const createUser = async (database, id, password, nickname) => {
   await database.pools.USER_DB.query(USER_SQL_QUERIES.CREATE_USER, [
     id,
-    email,
     password,
+    nickname,
   ]);
-  return { id, email, password };
+  return { id, password, nickname };
 };
 
 const updateUserLogin = async (database, id) => {

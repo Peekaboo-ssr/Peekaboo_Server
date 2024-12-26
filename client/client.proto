@@ -358,6 +358,7 @@ message S2C_SubmissionEndNotification {
 message C2S_RegistAccountRequest {
   string id = 1;
   string password = 2;
+  string nickname = 3;
 }
 
 message S2C_RegistAccountResponse {
@@ -415,7 +416,7 @@ message S2C_CreateRoomResponse {
   string inviteCode = 4;
 }
 
-message C2S_JoinRoomRequest {
+message C2S_JoinRoomByInviteCodeRequest {
   string userId = 1;
   string inviteCode = 2;
   string token = 3;
@@ -512,7 +513,7 @@ message GamePacket {
 
     C2S_CreateRoomRequest createRoomRequest = 601;
     S2C_CreateRoomResponse createRoomResponse = 602;
-    C2S_JoinRoomRequest joinRoomRequest = 603;
+    C2S_JoinRoomByInviteCodeRequest joinRoomByInviteCodeRequest = 603;
     C2S_JoinRoomByGameSessionIdRequest joinRoomByGameSessionIdRequest = 604;
     S2C_JoinRoomResponse joinRoomResponse = 605;
     S2C_JoinRoomNotification joinRoomNotification = 606;
