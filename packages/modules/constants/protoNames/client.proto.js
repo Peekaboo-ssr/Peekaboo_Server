@@ -16,7 +16,8 @@ const CLIENT_PACKET_MAPS = {
   // 방 : 600번대
   [clientPacket.game.CreateRoomRequest]: 'createRoomRequest',
   [clientPacket.dedicated.CreateRoomResponse]: 'createRoomResponse',
-  [clientPacket.game.JoinRoomRequest]: 'joinRoomRequest',
+  [clientPacket.game.JoinRoomByInviteCodeRequest]:
+    'joinRoomByInviteCodeRequest',
   [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
   [clientPacket.game.JoinRoomByGameSessionIdRequest]:
     'joinRoomByGameSessionIdRequest',
