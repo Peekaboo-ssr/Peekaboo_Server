@@ -1,14 +1,13 @@
 import config from '@peekaboo-ssr/config/lobby';
+import handleError from '@peekaboo-ssr/error/handleError';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 
-export const waitingRoomResponse = (server, data) => {
-  const { clientKey } = data;
-
-  let roomInfos = [];
-
-  const payloadDataForClient = {
-    roomInfos,
-    globalFailCode: config.clientState.globalFailCode.UNKNOWN_ERROR,
+export const waitingRoomHandler = (server, data) => {
+  const { responseChannel, clientKey } = data;
+  const resMessage = {
+    isSuccess: false,
+    roomInfos: [],
+    message: null,
   };
 
   try {
@@ -17,33 +16,26 @@ export const waitingRoomResponse = (server, data) => {
       if (value.state === config.clientState.gameState.PREPARE) {
         const roomInfo = {
           gameSessionId: key,
-          roomName: 'TEST_ROOM',
+          roomName: value.roomName,
           numberOfPlayer: value.numberOfPlayer,
           latency: value.latency,
         };
-        roomInfos.push(roomInfo);
+        resMessage.roomInfos.push(roomInfo);
       }
     }
 
-    payloadDataForClient.globalFailCode =
-      config.clientState.globalFailCode.NONE;
-
-    const packetForClient = createPacketS2G(
-      config.clientPacket.lobby.WaitingRoomListResponse,
-      clientKey,
-      payloadDataForClient,
-    );
-
-    server.gateSocket.write(packetForClient);
+    if (responseChannel) {
+      resMessage.isSuccess = true;
+      server.pubSubManager.publisher.publish(
+        responseChannel,
+        JSON.stringify(resMessage),
+      );
+    }
   } catch (e) {
-    payloadDataForClient.globalFailCode =
-      config.clientState.globalFailCode.UNKNOWN_ERROR;
-    const packetForClient = createPacketS2G(
-      config.clientPacket.lobby.WaitingRoomListResponse,
-      clientKey,
-      payloadDataForClient,
+    server.pubSubManager.publisher.publish(
+      responseChannel,
+      JSON.stringify(resMessage),
     );
-
-    server.gateSocket.write(packetForClient);
+    handleError(e);
   }
 };

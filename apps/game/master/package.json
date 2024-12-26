@@ -16,6 +16,7 @@
     "@peekaboo-ssr/events": "*",
     "@peekaboo-ssr/utils": "*",
     "@peekaboo-ssr/error": "*",
+    "@peekaboo-ssr/commands": "*",
     "uuid": "^11.0.3"
   }
 }

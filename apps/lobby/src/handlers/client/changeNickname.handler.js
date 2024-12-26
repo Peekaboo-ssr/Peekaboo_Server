@@ -1,5 +1,5 @@
 import config from '@peekaboo-ssr/config/lobby';
-import databaseManager from '@peekaboo-ssr/classes/DatabaseManager';
+import DatabaseManager from '@peekaboo-ssr/classes/DatabaseManager';
 import userCommands from '@peekaboo-ssr/commands/userCommands';
 import handleError from '@peekaboo-ssr/error/handleError';
 import CustomError from '@peekaboo-ssr/error/CustomError';
@@ -33,7 +33,7 @@ export const changeNicknameHandler = async (
 
     if (response && response.isSuccess) {
       // 닉네임 변경
-      await userCommands.updateUserNickname(databaseManager, userId, nickname);
+      await userCommands.updateUserNickname(DatabaseManager, userId, nickname);
       const payload = {
         globalFailCode: config.clientState.globalFailCode.NONE,
         message: '닉네임이 정상적으로 변경되었습니다.',
@@ -56,5 +56,5 @@ export const changeNicknameHandler = async (
   }
 
   // 유저의 닉네임 업데이트
-  await userCommands.updateUserNickname(databaseManager);
+  await userCommands.updateUserNickname(DatabaseManager);
 };

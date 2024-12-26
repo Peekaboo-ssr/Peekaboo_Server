@@ -7,7 +7,7 @@ import {
 import { findUserHandler } from './redis/findUser.handler.js';
 import { joinSessionHandler } from './redis/joinSession.handler.js';
 import config from '@peekaboo-ssr/config/session';
-import { waitingRoomResponse } from './redis/waitingRoom.handler.js';
+import { waitingRoomHandler } from './redis/waitingRoom.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 import { updateRoomInfoHandler } from './service/updateRoomInfo.handler.js';
 
@@ -30,7 +30,7 @@ export const handlers = {
       handler: FindDedicateByIdHandler,
     },
     [config.pubAction.WaitingRoomInfosRequest]: {
-      handler: waitingRoomResponse,
+      handler: waitingRoomHandler,
     },
   },
   service: {

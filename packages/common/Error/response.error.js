@@ -50,6 +50,14 @@ const errorResponse = {
       },
     },
   },
+  [clientPacket.lobby.WaitingRoomListResponse]: {
+    [errorCodesMap.HANDLER_ERROR]: {
+      payloadData: {
+        roomInfos: [],
+        globalFailCode: clientState.globalFailCode.UNKNOWN_ERROR,
+      },
+    },
+  },
 };
 
 export default errorResponse;

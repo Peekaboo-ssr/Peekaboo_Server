@@ -13,7 +13,7 @@ import IntervalManager from './classes/managers/interval.manager.js';
 import TcpClient from '@peekaboo-ssr/classes/TcpClient';
 
 class DedicateServer {
-  constructor(clientKey, id, inviteCode, userId) {
+  constructor(clientKey, id, inviteCode, userId, nickname) {
     // 마이크로서비스 정보
     this.context = {
       host: '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
@@ -28,10 +28,10 @@ class DedicateServer {
     this.game = null;
     this.handlers = handlers;
 
-    this.initialize(id, inviteCode, userId, clientKey);
+    this.initialize(id, inviteCode, userId, clientKey, nickname);
   }
 
-  async initialize(id, inviteCode, userId, clientKey) {
+  async initialize(id, inviteCode, userId, clientKey, nickname) {
     await this.initServer(id, inviteCode);
     await this.connectToDistributor(
       '172.17.0.1', // EC2: 172.17.0.1 or local: host.docker.internal
@@ -40,7 +40,6 @@ class DedicateServer {
         setInterval(async () => {
           // 게임 인스턴스 생성 이후 연결 시도하도록 함.
           if (!this.game.isCreated && this.event.isConnected) {
-            console.log('게이트웨이 연결됨.');
             // S2S로 호스트 유저를 맵에 등록하도록 요청
             const dedicateKey = `${this.context.host}:${this.context.port}`;
             const distributorKey = `${this.clientToDistributor.client.localAddress}:${this.clientToDistributor.client.localPort}`;
@@ -53,6 +52,8 @@ class DedicateServer {
                 dedicateKey,
                 distributorKey,
                 gameSessionId: id,
+                inviteCode,
+                roomName: nickname,
               },
             );
             this.clientToDistributor.write(packet);
@@ -117,24 +118,26 @@ class DedicateServer {
     // 레디스에 해당 게임 저장
     await setGameRedis(this.game.id, this.game.inviteCode, this.game.state);
     // 세션 서비스에 주기적으로 방 정보를 갱신하도록 요청
-    IntervalManager.getInstance().addGameRoomInfoInterval(
-      this.game.id,
-      () => {
-        const packetForSession = createPacketS2S(
-          config.servicePacket.UpdateRoomInfoRequest,
-          'dedicated',
-          'session',
-          {
-            gameSessionId: this.game.id,
-            numberOfPlayer: this.game.users.length,
-            latency: Math.floor(this.game.users[0].character.latency),
-            gameSessionState: this.game.state,
-          },
-        );
-        this.clientToDistributor.write(packetForSession);
-      },
-      3500,
-    );
+    setTimeout(() => {
+      IntervalManager.getInstance().addGameRoomInfoInterval(
+        this.game.id,
+        () => {
+          const packetForSession = createPacketS2S(
+            config.servicePacket.UpdateRoomInfoRequest,
+            'dedicated',
+            'session',
+            {
+              gameSessionId: this.game.id,
+              numberOfPlayer: this.game.users.length,
+              latency: Math.floor(this.game.getAvgLatency()),
+              gameSessionState: this.game.state,
+            },
+          );
+          this.clientToDistributor.write(packetForSession);
+        },
+        3500,
+      );
+    }, 5000);
     // createRoomResponse를 보내준다.
     console.log(
       `----------- createRoom Complete : ${this.game.id} -----------`,
@@ -166,8 +169,9 @@ const gameId = process.env.GAME_ID;
 const clientKey = process.env.CLIENT_KEY;
 const inviteCode = process.env.INVITE_CODE;
 const userId = process.env.USER_ID;
+const nickname = process.env.NICKNAME;
 const port = process.env.PORT;
 
 // new DedicateServer('clientKey', 'gameId', 'inviteCode', 'userId');
 // const [clientKey, gameId, inviteCode, userId] = process.argv.slice(2);
-new DedicateServer(clientKey, gameId, inviteCode, userId);
+new DedicateServer(clientKey, gameId, inviteCode, userId, nickname);

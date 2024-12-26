@@ -26,7 +26,6 @@ try {
       '@peekaboo-ssr/config',
       '@peekaboo-ssr/events',
       '@peekaboo-ssr/utils',
-      '@peekaboo-ssr/commands',
       '@peekaboo-ssr/error',
       'bull',
       'crypto',

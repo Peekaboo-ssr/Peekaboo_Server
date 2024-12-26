@@ -18,6 +18,7 @@ try {
       '@peekaboo-ssr/classes',
       '@peekaboo-ssr/events',
       '@peekaboo-ssr/utils',
+      '@peekaboo-ssr/error',
       // protobuf 관련
       'protobufjs',
       'protobufjs/minimal',

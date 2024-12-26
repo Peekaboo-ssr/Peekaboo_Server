@@ -34,6 +34,7 @@ message CreateDedicatedRequest {
   string distributorKey = 3;
   string gameSessionId = 4;
   string inviteCode = 5;
+  string roomName = 6;
 }
 
 message ConnectDedicatedRequest {

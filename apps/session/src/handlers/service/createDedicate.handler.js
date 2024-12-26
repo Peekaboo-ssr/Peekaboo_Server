@@ -5,8 +5,14 @@ import handleError from '@peekaboo-ssr/error/handleError';
 export const createDedicatedHandler = async (server, payload) => {
   console.log('Session >> createDedicate.....');
   try {
-    const { hostKey, dedicateKey, distributorKey, gameSessionId, inviteCode } =
-      payload;
+    const {
+      hostKey,
+      dedicateKey,
+      distributorKey,
+      gameSessionId,
+      inviteCode,
+      roomName,
+    } = payload;
 
     // 게임 세션에 등록
     if (!server.gameSessions.gameSessionId) {
@@ -14,6 +20,7 @@ export const createDedicatedHandler = async (server, payload) => {
         dedicateKey,
         distributorKey,
         inviteCode,
+        roomName: `${roomName}의 방`,
         numberOfPlayer: 0,
         latency: 0,
         state: 0,

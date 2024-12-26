@@ -5,8 +5,14 @@ import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 export const createDedicatedHandler = (server, payload) => {
   try {
     console.log('createDedicated...');
-    const { hostKey, dedicateKey, distributorKey, gameSessionId, inviteCode } =
-      payload;
+    const {
+      hostKey,
+      dedicateKey,
+      distributorKey,
+      gameSessionId,
+      inviteCode,
+      roomName,
+    } = payload;
 
     console.log('새로 생성된 방 정보: ', payload);
 
@@ -30,6 +36,7 @@ export const createDedicatedHandler = (server, payload) => {
         distributorKey,
         gameSessionId,
         inviteCode,
+        roomName,
       },
     );
 

@@ -1,6 +1,6 @@
 import config from '@peekaboo-ssr/config/account';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
-import databaseManager from '@peekaboo-ssr/classes/DatabaseManager';
+import DatabaseManager from '@peekaboo-ssr/classes/DatabaseManager';
 import userCommands from '@peekaboo-ssr/commands/userCommands';
 import bcrypt from 'bcrypt';
 import CustomError from '@peekaboo-ssr/error/CustomError';
@@ -17,7 +17,7 @@ export const registAccountHandler = async (
 
   try {
     // DB 검증, ID / PASSWORD 검증
-    const user = await userCommands.findUser(databaseManager, id);
+    const user = await userCommands.findUser(DatabaseManager, id);
 
     // 유저가 이미 존재하는 경우 에러 반환
     if (user) {
@@ -29,11 +29,12 @@ export const registAccountHandler = async (
       );
     }
 
+    const salt = bcrypt.genSaltSync(10);
     // bcrypt로 비밀번호 변경
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, salt);
 
     // 회원가입 진행
-    await userCommands.createUser(databaseManager, id, hashPassword, nickname);
+    await userCommands.createUser(DatabaseManager, id, hashPassword, nickname);
 
     const payloadDataForClient = {
       globalFailCode: config.clientState.globalFailCode.NONE,

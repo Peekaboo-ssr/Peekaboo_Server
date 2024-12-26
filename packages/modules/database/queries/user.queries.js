@@ -10,6 +10,8 @@ const USER_SQL_QUERIES = {
   CREATE_USER_UUID: `UPDATE users SET uuid = ? WHERE user_id = ?`,
 
   UPDATE_USER_NICKNAME: `UPDATE users SET nickname = ? WHERE uuid = ?`,
+
+  FIND_USER_BY_UUID: `SELECT * FROM users WHERE uuid = ?`,
 };
 
 export default USER_SQL_QUERIES;

@@ -43,6 +43,7 @@ export const createDedicatedServer = async (
   clientKey,
   inviteCode,
   userId,
+  nickname,
 ) => {
   const port = await findPort();
   const containerName = `dedicated_${inviteCode}`;
@@ -65,6 +66,8 @@ export const createDedicatedServer = async (
       `USER_ID=${userId}`,
       '-e',
       `PORT=${port}`,
+      '-e',
+      `NICKNAME=${nickname}`,
       'dedicated_server', //실행할 도커커 이미지 이름름
     ]);
   } catch (e) {

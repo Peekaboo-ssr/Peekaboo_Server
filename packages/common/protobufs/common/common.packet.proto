@@ -94,8 +94,9 @@ message ServicePacket {
     DisconnectedServiceNotification disconnectedServiceNotification = 4;
     CreateDedicatedRequest createDedicatedRequest = 5;
     ExitDedicatedRequestFromSocket exitDedicatedRequestFromSocket = 6;
-    ConnectDedicatedRequest ConnectDedicatedRequest = 7;
-    JoinDedicatedRequest joinDedicatedRequest = 8;
-    UpdateRoomInfoRequest updateRoomInfoRequest = 9;
+    ExitDedicatedRequestBySelf exitDedicatedRequestBySelf = 7;
+    ConnectDedicatedRequest connectDedicatedRequest = 8;
+    JoinDedicatedRequest joinDedicatedRequest = 9;
+    UpdateRoomInfoRequest updateRoomInfoRequest = 10;
   }
 }
