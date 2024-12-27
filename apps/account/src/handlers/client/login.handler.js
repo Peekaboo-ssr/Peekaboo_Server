@@ -73,6 +73,7 @@ export const loginRequestHandler = async (
       const payloadDataForClient = {
         globalFailCode: 0,
         userId,
+        nickname: user.nickname,
         token,
       };
       const packetForClient = createPacketS2G(

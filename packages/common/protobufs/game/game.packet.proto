@@ -261,7 +261,8 @@ message C2S_LoginRequest {
 message S2C_LoginResponse {
   GlobalFailCode globalFailCode = 1;
   string userId = 2;
-  string token = 3;
+  string nickname = 3;
+  string token = 4;
 }
 
 message C2S_ChangeNicknameRequest {
