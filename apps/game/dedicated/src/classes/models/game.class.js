@@ -155,11 +155,11 @@ class Game {
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
+      // 하루 차감
+      this.day -= 1;
+
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
-
-      this.day -= 1;
-      await stageEndNotification(this);
 
       // 사망한 플레이어만큼 soulCredit 깎기
       this.users.forEach((user) => {
@@ -168,7 +168,8 @@ class Game {
         }
       });
 
-      extractSoulNotification(this);
+      // 스테이지 종료 Notification 보내기
+      await stageEndNotification(this);
 
       await this.initStage();
     }

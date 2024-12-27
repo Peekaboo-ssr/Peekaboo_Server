@@ -30,26 +30,26 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   const clientsData = [
     {
       userData: {
-        id: 'test2',
+        id: 'test5',
         password: '1234',
-        token: 'tokenTest2',
-        userId: 'b25ba876-3939-48cd-a1dd-ce16eacf935c',
+        token: 'tokenTest5',
+        userId: '54bad508-8172-459c-96a1-91307295d9dd',
         position: { x: 21.24, y: 15.2, z: 8.66 },
         rotation: { x: 1.2, y: 11.5, z: 6.9 },
       },
-      host: '0.0.0.0',
+      host: '43.201.104.27',
       port: 6000,
     },
     {
       userData: {
-        id: 'test3',
+        id: 'test4',
         password: '1234',
-        token: 'tokenTest3',
-        userId: 'bd05fc53-9f85-43fe-8c23-3e4fdc6b239a',
+        token: 'tokenTest4',
+        userId: '3f023a42-7b55-4bd9-bdfb-9cbf0e4583bb',
         position: { x: 10.0, y: 10.0, z: 10.0 },
         rotation: { x: 0.0, y: 0.0, z: 0.0 },
       },
-      host: '0.0.0.0',
+      host: '43.201.104.27',
       port: 6000,
     },
     // 필요하다면 더 추가 가능
