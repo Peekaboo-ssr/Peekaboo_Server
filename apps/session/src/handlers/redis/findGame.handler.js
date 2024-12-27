@@ -40,7 +40,6 @@ export const FindDedicateByIdHandler = async (server, data) => {
   const resMessage = {
     isSuccess: false,
     dedicateKey: null,
-    distributorKey: null,
   };
   try {
     const { dedicateKey, distributorKey } = getGameByGameSessionId(
@@ -56,7 +55,6 @@ export const FindDedicateByIdHandler = async (server, data) => {
     } else {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
-      resMessage.distributorKey = distributorKey;
       server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),

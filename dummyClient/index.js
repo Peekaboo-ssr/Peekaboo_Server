@@ -37,7 +37,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
         position: { x: 21.24, y: 15.2, z: 8.66 },
         rotation: { x: 1.2, y: 11.5, z: 6.9 },
       },
-      host: '43.201.104.27',
+      host: '0.0.0.0',
       port: 6000,
     },
     {
@@ -49,7 +49,7 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
         position: { x: 10.0, y: 10.0, z: 10.0 },
         rotation: { x: 0.0, y: 0.0, z: 0.0 },
       },
-      host: '43.201.104.27',
+      host: '0.0.0.0',
       port: 6000,
     },
     // 필요하다면 더 추가 가능
@@ -74,9 +74,9 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     scenarioManagers.push(scenario);
   }
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
-  // await runScenario(clients, scenarioManagers);
+  await runScenario(clients, scenarioManagers);
   // await waitRoomScenario(clients, scenarioManagers);
-  await createRoomScenario(clients, scenarioManagers);
+  // await createRoomScenario(clients, scenarioManagers);
 })();
 
 const createRoomScenario = async (clients, scenarioManagers) => {
@@ -152,18 +152,20 @@ const runScenario = async (clients, scenarioManagers) => {
   // 첫 번째 클라이언트만 방 생성 및 생성될 때까지 대기
   const firstClientUserData = clients[0].userData;
   const secondClientUserData = clients[1].userData;
+
+  await scenarioManagers[0].waitingRoomScenario(firstClientUserData);
   // const inviteCode = await scenarioManagers[0].createRoomScenario(
   //   firstClientUserData,
   // );
-  await scenarioManagers[0].createRoomScenario(firstClientUserData);
+  // await scenarioManagers[0].createRoomScenario(firstClientUserData);
 
   // 두 번째 클라이언트가 방 참가
   // scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
 
   // 첫 번째 클라이언트만 이동 시나리오 시작
-  scenarioManagers[0].moveScenario(firstClientUserData, 100);
+  // scenarioManagers[0].moveScenario(firstClientUserData, 100);
 
-  await delay(6000);
+  // await delay(6000);
 
   // scenarioManagers[1].moveScenario(secondClientUserData, 100);
 
