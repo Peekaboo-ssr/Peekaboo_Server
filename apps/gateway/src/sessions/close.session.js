@@ -39,7 +39,7 @@ export const deleteUserToConnectClients = (server, clientKey) => {
       server.connectClients[clientKey].dedicateKey = null;
     }
 
-    exitUserFromSessionService(server.pubSubManager, clientKey);
+    exitUserFromSessionService(server, clientKey);
 
     delete server.connectClients[clientKey];
     // console.log(`deleteUserToConnectClients 수행 후: `, server.connectClients);
