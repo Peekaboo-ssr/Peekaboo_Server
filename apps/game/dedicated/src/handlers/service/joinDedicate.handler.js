@@ -8,7 +8,7 @@ import { MAX_PLAYER } from '../../constants/game.js';
 
 export const joinDedicatedHandler = (server, payload) => {
   console.log('joinDedicated.....');
-  const { clientKey, userId } = payload;
+  const { clientKey, userId, nickname } = payload;
 
   try {
     // 4인 초과라면 실패
@@ -29,7 +29,7 @@ export const joinDedicatedHandler = (server, payload) => {
       return;
     }
 
-    const user = new User(userId, clientKey);
+    const user = new User(userId, clientKey, nickname);
     // 게임에 유저 등록
     server.game.addUser(user, false);
 
@@ -49,7 +49,7 @@ export const joinDedicatedHandler = (server, payload) => {
 
     // 유저 등록완료를 클라이언트에 알리기
     sendJoinRoomResponse(server.game, clientKey, true);
-    joinRoomNotification(server.game, user.id);
+    joinRoomNotification(server.game, user);
   } catch (e) {
     console.error(e);
     sendJoinRoomResponse(server.game, clientKey, false);

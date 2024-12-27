@@ -6,6 +6,7 @@ enum GlobalFailCode {
   INVALID_REQUEST = 2;
   AUTHENTICATION_FAILED = 3;
   DUPLICATED_USER = 4;
+  NOT_FOUND = 5;
 }
 
 enum UserState {
@@ -67,8 +68,9 @@ message MoveInfo {
 
 message PlayerInfo {
   string userId = 1;
-  MoveInfo moveInfo = 2;
-  bool isHost = 3;
+  string nickname = 2;
+  MoveInfo moveInfo = 3;
+  bool isHost = 4;
 }
 
 message PlayerMoveInfo {
@@ -440,6 +442,7 @@ message S2C_JoinRoomResponse {
 
 message S2C_JoinRoomNotification {
   string userId = 1;
+  string nickname = 2;
 }
 
 message GamePacket {

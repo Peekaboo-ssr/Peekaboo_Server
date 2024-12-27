@@ -6,6 +6,7 @@ const clientState = {
     INVALID_REQUEST: 2,
     AUTHENTICATION_FAILED: 3,
     DUPLICATED_USER: 4,
+    NOT_FOUND: 5,
   },
   userState: {
     STAY: 0,

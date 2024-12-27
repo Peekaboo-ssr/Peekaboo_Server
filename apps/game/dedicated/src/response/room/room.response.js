@@ -35,6 +35,7 @@ export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
   const players = isSuccess
     ? game.users.map((user) => {
         const userId = user.id;
+        const nickname = user.nickname;
         const moveInfo = {
           position: user.character.position.getPosition(),
           rotation: user.character.rotation.getRotation(),
@@ -42,6 +43,7 @@ export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
         const isHost = game.hostId === userId ? true : false;
         return {
           userId,
+          nickname,
           moveInfo,
           isHost,
         };

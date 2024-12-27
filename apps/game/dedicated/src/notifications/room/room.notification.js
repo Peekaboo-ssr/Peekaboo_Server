@@ -5,14 +5,15 @@ import { removeUserRedisFromGame } from '../../redis/user.redis.js';
 /**
  * 방에 참가한 플레이어 정보를 기존 유저들에게 알리는 함수
  */
-export const joinRoomNotification = async (game, userId) => {
+export const joinRoomNotification = async (game, newUser) => {
   try {
     const payload = {
-      userId,
+      userId: newUser.id,
+      nickname: newUser.nickname,
     };
 
     game.users.forEach((user) => {
-      if (user.id !== userId) {
+      if (user.id !== newUser.id) {
         const packet = createPacketS2G(
           config.clientPacket.dedicated.JoinRoomNotification,
           user.clientKey,

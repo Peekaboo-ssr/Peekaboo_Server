@@ -327,4 +327,5 @@ message S2C_JoinRoomResponse {
 
 message S2C_JoinRoomNotification {
   string userId = 1;
+  string nickname = 2;
 }

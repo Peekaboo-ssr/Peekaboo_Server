@@ -45,6 +45,7 @@ message ConnectDedicatedRequest {
 message JoinDedicatedRequest {
   string clientKey = 1;
   string userId = 2;
+  string nickname = 3;
 }
 
 message ExitDedicatedRequestFromSocket {

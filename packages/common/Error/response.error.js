@@ -59,6 +59,24 @@ const errorResponse = {
       },
     },
   },
+  [clientPacket.game.JoinRoomResponse]: {
+    [errorCodesMap.USER_NOT_FOUND]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.AUTHENTICATION_FAILED,
+        message: '방에 참가하지 못했습니다.',
+        gameSessionId: '',
+        playerInfos: [],
+      },
+    },
+    [errorCodesMap.GAME_NOT_FOUND]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.NOT_FOUND,
+        message: '방에 참가하지 못했습니다.',
+        gameSessionId: '',
+        playerInfos: [],
+      },
+    },
+  },
 };
 
 export default errorResponse;
