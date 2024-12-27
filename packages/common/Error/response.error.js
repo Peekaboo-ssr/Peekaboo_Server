@@ -46,6 +46,7 @@ const errorResponse = {
     [errorCodesMap.HANDLER_ERROR]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.UNKNOWN_ERROR,
+        nickname: '',
         message: '알 수 없는 이유로 변경 실패',
       },
     },

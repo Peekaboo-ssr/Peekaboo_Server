@@ -267,12 +267,13 @@ message S2C_LoginResponse {
 
 message C2S_ChangeNicknameRequest {
   string userId = 1;
-  string nickname = 2; 
+  string nickname = 2;
 }
 
 message S2C_ChangeNicknameResponse {
   GlobalFailCode globalFailCode = 1;
-  string message = 2;
+  string nickname = 2;
+  string message = 3;
 }
 
 message C2S_EnterLobbyRequest {

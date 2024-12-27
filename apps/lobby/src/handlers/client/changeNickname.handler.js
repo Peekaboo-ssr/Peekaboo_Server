@@ -36,6 +36,7 @@ export const changeNicknameHandler = async (
       await userCommands.updateUserNickname(DatabaseManager, userId, nickname);
       const payload = {
         globalFailCode: config.clientState.globalFailCode.NONE,
+        nickname,
         message: '닉네임이 정상적으로 변경되었습니다.',
       };
       const packet = createPacketS2G(
