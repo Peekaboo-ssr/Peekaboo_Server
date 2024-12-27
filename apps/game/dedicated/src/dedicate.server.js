@@ -145,7 +145,7 @@ class DedicateServer {
     // TODO: 유저에게 방 생성 완료 응답
     sendCreateRoomResponse(this.game.socket, clientKey, id, inviteCode);
     // 호스트 유저를 생성하여 저장
-    this.game.addUser(new User(userId, clientKey), true);
+    this.game.addUser(new User(userId, clientKey, nickname), true);
   }
 
   getClientHandlerByPacketType = (packetType) => {
