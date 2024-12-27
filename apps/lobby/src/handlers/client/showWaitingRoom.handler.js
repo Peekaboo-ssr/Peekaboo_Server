@@ -27,13 +27,14 @@ export const showWaitingRoomHandler = async (
     );
 
     if (response && response.isSuccess) {
-      payloadDataForClient.globalFailCode =
-        config.clientState.globalFailCode.NONE;
-
+      const payloadData = {
+        roomInfos: response.roomInfos,
+        globalFailCode: config.clientState.globalFailCode.NONE,
+      };
       const packetForClient = createPacketS2G(
         config.clientPacket.lobby.WaitingRoomListResponse,
         clientKey,
-        payloadDataForClient,
+        payloadData,
       );
 
       server.gateSocket.write(packetForClient);
