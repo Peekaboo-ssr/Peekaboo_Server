@@ -161,6 +161,8 @@ class Game {
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
 
+      const prevCredit = this.soulCredit;
+
       // 사망한 플레이어만큼 soulCredit 깎기
       this.users.forEach((user) => {
         if (user.character.life <= 0) {
@@ -169,7 +171,7 @@ class Game {
       });
 
       // 스테이지 종료 Notification 보내기
-      await stageEndNotification(this);
+      await stageEndNotification(this, prevCredit - this.soulCredit);
 
       await this.initStage();
     }
@@ -178,7 +180,7 @@ class Game {
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
       await this.initStage();
-      await stageEndNotification(this);
+      await stageEndNotification(this, 0);
     }
     // 스테이지 종료 후 난이도 초기화
     this.difficultyId = null;
