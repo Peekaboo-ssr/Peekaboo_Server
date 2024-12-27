@@ -31,40 +31,34 @@ export const sendCreateRoomResponse = async (
   }
 };
 
-export const sendJoinRoomResponse = (game, clientKey, isSuccess) => {
-  const players = isSuccess
-    ? game.users.map((user) => {
-        const userId = user.id;
-        const nickname = user.nickname;
-        const moveInfo = {
-          position: user.character.position.getPosition(),
-          rotation: user.character.rotation.getRotation(),
-        };
-        const isHost = game.hostId === userId ? true : false;
-        return {
-          userId,
-          nickname,
-          moveInfo,
-          isHost,
-        };
-      })
-    : [];
+export const sendJoinRoomResponse = (game, clientKey) => {
+  const players = game.users.map((user) => {
+    const userId = user.id;
+    const nickname = user.nickname;
+    const moveInfo = {
+      position: user.character.position.getPosition(),
+      rotation: user.character.rotation.getRotation(),
+    };
+    const isHost = game.hostId === userId;
+    return {
+      userId,
+      nickname,
+      moveInfo,
+      isHost,
+    };
+  });
 
-  const data = {
-    globalFailCode: isSuccess
-      ? config.clientState.globalFailCode.NONE
-      : config.clientState.globalFailCode.INVALID_REQUEST,
-    message: isSuccess
-      ? '방에 성공적으로 참가하였습니다.'
-      : `방 참가에 실패하였습니다.`,
-    gameSessionId: isSuccess ? game.id : '',
+  const payload = {
+    globalFailCode: config.clientState.globalFailCode.NONE,
+    message: '방에 성공적으로 참가하였습니다.',
+    gameSessionId: game.id,
     playerInfos: players,
   };
 
   const packet = createPacketS2G(
     config.clientPacket.dedicated.JoinRoomResponse,
     clientKey,
-    data,
+    payload,
   );
 
   game.socket.write(packet);

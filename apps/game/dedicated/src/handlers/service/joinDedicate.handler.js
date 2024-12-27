@@ -5,6 +5,9 @@ import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 import { SUBMISSION_DURATION } from '../../constants/game.js';
 import { MAX_PLAYER } from '../../constants/game.js';
+import handleError from '@peekaboo-ssr/error/handleError';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 
 export const joinDedicatedHandler = (server, payload) => {
   console.log('joinDedicated.....');
@@ -13,9 +16,12 @@ export const joinDedicatedHandler = (server, payload) => {
   try {
     // 4인 초과라면 실패
     if (server.game.users.length >= MAX_PLAYER) {
-      console.log('최대 인원이므로 참가가 불가합니다.');
-      sendJoinRoomResponse(server.game, clientKey, false);
-      return;
+      throw new CustomError(
+        errorCodesMap.GAME_IS_FULLED,
+        config.clientPacket.dedicated.JoinRoomResponse,
+        clientKey,
+        server.game.socket,
+      );
     }
 
     // 게임 준비 단계 / 서브미션이 첫번째에 첫 날인지 검증
@@ -24,9 +30,12 @@ export const joinDedicatedHandler = (server, payload) => {
       server.game.day !== SUBMISSION_DURATION &&
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
-      console.log('게임이 이미 진행중입니다.');
-      sendJoinRoomResponse(server.game, clientKey, false);
-      return;
+      throw new CustomError(
+        errorCodesMap.GAME_IS_STARTED,
+        config.clientPacket.dedicated.JoinRoomResponse,
+        clientKey,
+        server.game.socket,
+      );
     }
 
     const user = new User(userId, clientKey, nickname);
@@ -48,10 +57,9 @@ export const joinDedicatedHandler = (server, payload) => {
     server.clientToDistributor.write(packetForGate);
 
     // 유저 등록완료를 클라이언트에 알리기
-    sendJoinRoomResponse(server.game, clientKey, true);
+    sendJoinRoomResponse(server.game, clientKey);
     joinRoomNotification(server.game, user);
   } catch (e) {
-    console.error(e);
-    sendJoinRoomResponse(server.game, clientKey, false);
+    handleError(e);
   }
 };

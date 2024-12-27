@@ -88,6 +88,14 @@ const errorCodesMap = {
     code: 10021,
     message: '유효하지 않은 요청',
   },
+  GAME_IS_STARTED: {
+    code: 10022,
+    message: '이미 시작된 게임입니다.',
+  },
+  GAME_IS_FULLED: {
+    code: 10023,
+    message: '게임에 모든 인원이 찼습니다.',
+  },
 };
 
 export default errorCodesMap;

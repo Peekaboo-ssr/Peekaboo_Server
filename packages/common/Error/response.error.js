@@ -63,7 +63,7 @@ const errorResponse = {
     [errorCodesMap.USER_NOT_FOUND]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.AUTHENTICATION_FAILED,
-        message: '방에 참가하지 못했습니다.',
+        message: '유저 인증에 실패했습니다.',
         gameSessionId: '',
         playerInfos: [],
       },
@@ -71,7 +71,23 @@ const errorResponse = {
     [errorCodesMap.GAME_NOT_FOUND]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.NOT_FOUND,
-        message: '방에 참가하지 못했습니다.',
+        message: '게임을 찾을 수 없습니다.',
+        gameSessionId: '',
+        playerInfos: [],
+      },
+    },
+    [errorCodesMap.GAME_IS_STARTED]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.STARTED_GAME,
+        message: '게임이 시작된 상태로 참여가 불가합니다.',
+        gameSessionId: '',
+        playerInfos: [],
+      },
+    },
+    [errorCodesMap.GAME_IS_FULLED]: {
+      payloadData: {
+        globalFailCode: clientState.globalFailCode.FULLED_GAME,
+        message: '게임에 인원이 모두 찬 상태로 참여가 불가합니다.',
         gameSessionId: '',
         playerInfos: [],
       },
