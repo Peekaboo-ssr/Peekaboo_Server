@@ -10,7 +10,7 @@ export const exitDedicatedSelfHandler = (server, payload) => {
     // 1. 해당 데디에서 삭제하도록 함
     deleteUserToDedicates(server, dedicateKey, clientKey);
 
-    // 세션 서비스에 등록 요청
+    // 세션 서비스에 방 나가기 및 타이틀로 세션 이동 요청
     const pubMessage = {
       action: config.pubAction.JoinSessionRequest,
       type: 'user',

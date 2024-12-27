@@ -3,6 +3,7 @@ import { sendInfo } from '../notifications/connection.notification.js';
 import { serviceMap } from '../source/connection.source.js';
 import { parsePacketS2S } from '@peekaboo-ssr/utils/parsePacket';
 import { findServiceByReceiver } from '../utils/routes/find.routes.js';
+import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 
 class S2DEventHandler {
   onConnection(socket) {
@@ -75,7 +76,7 @@ class S2DEventHandler {
     }
   }
 
-  onEnd(socket) {
+  onEnd(socket, server) {
     // 이전 코드
     /*
     const key = socket.remoteAddress + ':' + socket.remotePort;
@@ -99,6 +100,18 @@ class S2DEventHandler {
     // dedicates에서 검색
     Object.keys(serviceMap.dedicates).forEach((key) => {
       if (serviceMap.dedicates[key].socket === socket) {
+        // 해당 데디 세션정보에 대한 것을 정리하도록 요청
+        const gatewaySocket = findServiceByReceiver('gateway');
+        const s2sPayload = {
+          dedicateKey: key,
+        };
+        const packet = createPacketS2S(
+          config.servicePacket.DeleteDedicatedRequest,
+          'distributor',
+          'gateway',
+          s2sPayload,
+        );
+        gatewaySocket.write(packet);
         delete serviceMap.dedicates[key];
         removed = true;
       }
@@ -110,14 +123,14 @@ class S2DEventHandler {
     }
   }
 
-  onError(socket, err) {
+  onError(socket, err, server) {
     console.log(
       '서비스 연결 오류:',
       socket.remoteAddress,
       socket.remotePort,
       err,
     );
-    this.onEnd(socket); // 새로운 코드: 에러 처리를 onEnd와 동일하게 처리
+    this.onEnd(socket, server); // 새로운 코드: 에러 처리를 onEnd와 동일하게 처리
   }
 }
 

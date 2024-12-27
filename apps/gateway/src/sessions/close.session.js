@@ -2,16 +2,19 @@ import config from '@peekaboo-ssr/config/gateway';
 import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 
 // 유저 Disconnect에 대한 처리 관련 함수 모음
-export const exitUserFromSessionService = async (pubSubManager, clientKey) => {
+export const exitUserFromSessionService = async (server, clientKey) => {
   try {
-    const messageForSession = {
-      action: config.pubAction.ExitSessionRequest,
+    const s2sPayload = {
       clientKey,
     };
-    await pubSubManager.sendMessage(
-      config.subChannel.session,
-      messageForSession,
+    const packet = createPacketS2S(
+      config.servicePacket.ExitSessionRequest,
+      'gateway',
+      'session',
+      s2sPayload,
     );
+
+    server.clientToDistributor.write(packet);
   } catch (e) {
     console.error(e);
   }
@@ -30,10 +33,13 @@ export const deleteUserToConnectClients = (server, clientKey) => {
     if (dedicateKey !== null) {
       // 참가한 유저의 데디에 해당 유저 삭제 요청
       exitUserNotificationToDedicated(server, clientKey, dedicateKey);
-
       // 데디케이티드 맵에서 해당 유저가 참여한 데디에서 유저 삭제
       deleteUserToDedicates(server, dedicateKey, clientKey);
+      // 해당 유저 커넥션 정보에서 데디케이티드 정보 삭제
+      server.connectClients[clientKey].dedicateKey = null;
     }
+
+    exitUserFromSessionService(server.pubSubManager, clientKey);
 
     delete server.connectClients[clientKey];
     // console.log(`deleteUserToConnectClients 수행 후: `, server.connectClients);

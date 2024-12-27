@@ -98,5 +98,7 @@ message ServicePacket {
     ConnectDedicatedRequest connectDedicatedRequest = 8;
     JoinDedicatedRequest joinDedicatedRequest = 9;
     UpdateRoomInfoRequest updateRoomInfoRequest = 10;
+    DeleteDedicatedRequest deleteDedicatedRequest = 11;
+    ExitSessionRequest exitSessionRequest = 12;
   }
 }

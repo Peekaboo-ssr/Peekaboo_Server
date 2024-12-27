@@ -96,14 +96,12 @@ class C2GEventHandler extends BaseEvent {
     // 3. connectClients 해당 유저가 플레이중인 게임이 있었다면 해당 게임에 삭제 요청
     // 4. 데디케이티드 서버에 해당 유저 Disconnected 알림
     const clientKey = `${socket.remoteAddress}:${socket.remotePort}`;
-    exitUserFromSessionService(server.pubSubManager, clientKey);
     deleteUserToConnectClients(server, clientKey);
     console.log('Client Disconnected', socket.remoteAddress, socket.remotePort);
   }
 
   onError(socket, err, server) {
     const clientKey = `${socket.remoteAddress}:${socket.remotePort}`;
-    exitUserFromSessionService(server.pubSubManager, clientKey);
     deleteUserToConnectClients(server, clientKey);
     console.log('Client Disconnected', socket.remoteAddress, socket.remotePort);
   }

@@ -64,3 +64,11 @@ message UpdateRoomInfoRequest {
   uint32 latency = 3;
   GameSessionState gameSessionState = 4;
 }
+
+message DeleteDedicatedRequest {
+  string dedicateKey = 1;
+}
+
+message ExitSessionRequest {
+  string clientKey = 1;
+}

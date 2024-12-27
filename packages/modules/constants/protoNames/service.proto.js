@@ -13,6 +13,8 @@ const SERVICE_PACKET_MAPS = {
   [servicePacket.ConnectDedicatedRequest]: 'connectDedicatedRequest',
   [servicePacket.JoinDedicatedRequest]: 'joinDedicatedRequest',
   [servicePacket.UpdateRoomInfoRequest]: 'updateRoomInfoRequest',
+  [servicePacket.DeleteDedicatedRequest]: 'deleteDedicatedRequest',
+  [servicePacket.ExitSessionRequest]: 'exitSessionRequest',
 };
 
 export default SERVICE_PACKET_MAPS;

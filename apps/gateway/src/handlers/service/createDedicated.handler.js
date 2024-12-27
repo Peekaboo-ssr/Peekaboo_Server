@@ -41,14 +41,6 @@ export const createDedicatedHandler = (server, payload) => {
     );
 
     server.clientToDistributor.write(s2sPacket);
-
-    // const pubMessage = {
-    //   action: config.pubAction.CreateDedicatedRequest,
-    //   dedicateKey,
-    //   distributorKey,
-    //   gameSessionId,
-    // };
-    // server.pubSubManager.sendMessage(config.subChannel.session, pubMessage);
   } catch (e) {
     handleError(e);
   }
