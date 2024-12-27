@@ -26,8 +26,8 @@ export const joinDedicatedHandler = (server, payload) => {
 
     // 게임 준비 단계 / 서브미션이 첫번째에 첫 날인지 검증
     if (
-      server.game.state !== config.clientState.gameState.PREPARE &&
-      server.game.day !== SUBMISSION_DURATION &&
+      server.game.state !== config.clientState.gameState.PREPARE ||
+      server.game.day !== SUBMISSION_DURATION ||
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
       throw new CustomError(
