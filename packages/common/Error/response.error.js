@@ -43,7 +43,7 @@ const errorResponse = {
     },
   },
   [clientPacket.lobby.ChangeNicknameResponse]: {
-    [errorCodesMap.HANDLER_ERROR]: {
+    [errorCodesMap.HANDLER_ERROR.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.UNKNOWN_ERROR,
         nickname: '',
@@ -52,15 +52,15 @@ const errorResponse = {
     },
   },
   [clientPacket.lobby.WaitingRoomListResponse]: {
-    [errorCodesMap.HANDLER_ERROR]: {
+    [errorCodesMap.HANDLER_ERROR.code]: {
       payloadData: {
         roomInfos: [],
         globalFailCode: clientState.globalFailCode.UNKNOWN_ERROR,
       },
     },
   },
-  [clientPacket.game.JoinRoomResponse]: {
-    [errorCodesMap.USER_NOT_FOUND]: {
+  [clientPacket.dedicated.JoinRoomResponse]: {
+    [errorCodesMap.USER_NOT_FOUND.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.AUTHENTICATION_FAILED,
         message: '유저 인증에 실패했습니다.',
@@ -68,7 +68,7 @@ const errorResponse = {
         playerInfos: [],
       },
     },
-    [errorCodesMap.GAME_NOT_FOUND]: {
+    [errorCodesMap.GAME_NOT_FOUND.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.NOT_FOUND,
         message: '게임을 찾을 수 없습니다.',
@@ -76,7 +76,7 @@ const errorResponse = {
         playerInfos: [],
       },
     },
-    [errorCodesMap.GAME_IS_STARTED]: {
+    [errorCodesMap.GAME_IS_STARTED.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.STARTED_GAME,
         message: '게임이 시작된 상태로 참여가 불가합니다.',
@@ -84,7 +84,7 @@ const errorResponse = {
         playerInfos: [],
       },
     },
-    [errorCodesMap.GAME_IS_FULLED]: {
+    [errorCodesMap.GAME_IS_FULLED.code]: {
       payloadData: {
         globalFailCode: clientState.globalFailCode.FULLED_GAME,
         message: '게임에 인원이 모두 찬 상태로 참여가 불가합니다.',
