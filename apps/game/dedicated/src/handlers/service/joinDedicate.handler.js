@@ -57,7 +57,7 @@ export const joinDedicatedHandler = (server, payload) => {
     server.clientToDistributor.write(packetForGate);
 
     // 유저 등록완료를 클라이언트에 알리기
-    sendJoinRoomResponse(server.game, clientKey, userId);
+    sendJoinRoomResponse(server.game, clientKey);
     joinRoomNotification(server.game, user);
   } catch (e) {
     handleError(e);

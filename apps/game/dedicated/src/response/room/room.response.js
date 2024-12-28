@@ -31,9 +31,10 @@ export const sendCreateRoomResponse = async (
   }
 };
 
-export const sendJoinRoomResponse = (game, clientKey, userId) => {
-  const players = game.users.map((user) => {
-    if (user.id !== userId) {
+export const sendJoinRoomResponse = (game, clientKey) => {
+  const players = game.users
+    .filter((user) => user.clientKey !== clientKey)
+    .map((user) => {
       const userId = user.id;
       const nickname = user.nickname;
       const moveInfo = {
@@ -47,8 +48,7 @@ export const sendJoinRoomResponse = (game, clientKey, userId) => {
         moveInfo,
         isHost,
       };
-    }
-  });
+    });
 
   const payload = {
     globalFailCode: config.clientState.globalFailCode.NONE,
