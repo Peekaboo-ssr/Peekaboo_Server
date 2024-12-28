@@ -8,6 +8,18 @@ export const deleteDedicatedHandler = (server, payload) => {
       if (key === dedicateKey) {
         const users = server.mapClients.dedicates[key].users;
         for (let i in users) {
+          // 세션을 'user'로 옮기는 작업 진행
+          const pubMessage = {
+            action: config.pubAction.JoinSessionRequest,
+            type: 'user',
+            clientKey: users[i],
+          };
+
+          server.pubSubManager.sendMessage(
+            config.subChannel.session,
+            pubMessage,
+          );
+
           server.connectClients[users[i]].dedicateKey = null;
         }
         delete server.mapClients.dedicates[key];
