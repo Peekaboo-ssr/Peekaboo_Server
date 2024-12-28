@@ -23,6 +23,7 @@ jobs:
             # 도커 빌드 캐시 삭제
             docker builder prune -f
             # docker system prune -af
+            docker rmi $(docker images -f "dangling=true" -q)
 
             # Docker Compose 재시작
             docker-compose down || true  # 에러 무시
