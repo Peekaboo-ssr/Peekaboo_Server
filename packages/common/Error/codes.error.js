@@ -44,9 +44,9 @@ const errorCodesMap = {
     code: 10010,
     message: '알 수 없는 프로토타입 이름',
   },
-  DUPLICATED_USER_CONNECT: {
+  DUPLICATED_USER: {
     code: 10011,
-    message: '중복된 사용자 연결',
+    message: '중복된 사용자 오류',
   },
   DB_QUERY_ERROR: {
     code: 10012,
@@ -87,6 +87,14 @@ const errorCodesMap = {
   INVALID_REQUEST: {
     code: 10021,
     message: '유효하지 않은 요청',
+  },
+  GAME_IS_STARTED: {
+    code: 10022,
+    message: '이미 시작된 게임입니다.',
+  },
+  GAME_IS_FULLED: {
+    code: 10023,
+    message: '게임에 모든 인원이 찼습니다.',
   },
 };
 

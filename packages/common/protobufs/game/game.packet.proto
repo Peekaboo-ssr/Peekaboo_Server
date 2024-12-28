@@ -232,8 +232,9 @@ message S2C_StageEndNotification {
   uint32 remainingDay = 1;
   Position startPosition = 2;
   uint32 soulCredit = 3;  // 현재 소울 크레딧(플레이어 사망 수 체크후 깎아주기 때문)
-  uint32 aliveCount = 4;  // 생존한 수 
-  uint32 diedCount = 5;   // 사망한 수
+  uint32 penaltyCredit = 4; // 플레이어 사망에 따른 패널티 크레딧
+  uint32 aliveCount = 5;  // 생존한 수 
+  uint32 diedCount = 6;   // 사망한 수
 }
 
 message S2C_SubmissionEndNotification {
@@ -261,17 +262,19 @@ message C2S_LoginRequest {
 message S2C_LoginResponse {
   GlobalFailCode globalFailCode = 1;
   string userId = 2;
-  string token = 3;
+  string nickname = 3;
+  string token = 4;
 }
 
 message C2S_ChangeNicknameRequest {
   string userId = 1;
-  string nickname = 2; 
+  string nickname = 2;
 }
 
 message S2C_ChangeNicknameResponse {
   GlobalFailCode globalFailCode = 1;
-  string message = 2;
+  string nickname = 2;
+  string message = 3;
 }
 
 message C2S_EnterLobbyRequest {
@@ -311,7 +314,7 @@ message C2S_JoinRoomByInviteCodeRequest {
 
 message C2S_JoinRoomByGameSessionIdRequest {
   string userId = 1;
-  string inviteCode = 2;
+  string gameSessionId = 2;
   string token = 3;
 }
 
@@ -324,4 +327,5 @@ message S2C_JoinRoomResponse {
 
 message S2C_JoinRoomNotification {
   string userId = 1;
+  string nickname = 2;
 }

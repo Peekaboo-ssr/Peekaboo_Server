@@ -1,6 +1,6 @@
 import config from '@peekaboo-ssr/config/account';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
-import databaseManager from '@peekaboo-ssr/classes/DatabaseManager';
+import DatabaseManager from '@peekaboo-ssr/classes/DatabaseManager';
 import userCommands from '@peekaboo-ssr/commands/userCommands';
 import CustomError from '@peekaboo-ssr/error/CustomError';
 import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
@@ -17,10 +17,11 @@ export const loginRequestHandler = async (
 ) => {
   const { id, password } = payload;
   try {
-    // DB 검증, ID / PASSWORD 검증
-    const user = await userCommands.findUser(databaseManager, id);
-
-    if (!user || user.password !== password) {
+    console.log(id, password);
+    // DB 검증
+    const user = await userCommands.findUser(DatabaseManager, id);
+    console.log(user);
+    if (!user) {
       throw new CustomError(
         errorCodesMap.AUTHENTICATION_ERROR,
         config.clientPacket.account.LoginResponse,
@@ -29,15 +30,22 @@ export const loginRequestHandler = async (
       );
     }
 
-    // 나중에는 bcrypt 검증으로 강화 - 회원가입 기능 추가시 TODO
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    // if(!isPasswordValid){
-    //   throw new Error(`비밀번호가 맞지 않습니다.`);
+    // 패스워드 bcrypt 검증 이거 왜 안되는지 진짜 모르겠음 회원가입 일단 두번 보내는거 없애보고 테스트 필요함 하.. 화나네
+    // if (!(await bcrypt.compare(password, user.password))) {
+    //   throw new CustomError(
+    //     errorCodesMap.AUTHENTICATION_ERROR,
+    //     config.clientPacket.account.LoginResponse,
+    //     clientKey,
+    //     socket,
+    //   );
     // }
+
+    // 마지막 유저 로그인 업데이트
+    await userCommands.updateUserLogin(DatabaseManager, id);
 
     // UUID DB에 있는지 검증 후 발급
     const userId = !user.uuid
-      ? await userCommands.createUserUuid(databaseManager, id, uuidv4())
+      ? await userCommands.createUserUuid(DatabaseManager, id, uuidv4())
       : user.uuid;
 
     // JWT 토큰 발급
@@ -65,6 +73,7 @@ export const loginRequestHandler = async (
       const payloadDataForClient = {
         globalFailCode: 0,
         userId,
+        nickname: user.nickname,
         token,
       };
       const packetForClient = createPacketS2G(
@@ -73,10 +82,10 @@ export const loginRequestHandler = async (
         payloadDataForClient,
       );
       socket.write(packetForClient);
-    } else {
+    } else if (!response.isSuccess) {
       if (response.message === 'duplicated') {
         throw new CustomError(
-          errorCodesMap.DUPLICATED_USER_CONNECT,
+          errorCodesMap.DUPLICATED_USER,
           config.clientPacket.account.LoginResponse,
           clientKey,
           socket,

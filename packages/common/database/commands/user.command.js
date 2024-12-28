@@ -29,11 +29,28 @@ const createUserUuid = async (database, id, uuid) => {
   return uuid;
 };
 
+const updateUserNickname = async (database, uuid, nickname) => {
+  await database.pools.USER_DB.query(USER_SQL_QUERIES.UPDATE_USER_NICKNAME, [
+    nickname,
+    uuid,
+  ]);
+};
+
+const findUserByUUID = async (database, uuid) => {
+  const [rows] = await database.pools.USER_DB.query(
+    USER_SQL_QUERIES.FIND_USER_BY_UUID,
+    [uuid],
+  );
+  return rows[0];
+};
+
 const userCommands = {
   findUser,
   createUser,
   updateUserLogin,
   createUserUuid,
+  updateUserNickname,
+  findUserByUUID,
 };
 
 export default userCommands;

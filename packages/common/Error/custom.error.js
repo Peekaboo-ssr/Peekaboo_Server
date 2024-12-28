@@ -6,10 +6,18 @@ class CustomError extends Error {
     this.code = error.code;
     this.name = 'Custom Error';
     if (packetType) {
-      this.responseData = errorResponse[packetType].payloadData;
-      this.packetType = packetType;
-      this.clientKey = clientKey;
-      this.socket = socket;
+      const response = errorResponse?.[packetType]?.[this.code];
+      if (response) {
+        this.responseData = errorResponse[packetType][this.code].payloadData;
+        this.packetType = packetType;
+        this.clientKey = clientKey;
+        this.socket = socket;
+      } else {
+        console.error('ErrorResponse 데이터가 올바르지 않습니다.', {
+          packetType,
+          code: this.code,
+        });
+      }
     }
   }
 }

@@ -10,9 +10,11 @@ const SERVICE_PACKET_MAPS = {
   [servicePacket.ExitDedicatedRequestFromSocket]:
     'exitDedicatedRequestFromSocket',
   [servicePacket.ExitDedicatedRequestBySelf]: 'exitDedicatedRequestBySelf',
-  [servicePacket.ConnectDedicatedRequest]: 'ConnectDedicatedRequest',
+  [servicePacket.ConnectDedicatedRequest]: 'connectDedicatedRequest',
   [servicePacket.JoinDedicatedRequest]: 'joinDedicatedRequest',
   [servicePacket.UpdateRoomInfoRequest]: 'updateRoomInfoRequest',
+  [servicePacket.DeleteDedicatedRequest]: 'deleteDedicatedRequest',
+  [servicePacket.ExitSessionRequest]: 'exitSessionRequest',
 };
 
 export default SERVICE_PACKET_MAPS;

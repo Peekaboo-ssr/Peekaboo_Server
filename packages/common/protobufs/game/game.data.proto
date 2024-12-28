@@ -21,8 +21,9 @@ message MoveInfo {
 
 message PlayerInfo {
   string userId = 1;
-  MoveInfo moveInfo = 2;
-  bool isHost = 3;
+  string nickname = 2;
+  MoveInfo moveInfo = 3;
+  bool isHost = 4;
 }
 
 message PlayerMoveInfo {

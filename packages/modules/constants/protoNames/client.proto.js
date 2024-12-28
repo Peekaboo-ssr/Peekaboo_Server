@@ -6,8 +6,8 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.account.RegistAccountResponse]: 'registAccountResponse',
   [clientPacket.account.LoginRequest]: 'loginRequest',
   [clientPacket.account.LoginResponse]: 'loginResponse',
-  [clientPacket.account.ChangeNicknameRequest]: 'changeNicknameRequest',
-  [clientPacket.account.ChangeNicknameResponse]: 'changeNicknameResponse',
+  [clientPacket.lobby.ChangeNicknameRequest]: 'changeNicknameRequest',
+  [clientPacket.lobby.ChangeNicknameResponse]: 'changeNicknameResponse',
   [clientPacket.lobby.EnterLobbyRequest]: 'enterLobbyRequest',
   [clientPacket.lobby.EnterLobbyResponse]: 'enterLobbyResponse',
   [clientPacket.lobby.WaitingRoomListRequest]: 'waitingRoomListRequest',
@@ -18,9 +18,9 @@ const CLIENT_PACKET_MAPS = {
   [clientPacket.dedicated.CreateRoomResponse]: 'createRoomResponse',
   [clientPacket.game.JoinRoomByInviteCodeRequest]:
     'joinRoomByInviteCodeRequest',
-  [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
   [clientPacket.game.JoinRoomByGameSessionIdRequest]:
     'joinRoomByGameSessionIdRequest',
+  [clientPacket.dedicated.JoinRoomResponse]: 'joinRoomResponse',
   [clientPacket.dedicated.JoinRoomNotification]: 'joinRoomNotification',
   [clientPacket.dedicated.DisconnectRoomRequest]: 'disconnectRoomRequest',
   [clientPacket.dedicated.KickRoomNotification]: 'kickRoomNotification',

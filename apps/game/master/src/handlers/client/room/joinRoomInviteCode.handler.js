@@ -1,9 +1,11 @@
 import CustomError from '@peekaboo-ssr/error/CustomError';
-import ErrorCodesMaps from '@peekaboo-ssr/error/errorCodesMap';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 import handleError from '@peekaboo-ssr/error/handleError';
 import config from '@peekaboo-ssr/config/game';
 import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
+import userCommands from '@peekaboo-ssr/commands/userCommands';
+import DatabaseManager from '@peekaboo-ssr/classes/DatabaseManager';
 
 export const JoinRoomByInviteCodeHandler = async (
   socket,
@@ -11,9 +13,20 @@ export const JoinRoomByInviteCodeHandler = async (
   payload,
   server,
 ) => {
+  const { userId, inviteCode, token } = payload;
+  console.log('joinRoomInviteCode.....');
   try {
-    const { userId, inviteCode } = payload;
+    // 닉네임 불러오기
+    const user = await userCommands.findUserByUUID(DatabaseManager, userId);
 
+    if (!user) {
+      throw new CustomError(
+        errorCodesMap.USER_NOT_FOUND,
+        config.clientPacket.game.JoinRoomResponse,
+        clientKey,
+        socket,
+      );
+    }
     // TODO : 토큰 검증
 
     // 일단 inviteCode로 게임을 찾음
@@ -30,21 +43,26 @@ export const JoinRoomByInviteCodeHandler = async (
       pubMessage,
     );
 
-    // console.log('참여할 데디 키: ', response.dedicateKey);
+    console.log('참여할 데디 키: ', response.dedicateKey);
 
     if (response.isSuccess) {
-      // console.log('이거 pubsub으로 받은 dedicateKey: ', response.dedicateKey);
+      console.log('이거 pubsub으로 받은 dedicateKey: ', response.dedicateKey);
       // 데디케이티드에 해당 유저 추가 요청
       const packetForDedicate = createPacketS2S(
         config.servicePacket.JoinDedicatedRequest,
         'game',
         response.dedicateKey,
-        { clientKey, userId },
+        { clientKey, userId, nickname: user.nickname },
       );
 
       server.clientToDistributor.write(packetForDedicate);
     } else {
-      throw new CustomError(ErrorCodesMaps.GAME_NOT_FOUND);
+      throw new CustomError(
+        errorCodesMap.GAME_NOT_FOUND,
+        config.clientPacket.game.JoinRoomResponse,
+        clientKey,
+        socket,
+      );
     }
 
     console.log(
@@ -52,19 +70,5 @@ export const JoinRoomByInviteCodeHandler = async (
     );
   } catch (e) {
     handleError(e);
-
-    const payloadData = {
-      globalFailCode: config.globalFailCode.UNKNOWN_ERROR,
-      message: '방에 참가하지 못했습니다.',
-      gameSessionId: '',
-      playerInfos: [],
-    };
-    const packet = createPacketS2G(
-      config.clientPacket.game.JoinRoomResponse,
-      clientKey,
-      payloadData,
-    );
-
-    socket.write(packet);
   }
 };

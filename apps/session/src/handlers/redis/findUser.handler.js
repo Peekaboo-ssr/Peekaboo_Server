@@ -1,19 +1,32 @@
-// 찾아서 무엇을 response로 줄건지?
-export const findUserHandler = (serverInstance, data) => {
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import { getUserByClientKey } from '../../sessions/user.sessions.js';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
+
+export const findUserHandler = (server, data) => {
+  const { responseChannel, clientKey, type } = data;
+  console.log('findUser..........');
+  console.log('findUser channel: ', responseChannel);
+  let resMessage = {
+    isSuccess: false,
+  };
   try {
-    console.log('findUser..........');
-    let resMessage = {
-      isSuccess: false,
-    };
+    const user = getUserByClientKey(server.userSessions, clientKey);
+
+    // 유저가 없거나 유저가 현재 type의 세션이 아닌 경우는 USER_NOT_FOUND 보내주도록 함.
+    // if (!user || user.type !== type) {
+    //   throw new CustomError(errorCodesMap.USER_NOT_FOUND);
+    // }
 
     resMessage.isSuccess = true;
-    serverInstance.pubSubManager.publisher.publish(
-      data.responseChannel,
+    server.pubSubManager.publisher.publish(
+      responseChannel,
       JSON.stringify(resMessage),
     );
-
-    console.log(`Published response to ${responseChannel}:`, response);
   } catch (e) {
+    server.pubSubManager.publisher.publish(
+      responseChannel,
+      JSON.stringify(resMessage),
+    );
     console.error(e);
   }
 };

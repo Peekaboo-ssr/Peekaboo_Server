@@ -7,30 +7,30 @@ import { getSocketByClientKey } from '../sessions/find.session.js';
 import { sendPacketToClient } from '../response/client.response.js';
 
 class S2GEventHandler extends BaseEvent {
-  onConnection(socket) {
+  onConnection(server) {
     console.log(
       `Service connected from: `,
-      socket.options.host,
-      socket.options.port,
+      server.options.host,
+      server.options.port,
     );
-    socket.buffer = Buffer.alloc(0);
+    server.buffer = Buffer.alloc(0);
   }
 
-  async onData(socket, data, clients) {
-    socket.buffer = Buffer.concat([socket.buffer, data]);
+  async onData(server, data, clients) {
+    server.buffer = Buffer.concat([server.buffer, data]);
 
     while (
-      socket.buffer.length >=
+      server.buffer.length >=
       config.header.route.typeLength + config.header.route.clientKeyLength
     ) {
       let offset = 0;
-      const packetType = socket.buffer.readUInt16BE(offset);
+      const packetType = server.buffer.readUInt16BE(offset);
       offset += config.header.route.typeLength;
 
-      const clientKeyLength = socket.buffer.readUInt8(offset);
+      const clientKeyLength = server.buffer.readUInt8(offset);
       offset += config.header.route.clientKeyLength;
 
-      const clientKey = socket.buffer
+      const clientKey = server.buffer
         .subarray(offset, offset + clientKeyLength)
         .toString();
       offset += clientKeyLength;
@@ -40,24 +40,24 @@ class S2GEventHandler extends BaseEvent {
         config.header.route.clientKeyLength +
         clientKeyLength;
 
-      if (socket.buffer.length < totalHeaderLength) {
+      if (server.buffer.length < totalHeaderLength) {
         break;
       }
 
-      const payloadLength = socket.buffer.readUint32BE(offset);
+      const payloadLength = server.buffer.readUint32BE(offset);
       offset += config.header.route.payloadLength;
       const totalPacketLength = totalHeaderLength + payloadLength;
 
-      if (socket.buffer.length < totalPacketLength) {
+      if (server.buffer.length < totalPacketLength) {
         break;
       }
-      const payloadBuffer = socket.buffer.subarray(
+      const payloadBuffer = server.buffer.subarray(
         offset,
         offset + payloadLength,
       );
       offset += payloadLength;
       try {
-        socket.buffer = socket.buffer.subarray(offset);
+        server.buffer = server.buffer.subarray(offset);
         // 여기서 클라이언트를 찾아서 보내는 작업 하면 될 것 같음.
         const client = getSocketByClientKey(clients, clientKey);
         if (!client) {
@@ -70,19 +70,19 @@ class S2GEventHandler extends BaseEvent {
     }
   }
 
-  onEnd(socket) {
+  onEnd(server) {
     console.log(
       'Disconnected Service: ',
-      socket.remoteAddress,
-      socket.remotePort,
+      server.options.host,
+      server.options.port,
     );
   }
 
-  onError(socket, err) {
+  onError(server, err) {
     console.log(
       'Disconnected Service: ',
-      socket.remoteAddress,
-      socket.remotePort,
+      server.options.host,
+      server.options.port,
     );
   }
 }

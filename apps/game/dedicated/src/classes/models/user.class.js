@@ -2,10 +2,11 @@ import { createPacketS2G } from '@peekaboo-ssr/utils/createPacket';
 import config from '@peekaboo-ssr/config/game';
 
 class User {
-  constructor(id, clientKey) {
+  constructor(id, clientKey, nickname) {
     // 유저 기본 정보
     this.id = id;
     this.clientKey = clientKey;
+    this.nickname = nickname;
     this.exp = 0;
 
     // 게임 관련 정보

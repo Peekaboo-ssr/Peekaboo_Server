@@ -3,6 +3,7 @@ import { connectDedicatedHandler } from './service/connectDedicated.handler.js';
 import { createDedicatedHandler } from './service/createDedicated.handler.js';
 import { connectedServiceNotificationHandler } from './service/connectService.handler.js';
 import { exitDedicatedSelfHandler } from './service/exitDedicatedSelf.handler.js';
+import { deleteDedicatedHandler } from './service/deleteDedicated.handler.js';
 
 export const handlers = {
   service: {
@@ -18,6 +19,9 @@ export const handlers = {
     // 데디케이티드 연결 끊기 요청 추가
     [config.servicePacket.ExitDedicatedRequestBySelf]: {
       handler: exitDedicatedSelfHandler,
+    },
+    [config.servicePacket.DeleteDedicatedRequest]: {
+      handler: deleteDedicatedHandler,
     },
   },
 };

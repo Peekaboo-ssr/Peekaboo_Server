@@ -32,7 +32,7 @@ export const remainingTimeNotification = (game) => {
   });
 };
 
-export const stageEndNotification = async (game) => {
+export const stageEndNotification = async (game, penaltyCredit) => {
   const startPosition = {
     x: -13.17,
     y: 1,
@@ -53,6 +53,7 @@ export const stageEndNotification = async (game) => {
     remainingDay: game.day,
     startPosition,
     soulCredit: game.soulCredit,
+    penaltyCredit,
     aliveCount,
     diedCount,
   };

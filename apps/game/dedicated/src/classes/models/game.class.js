@@ -155,20 +155,29 @@ class Game {
       IntervalManager.getInstance().removeGhostsInterval(this.id);
       IntervalManager.getInstance().removeGameTimerInterval(this.id);
 
+      // 하루 차감
+      this.day -= 1;
+
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
 
-      this.day -= 1;
-      await stageEndNotification(this);
+      let totalPenalty = 0;
 
       // 사망한 플레이어만큼 soulCredit 깎기
       this.users.forEach((user) => {
         if (user.character.life <= 0) {
+          totalPenalty += this.penalty;
           this.soulCredit -= this.penalty;
         }
       });
 
-      extractSoulNotification(this);
+      // 만약 현재 소울크레딧이 음수라면 0으로 변경
+      if (this.soulCredit < 0) {
+        this.soulCredit = 0;
+      }
+
+      // 스테이지 종료 Notification 보내기
+      await stageEndNotification(this, totalPenalty);
 
       await this.initStage();
     }
@@ -177,7 +186,7 @@ class Game {
       // 게임 상태를 END로 변경한다.
       await this.setState(config.clientState.gameState.END);
       await this.initStage();
-      await stageEndNotification(this);
+      await stageEndNotification(this, 0);
     }
     // 스테이지 종료 후 난이도 초기화
     this.difficultyId = null;

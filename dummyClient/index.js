@@ -30,10 +30,10 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   const clientsData = [
     {
       userData: {
-        id: 'test2',
+        id: 'test5',
         password: '1234',
-        token: 'tokenTest2',
-        userId: 'b25ba876-3939-48cd-a1dd-ce16eacf935c',
+        token: 'tokenTest5',
+        userId: '54bad508-8172-459c-96a1-91307295d9dd',
         position: { x: 21.24, y: 15.2, z: 8.66 },
         rotation: { x: 1.2, y: 11.5, z: 6.9 },
       },
@@ -42,10 +42,10 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     },
     {
       userData: {
-        id: 'test3',
+        id: 'test4',
         password: '1234',
-        token: 'tokenTest3',
-        userId: 'bd05fc53-9f85-43fe-8c23-3e4fdc6b239a',
+        token: 'tokenTest4',
+        userId: '3f023a42-7b55-4bd9-bdfb-9cbf0e4583bb',
         position: { x: 10.0, y: 10.0, z: 10.0 },
         rotation: { x: 0.0, y: 0.0, z: 0.0 },
       },
@@ -74,9 +74,9 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     scenarioManagers.push(scenario);
   }
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
-  // await runScenario(clients, scenarioManagers);
+  await runScenario(clients, scenarioManagers);
   // await waitRoomScenario(clients, scenarioManagers);
-  await createRoomScenario(clients, scenarioManagers);
+  // await createRoomScenario(clients, scenarioManagers);
 })();
 
 const createRoomScenario = async (clients, scenarioManagers) => {
@@ -152,18 +152,20 @@ const runScenario = async (clients, scenarioManagers) => {
   // 첫 번째 클라이언트만 방 생성 및 생성될 때까지 대기
   const firstClientUserData = clients[0].userData;
   const secondClientUserData = clients[1].userData;
+
+  await scenarioManagers[0].waitingRoomScenario(firstClientUserData);
   // const inviteCode = await scenarioManagers[0].createRoomScenario(
   //   firstClientUserData,
   // );
-  await scenarioManagers[0].createRoomScenario(firstClientUserData);
+  // await scenarioManagers[0].createRoomScenario(firstClientUserData);
 
   // 두 번째 클라이언트가 방 참가
   // scenarioManagers[1].joinRoomScenario(secondClientUserData, inviteCode);
 
   // 첫 번째 클라이언트만 이동 시나리오 시작
-  scenarioManagers[0].moveScenario(firstClientUserData, 100);
+  // scenarioManagers[0].moveScenario(firstClientUserData, 100);
 
-  await delay(6000);
+  // await delay(6000);
 
   // scenarioManagers[1].moveScenario(secondClientUserData, 100);
 

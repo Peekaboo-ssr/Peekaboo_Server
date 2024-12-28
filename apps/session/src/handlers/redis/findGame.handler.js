@@ -3,31 +3,29 @@ import {
   getGameByInviteCode,
 } from '../../sessions/game.session.js';
 
-export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
+export const FindDedicateByInviteCodeHandler = async (server, data) => {
   const { responseChannel, inviteCode } = data;
+  let resMessage = {
+    isSuccess: false,
+    dedicateKey: null,
+  };
   try {
-    const resMessage = {
-      isSuccess: false,
-      dedicateKey: null,
-      distributorKey: null,
-    };
-
     const { dedicateKey, distributorKey } = getGameByInviteCode(
-      serverInstance.gameSessions,
+      server.gameSessions,
       inviteCode,
     );
-    // console.log(dedicateKey, distributorKey);
+    console.log(dedicateKey, distributorKey);
+    console.log(responseChannel);
 
     if (!dedicateKey || !distributorKey) {
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
     } else {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
-      resMessage.distributorKey = distributorKey;
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
@@ -37,30 +35,27 @@ export const FindDedicateByInviteCodeHandler = async (serverInstance, data) => {
   }
 };
 
-export const FindDedicateByIdHandler = async (serverInstance, data) => {
+export const FindDedicateByIdHandler = async (server, data) => {
+  const { responseChannel, gameSessionId } = data;
+  const resMessage = {
+    isSuccess: false,
+    dedicateKey: null,
+  };
   try {
-    const { responseChannel, gameSessionId } = data;
-    const resMessage = {
-      isSuccess: false,
-      dedicateKey: null,
-      distributorKey: null,
-    };
-
     const { dedicateKey, distributorKey } = getGameByGameSessionId(
-      serverInstance.gameSessions,
+      server.gameSessions,
       gameSessionId,
     );
 
     if (!dedicateKey || !distributorKey) {
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );
     } else {
       resMessage.isSuccess = true;
       resMessage.dedicateKey = dedicateKey;
-      resMessage.distributorKey = distributorKey;
-      serverInstance.pubSubManager.publisher.publish(
+      server.pubSubManager.publisher.publish(
         responseChannel,
         JSON.stringify(resMessage),
       );

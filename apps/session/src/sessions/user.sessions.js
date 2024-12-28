@@ -19,7 +19,7 @@ export const joinSessionByType = (userSessions, userData) => {
     if (key) {
       // 만약 클라이언트키가 다르다면 중복 로그인 처리
       if (key !== userData.clientKey)
-        throw new CustomError(errorCodesMap.DUPLICATED_USER_CONNECT);
+        throw new CustomError(errorCodesMap.DUPLICATED_USER);
     }
   }
 
@@ -49,12 +49,14 @@ export const joinSessionByType = (userSessions, userData) => {
   );
 };
 
-export const getSessionByType = (userSessions, clientKey, type) => {
-  const session = userSessions[clientKey][clientKey];
-  if (session && session.type) {
-    return session;
+export const getSessionByType = (userSessions, type) => {
+  const sessions = {};
+  for (const [key, value] of Object.entries(userSessions)) {
+    if (value.type === type) {
+      sessions[key] = value;
+    }
   }
-  return null;
+  return sessions;
 };
 
 export const getUserByUUID = (userSessions, uuid) => {

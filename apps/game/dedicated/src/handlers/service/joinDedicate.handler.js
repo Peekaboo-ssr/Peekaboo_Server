@@ -4,29 +4,41 @@ import config from '@peekaboo-ssr/config/game';
 import { sendJoinRoomResponse } from '../../response/room/room.response.js';
 import { joinRoomNotification } from '../../notifications/room/room.notification.js';
 import { SUBMISSION_DURATION } from '../../constants/game.js';
+import { MAX_PLAYER } from '../../constants/game.js';
+import handleError from '@peekaboo-ssr/error/handleError';
+import CustomError from '@peekaboo-ssr/error/CustomError';
+import errorCodesMap from '@peekaboo-ssr/error/errorCodesMap';
 
 export const joinDedicatedHandler = (server, payload) => {
   console.log('joinDedicated.....');
-  const { clientKey, userId } = payload;
+  const { clientKey, userId, nickname } = payload;
 
   try {
     // 4인 초과라면 실패
     if (server.game.users.length >= MAX_PLAYER) {
-      sendJoinRoomResponse(server.game, clientKey, false);
-      return;
+      throw new CustomError(
+        errorCodesMap.GAME_IS_FULLED,
+        config.clientPacket.dedicated.JoinRoomResponse,
+        clientKey,
+        server.game.socket,
+      );
     }
 
-    // 게임이 준비 단계이고, 서브미션이 첫번째가 아닌 경우 실패
+    // 게임 준비 단계 / 서브미션이 첫번째에 첫 날인지 검증
     if (
-      server.game.state !== config.clientState.gameState.PREPARE &&
-      server.game.day !== SUBMISSION_DURATION &&
+      server.game.state !== config.clientState.gameState.PREPARE ||
+      server.game.day !== SUBMISSION_DURATION ||
       server.game.submissionId !== server.game.gameAssets.submission.data[0].Id
     ) {
-      sendJoinRoomResponse(server.game, clientKey, false);
-      return;
+      throw new CustomError(
+        errorCodesMap.GAME_IS_STARTED,
+        config.clientPacket.dedicated.JoinRoomResponse,
+        clientKey,
+        server.game.socket,
+      );
     }
 
-    const user = new User(userId, clientKey);
+    const user = new User(userId, clientKey, nickname);
     // 게임에 유저 등록
     server.game.addUser(user, false);
 
@@ -45,9 +57,9 @@ export const joinDedicatedHandler = (server, payload) => {
     server.clientToDistributor.write(packetForGate);
 
     // 유저 등록완료를 클라이언트에 알리기
-    sendJoinRoomResponse(server.game, clientKey, true);
-    joinRoomNotification(server.game, user.id);
+    sendJoinRoomResponse(server.game, clientKey);
+    joinRoomNotification(server.game, user);
   } catch (e) {
-    sendJoinRoomResponse(server.game, clientKey, false);
+    handleError(e);
   }
 };

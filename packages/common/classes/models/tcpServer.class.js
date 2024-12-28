@@ -108,12 +108,12 @@ class TcpServer {
       }
     });
 
-    this.pubSubManager.subscriber.on('message', (channel, message) => {
+    this.pubSubManager.subscriber.on('message', async (channel, message) => {
       if (channel === requestChannel) {
         try {
           const data = JSON.parse(message);
           const handler = this.getRedisHandlerByAction(data.action);
-          handler(this, data);
+          await handler(this, data);
         } catch (e) {
           console.error(e);
         }

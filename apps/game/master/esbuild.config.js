@@ -20,6 +20,7 @@ try {
       '@peekaboo-ssr/events',
       '@peekaboo-ssr/utils',
       '@peekaboo-ssr/error',
+      '@peekaboo-ssr/commands',
       // protobuf 관련
       'protobufjs',
       'protobufjs/minimal',

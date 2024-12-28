@@ -23,49 +23,47 @@ class PubSubManager {
     requestChannel,
     responseChannel,
     message,
-    timeout = 10000,
+    timeout = 15000,
   ) {
     return new Promise((resolve, reject) => {
+      console.log(`Preparing to subscribe to ${responseChannel}`);
       const timeoutId = setTimeout(() => {
-        // 타임아웃 시
         if (this.pendingRequests.has(responseChannel)) {
+          console.error(`Timeout for responseChannel: ${responseChannel}`);
           this.pendingRequests.delete(responseChannel);
           this.subscriber.unsubscribe(responseChannel);
-          console.log(`Unsubscribed from ${responseChannel} due to timeout`);
           reject(new Error(`Response timed out after ${timeout}ms`));
         }
       }, timeout);
 
       this.pendingRequests.set(responseChannel, { resolve, reject, timeoutId });
 
-      // 응답 채널 구독
+      // 구독 설정
       this.subscriber.subscribe(responseChannel, (err) => {
         if (err) {
+          console.error(
+            `Failed to subscribe to ${responseChannel}: ${err.message}`,
+          );
           this.pendingRequests.delete(responseChannel);
           clearTimeout(timeoutId);
-          reject(
-            new Error(
-              `Failed to subscribe to ${responseChannel}: ${err.message}`,
-            ),
-          );
+          reject(err);
         } else {
-          console.log(`Subscribed to ${responseChannel}`);
-          // 요청 메시지 발송
+          console.log(`Successfully subscribed to ${responseChannel}`);
+          // 요청 발행
           this.publisher.publish(
             requestChannel,
             JSON.stringify(message),
             (err) => {
               if (err) {
+                console.error(
+                  `Failed to publish message to ${requestChannel}: ${err.message}`,
+                );
                 this.pendingRequests.delete(responseChannel);
                 clearTimeout(timeoutId);
                 this.subscriber.unsubscribe(responseChannel);
-                reject(
-                  new Error(
-                    `Failed to publish message to ${requestChannel}: ${err.message}`,
-                  ),
-                );
+                reject(err);
               } else {
-                console.log(`Published to ${requestChannel}:`, message);
+                console.log(`Published message to ${requestChannel}:`, message);
               }
             },
           );
