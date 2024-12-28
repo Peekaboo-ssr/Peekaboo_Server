@@ -50,7 +50,7 @@ export const ExitDedicatedBySocketHandler = async (server, payload) => {
             characterState: CHARACTER_STATE.DIED,
           },
         };
-        playerStateChangeNotification(server, statePayload);
+        playerStateChangeNotification(server.game, statePayload);
       }
 
       // 5. 유저의 인터벌 삭제
@@ -67,7 +67,7 @@ export const ExitDedicatedBySocketHandler = async (server, payload) => {
     }
 
     // 8. 인원이 없는 경우 모든 인터벌 삭제 및 데디 종료
-    server.game.checkRemainUsers(server.game);
+    await server.game.checkRemainUsers();
   } catch (e) {
     handleError(e);
   }

@@ -551,10 +551,10 @@ class Game {
     return this.ghostIdCount++;
   }
 
-  async checkRemainUsers(game) {
-    if (game.users.length <= 0) {
+  async checkRemainUsers() {
+    if (this.users.length <= 0) {
       IntervalManager.getInstance().clearAll();
-      await removeGameRedis(game.id);
+      await removeGameRedis(this.id);
       console.log('-------남은 유저가 없어 종료합니다-------');
       process.exit(1);
     }
