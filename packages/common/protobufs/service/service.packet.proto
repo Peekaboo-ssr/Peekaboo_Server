@@ -71,4 +71,5 @@ message DeleteDedicatedRequest {
 
 message ExitSessionRequest {
   string clientKey = 1;
+  string dedicateKey = 2;
 }

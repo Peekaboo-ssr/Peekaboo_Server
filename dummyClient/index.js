@@ -30,26 +30,26 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
   const clientsData = [
     {
       userData: {
-        id: 'test5',
+        id: 'test6',
         password: '1234',
         token: 'tokenTest5',
-        userId: '54bad508-8172-459c-96a1-91307295d9dd',
+        userId: '0bac6f1b-9b92-499a-843b-5eae38363f37',
         position: { x: 21.24, y: 15.2, z: 8.66 },
         rotation: { x: 1.2, y: 11.5, z: 6.9 },
       },
-      host: '0.0.0.0',
+      host: '43.201.104.27',
       port: 6000,
     },
     {
       userData: {
-        id: 'test4',
+        id: 'test5',
         password: '1234',
         token: 'tokenTest4',
-        userId: '3f023a42-7b55-4bd9-bdfb-9cbf0e4583bb',
+        userId: '54bad508-8172-459c-96a1-91307295d9dd',
         position: { x: 10.0, y: 10.0, z: 10.0 },
         rotation: { x: 0.0, y: 0.0, z: 0.0 },
       },
-      host: '0.0.0.0',
+      host: '43.201.104.27',
       port: 6000,
     },
     // 필요하다면 더 추가 가능
@@ -74,9 +74,9 @@ const protoDir = path.join(__dirname, '../packages/common/protobufs');
     scenarioManagers.push(scenario);
   }
   // 이제 각 클라이언트에 대해 병렬 시나리오 수행 가능
-  await runScenario(clients, scenarioManagers);
+  // await runScenario(clients, scenarioManagers);
   // await waitRoomScenario(clients, scenarioManagers);
-  // await createRoomScenario(clients, scenarioManagers);
+  await createRoomScenario(clients, scenarioManagers);
 })();
 
 const createRoomScenario = async (clients, scenarioManagers) => {
@@ -104,8 +104,13 @@ const createRoomScenario = async (clients, scenarioManagers) => {
 
   for (let i = 0; i < clients.length; i++) {
     const { userData } = clients[i];
-    await scenarioManagers[i].joinRoomScenario(userData, '8WVZ33GYX6');
+    await scenarioManagers[i].createRoomScenario(userData);
   }
+
+  // for (let i = 0; i < clients.length; i++) {
+  //   const { userData } = clients[i];
+  //   await scenarioManagers[i].joinRoomScenario(userData, '8WVZ33GYX6');
+  // }
 };
 
 const waitRoomScenario = async (clients, scenarioManagers) => {

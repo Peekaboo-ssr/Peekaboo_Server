@@ -2,10 +2,15 @@ import config from '@peekaboo-ssr/config/gateway';
 import { createPacketS2S } from '@peekaboo-ssr/utils/createPacket';
 
 // 유저 Disconnect에 대한 처리 관련 함수 모음
-export const exitUserFromSessionService = async (server, clientKey) => {
+export const exitUserFromSessionService = async (
+  server,
+  clientKey,
+  dedicateKey,
+) => {
   try {
     const s2sPayload = {
       clientKey,
+      dedicateKey,
     };
     const packet = createPacketS2S(
       config.servicePacket.ExitSessionRequest,
@@ -39,7 +44,7 @@ export const deleteUserToConnectClients = (server, clientKey) => {
       server.connectClients[clientKey].dedicateKey = null;
     }
 
-    exitUserFromSessionService(server, clientKey);
+    exitUserFromSessionService(server, clientKey, dedicateKey);
 
     delete server.connectClients[clientKey];
     // console.log(`deleteUserToConnectClients 수행 후: `, server.connectClients);
