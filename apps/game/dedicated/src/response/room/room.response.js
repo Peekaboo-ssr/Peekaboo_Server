@@ -33,19 +33,21 @@ export const sendCreateRoomResponse = async (
 
 export const sendJoinRoomResponse = (game, clientKey) => {
   const players = game.users.map((user) => {
-    const userId = user.id;
-    const nickname = user.nickname;
-    const moveInfo = {
-      position: user.character.position.getPosition(),
-      rotation: user.character.rotation.getRotation(),
-    };
-    const isHost = game.hostId === userId;
-    return {
-      userId,
-      nickname,
-      moveInfo,
-      isHost,
-    };
+    if (user.clientKey !== clientKey) {
+      const userId = user.id;
+      const nickname = user.nickname;
+      const moveInfo = {
+        position: user.character.position.getPosition(),
+        rotation: user.character.rotation.getRotation(),
+      };
+      const isHost = game.hostId === userId;
+      return {
+        userId,
+        nickname,
+        moveInfo,
+        isHost,
+      };
+    }
   });
 
   const payload = {
