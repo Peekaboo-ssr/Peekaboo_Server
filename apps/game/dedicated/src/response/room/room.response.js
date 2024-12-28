@@ -31,9 +31,9 @@ export const sendCreateRoomResponse = async (
   }
 };
 
-export const sendJoinRoomResponse = (game, clientKey) => {
+export const sendJoinRoomResponse = (game, clientKey, userId) => {
   const players = game.users.map((user) => {
-    if (user.clientKey !== clientKey) {
+    if (user.id !== userId) {
       const userId = user.id;
       const nickname = user.nickname;
       const moveInfo = {
