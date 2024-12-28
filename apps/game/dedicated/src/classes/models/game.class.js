@@ -363,23 +363,51 @@ class Game {
   }
 
   spawnGhosts() {
+    // 스폰할 귀신의 개수
     const spawnGhostNumber = getRandomInt(
       this.minGhostNumber,
       this.maxGhostNumber + 1,
     );
+
+    // 귀신 스폰 종류들에 대한 데이터
+    let copyGhostTypes = [...this.spawnGhost];
+
+    // 귀신 스폰 위치들에 대한 데이터
     const copyGhostSpawnPositions = [...this.ghostSpawnPositions];
-    const copyGhostTypes = [...this.spawnGhost];
+
+    // 귀신 스폰 패킷 페이로드
     const ghostInfos = [];
+
     for (let i = 0; i < spawnGhostNumber; i++) {
       const ghostId = this.getUniqueGhostId();
-      const randomTypeIdx = getRandomInt(0, copyGhostTypes.length);
-      const ghostTypeId = copyGhostTypes[randomTypeIdx];
-      if (copyGhostTypes.length !== 1) {
-        copyGhostTypes.splice(randomTypeIdx, 1);
+      let ghostTypeIdx = null;
+      let ghostTypeId = null;
+
+      // 귀신 스폰 종류들에 대한 배열이 비었다면 다시 채워준다.
+      if (copyGhostTypes.length === 0) {
+        // 첫 스폰 사이클이 끝났다면, 이제 랜덤하게 스폰한다.
+        if (!isFirstCycleComplete) isFirstCycleComplete = true;
+
+        copyGhostTypes = [...this.spawnGhost];
       }
-      const randomPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
-      const ghostPosition = copyGhostSpawnPositions[randomPosIdx];
-      copyGhostSpawnPositions.splice(randomPosIdx, 1);
+
+      // 스폰할 귀신 타입(등급) 선택
+      if (!isFirstCycleComplete) {
+        // 한 사이클에 대해 스폰이 끝나지 않았다면,
+        // 높은 타입(등급) 순으로 귀신을 스폰한다.
+        ghostTypeIdx = copyGhostTypes.length - 1;
+      } else {
+        // 한 사이클에 대해 스폰이 끝났다면,
+        // 랜덤한 타입(등급)의 귀신을 스폰한다.
+        ghostTypeIdx = getRandomInt(0, copyGhostTypes.length);
+      }
+      ghostTypeId = copyGhostTypes[ghostTypeIdx];
+      copyGhostTypes.splice(ghostTypeIdx, 1);
+
+      // 귀신 스폰 위치 : copyGhostSpawnPositions 중 랜덤으로 하나를 선택한다.
+      const randomGhostPosIdx = getRandomInt(0, copyGhostSpawnPositions.length);
+      const ghostPosition = copyGhostSpawnPositions[randomGhostPosIdx];
+      copyGhostSpawnPositions.splice(randomGhostPosIdx, 1);
 
       const ghostData = this.gameAssets.ghost.data.find((ghost) => {
         return ghost.Id === ghostTypeId;
