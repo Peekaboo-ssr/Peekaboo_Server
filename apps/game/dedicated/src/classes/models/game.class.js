@@ -382,6 +382,7 @@ class Game {
       const ghostId = this.getUniqueGhostId();
       let ghostTypeIdx = null;
       let ghostTypeId = null;
+      let isFirstCycleComplete = false;
 
       // 귀신 스폰 종류들에 대한 배열이 비었다면 다시 채워준다.
       if (copyGhostTypes.length === 0) {
